@@ -35,6 +35,7 @@
 
       <div class="header-actions">
         <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
+        <button id="btn-open-weekly-modal" class="header-btn weekly-highlight-btn" title="Reto Semanal Oficial y Posicionamiento"><span>🏆</span> <span data-i18n="btn_weekly">Reto Semanal</span></button>
         <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad"><span>⚔️</span> <span>Nuevo Duelo</span></button>\n        <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida">
           <span>⚔️</span>
           <span class="duel-btn-label">Duelo: <strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
@@ -540,6 +541,140 @@
   </div>
 
   
+  
+  <!-- Modal 8: Reto Semanal por Niveles y Posicionamiento -->
+  <div id="modal-weekly" class="modal-overlay">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 data-i18n="weekly_modal_title">🏆 Reto Semanal por Niveles</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;" data-i18n="weekly_modal_desc">
+          Cada semana el sistema propone una plantilla oficial única e idéntica por nivel para todos los jugadores del mundo. ¡Complétalas para posicionarte en el ranking según los puntos obtenidos sobre el techo total!
+        </p>
+
+        <!-- Contador Semanal -->
+        <div class="weekly-timer-banner">
+          <span class="weekly-timer-icon">⏳</span>
+          <div class="weekly-timer-text">
+            <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted);" data-i18n="weekly_countdown">Tiempo restante para la siguiente plantilla:</span>
+            <strong id="weekly-countdown-display" class="font-mono text-gold" style="font-size: 1.05rem;">Calculando...</strong>
+          </div>
+          <span id="weekly-badge-tag" class="weekly-week-pill font-mono">2026-W42</span>
+        </div>
+
+        <!-- Cuadrícula de los 4 Niveles -->
+        <div class="weekly-levels-grid">
+          <!-- Nivel Fácil -->
+          <div class="weekly-level-card" data-diff="facil">
+            <div class="weekly-card-header">
+              <span class="weekly-card-icon">🟢</span>
+              <div>
+                <strong class="weekly-card-title" data-i18n="diff_facil">Fácil</strong>
+                <div class="weekly-card-sub" data-i18n="duel_card_easy_sub">42 pistas • 10 pts</div>
+              </div>
+              <span id="weekly-status-facil" class="weekly-status-badge badge-pending" data-i18n="weekly_status_pending">Pendiente</span>
+            </div>
+            <div class="weekly-card-body">
+              <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <strong id="weekly-score-facil" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
+              </div>
+              <button class="modal-btn primary btn-play-weekly" data-diff="facil" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
+                🎮 Jugar Reto Fácil
+              </button>
+            </div>
+          </div>
+
+          <!-- Nivel Medio -->
+          <div class="weekly-level-card" data-diff="medio">
+            <div class="weekly-card-header">
+              <span class="weekly-card-icon">🟡</span>
+              <div>
+                <strong class="weekly-card-title" data-i18n="diff_medio">Medio</strong>
+                <div class="weekly-card-sub" data-i18n="duel_card_med_sub">34 pistas • 15 pts</div>
+              </div>
+              <span id="weekly-status-medio" class="weekly-status-badge badge-pending" data-i18n="weekly_status_pending">Pendiente</span>
+            </div>
+            <div class="weekly-card-body">
+              <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <strong id="weekly-score-medio" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
+              </div>
+              <button class="modal-btn primary btn-play-weekly" data-diff="medio" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
+                🎮 Jugar Reto Medio
+              </button>
+            </div>
+          </div>
+
+          <!-- Nivel Difícil -->
+          <div class="weekly-level-card" data-diff="dificil">
+            <div class="weekly-card-header">
+              <span class="weekly-card-icon">🔴</span>
+              <div>
+                <strong class="weekly-card-title" data-i18n="diff_dificil">Difícil</strong>
+                <div class="weekly-card-sub" data-i18n="duel_card_hard_sub">28 pistas • 30 pts</div>
+              </div>
+              <span id="weekly-status-dificil" class="weekly-status-badge badge-pending" data-i18n="weekly_status_pending">Pendiente</span>
+            </div>
+            <div class="weekly-card-body">
+              <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <strong id="weekly-score-dificil" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
+              </div>
+              <button class="modal-btn primary btn-play-weekly" data-diff="dificil" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
+                🎮 Jugar Reto Difícil
+              </button>
+            </div>
+          </div>
+
+          <!-- Nivel Endemoniado -->
+          <div class="weekly-level-card" data-diff="endemoniado">
+            <div class="weekly-card-header">
+              <span class="weekly-card-icon">🟣</span>
+              <div>
+                <strong class="weekly-card-title" data-i18n="diff_endemoniado">Endemoniado</strong>
+                <div class="weekly-card-sub" data-i18n="duel_card_evil_sub">22 pistas • 100 pts</div>
+              </div>
+              <span id="weekly-status-endemoniado" class="weekly-status-badge badge-pending" data-i18n="weekly_status_pending">Pendiente</span>
+            </div>
+            <div class="weekly-card-body">
+              <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <strong id="weekly-score-endemoniado" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
+              </div>
+              <button class="modal-btn primary btn-play-weekly" data-diff="endemoniado" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
+                🎮 Jugar Reto Endemoniado
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escala de Posicionamiento Oficial -->
+        <div class="weekly-ranking-scale">
+          <label style="font-size: 0.78rem; text-transform: uppercase; color: var(--border-accent); font-weight: 700; display: block; margin-bottom: 0.4rem;" data-i18n="weekly_ranking_title">
+            Escala Oficial de Posicionamiento Competitivo:
+          </label>
+          <div class="weekly-tiers-row">
+            <div class="tier-chip tier-diamond"><span>💎</span> <strong>95-100%</strong> <small>Élite (Top 5%)</small></div>
+            <div class="tier-chip tier-gold"><span>🥇</span> <strong>85-94%</strong> <small>Oro (Top 15%)</small></div>
+            <div class="tier-chip tier-silver"><span>🥈</span> <strong>70-84%</strong> <small>Plata (Top 35%)</small></div>
+            <div class="tier-chip tier-bronze"><span>🥉</span> <strong>50-69%</strong> <small>Bronce (Top 60%)</small></div>
+          </div>
+        </div>
+
+        <!-- Botón Compartir Tarjeta de la Semana -->
+        <button id="btn-share-weekly-progress" class="modal-btn secondary" style="width: 100%; margin-top: 0.75rem; border-color: var(--gold); color: var(--gold); font-size: 0.9rem;">
+          📋 Compartir Mis Puntuaciones Semanales
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal 7: Selector de Idioma -->
   <div id="modal-language" class="modal-overlay">
     <div class="modal-card" style="max-width: 540px;">
@@ -582,12 +717,28 @@
             </div>
           </div>
           <div class="lang-card" data-lang="ca">
+
+            <!-- va -->
+              <span class="lang-flag">🦇</span>
+              <div class="lang-info">
+                <strong class="lang-name">Valencià</strong>
+                <span class="lang-sub">Comunitat Valenciana</span>
+              </div>
+            </div>
             <span class="lang-flag">🟡</span>
             <div class="lang-info">
               <strong class="lang-name">Català</strong>
               <span class="lang-sub">Catalunya, Illes Balears, València</span>
             </div>
           </div>
+          
+            <div class="lang-card" data-lang="va">
+              <span class="lang-flag">🦇</span>
+              <div class="lang-info">
+                <strong class="lang-name">Valencià</strong>
+                <span class="lang-sub">Comunitat Valenciana</span>
+              </div>
+            </div>
           <div class="lang-card" data-lang="eu">
             <span class="lang-flag">🟢</span>
             <div class="lang-info">
@@ -618,6 +769,7 @@
   <script src="js/engine/sudoku.js"></script>
   <script src="js/engine/scoring.js"></script>
   <script src="js/engine/competition.js"></script>
+  <script src="js/engine/weekly.js"></script>
   <script src="js/ui/audio.js"></script>
   <script src="js/ui/board.js"></script>
   <script src="js/app.js"></script>

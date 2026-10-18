@@ -1335,3 +1335,142 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================================================
+   RETO SEMANAL Y POSICIONAMIENTO POR NIVELES
+======================================================== */
+.weekly-highlight-btn {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.3));
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+  font-weight: 700;
+}
+.weekly-highlight-btn:hover {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #111827 !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+}
+
+.weekly-timer-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  padding: 0.65rem 0.95rem;
+  margin-bottom: 0.95rem;
+}
+.weekly-timer-icon {
+  font-size: 1.5rem;
+}
+.weekly-timer-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.weekly-week-pill {
+  background: #f59e0b;
+  color: #111827;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.weekly-levels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.95rem;
+}
+@media (max-width: 540px) {
+  .weekly-levels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.weekly-level-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-grid);
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s;
+}
+.weekly-level-card:hover {
+  border-color: var(--border-accent);
+}
+.weekly-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.weekly-card-icon {
+  font-size: 1.35rem;
+}
+.weekly-card-title {
+  font-size: 0.95rem;
+  color: #fff;
+  display: block;
+}
+.weekly-card-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.weekly-status-badge {
+  margin-left: auto;
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.badge-pending {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+.badge-done {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid #10b981;
+}
+
+.weekly-ranking-scale {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-grid);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+}
+.weekly-tiers-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+@media (max-width: 540px) {
+  .weekly-tiers-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.tier-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-grid);
+  border-radius: 6px;
+  padding: 0.4rem 0.35rem;
+  text-align: center;
+  font-size: 0.72rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.tier-diamond { border-color: #38bdf8; color: #38bdf8; }
+.tier-gold { border-color: #f59e0b; color: #f59e0b; }
+.tier-silver { border-color: #94a3b8; color: #cbd5e1; }
+.tier-bronze { border-color: #d97706; color: #fb923c; }

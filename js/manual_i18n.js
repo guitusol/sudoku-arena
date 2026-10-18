@@ -168,6 +168,38 @@ const MANUAL_I18N = {
     "sec6_sub3": "🏆 Garaipen Irizpide Ofiziala",
     "sec7_title": "7. Maisu Handi Maila Lortzeko Aholkuak"
   },
+  "va": {
+    "back": "← Tornar al Joc",
+    "title": "Manual Oficial del Jugador",
+    "subtitle": "Sudoku Arena • Competició Lògica, Cost d'Oportunitat & Auditoria de Punts",
+    "sec1_title": "1. Nivells de Dificultat i Tècniques Humanes",
+    "sec1_text": "A diferència dels sudokus ordinaris que només compten caselles buides, en <strong>Sudoku Arena</strong> els taulers es classifiquen segons les tècniques deductives humanes necessàries sense endevinar:",
+    "diff_table_headers": [
+        "Dificultat",
+        "Pistes Inicials",
+        "Valor per Casella",
+        "Tècniques Lògiques Requerides"
+    ],
+    "sec2_title": "2. Controls en Mòbil i Ordinador",
+    "sec2_sub1": "📱 En Smartphone o Tauleta",
+    "sec2_sub2": "💻 En Ordinador (PC o Portàtil)",
+    "sec3_title": "3. Motor de Puntuació per Cost d'Oportunitat",
+    "sec3_text": "Cada partida comença amb un <strong>Sostre Teòric Màxim</strong> calculat sumant el valor de totes les caselles buides.",
+    "sec4_title": "4. Les Ajudes Tàctiques i les seues Penalitzacions",
+    "sec4_sub1": "🔍 Inspecció Quirúrgica (Mode Lupa)",
+    "sec4_sub2": "⚡ Raigs X Globals (Totes les Possibilitats)",
+    "sec4_sub3": "🏳️ Resolució per Sistema (Rendició)",
+    "sec5_title": "5. Índex d'Autonomia Mental i Rangs",
+    "sec6_title": "6. Mode Duel: Com Crear un Nou Plantejament i Competir",
+    "sec6_sub1": "⚔️ Pas a Pas per a Crear un Nou Duel",
+    "sec6_sub2": "👥 Com es Connecta el teu Rival",
+    "sec6_sub3": "🏆 Criteri Oficial de Victòria",
+    "sec7_title": "7. Consells per Assolir el Rang de Gran Mestre",
+    "sec8_title": "8. Repte Setmanal Oficial i Posicionament de Punts",
+    "sec8_p1": "Cada dilluns a les 00:00 UTC, el motor algorítmic de <strong>Sudoku Arena</strong> genera de forma determinista una <strong>plantilla oficial única per nivell</strong> (Fàcil, Mig, Difícil i Endimoniat) exactament idèntica per a tots els jugadors del planeta.",
+    "sec8_sub1": "🎯 L'Objectiu: Eficiència sobre el Sostre Teòric",
+    "sec8_p2": "No només importa resoldre el sudoku, sinó la <strong>puresa lògica i l'autonomia</strong>. La teua puntuació final es dividix entre el sostre màxim possible del tauler per a calcular el teu percentatge d'eficiència competitiva."
+},
   "gl": {
     "back": "← Volver ao Xogo",
     "title": "Manual Oficial do Xogador",

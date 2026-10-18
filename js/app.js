@@ -383,6 +383,58 @@ class SudokuApp {
     }
   }
 
+  
+  /**
+   * Abre el Modal del Reto Semanal y actualiza puntuaciones e información
+   */
+  openWeeklyModal() {
+    this.updateWeeklyModalUI();
+    this.openModal('modal-weekly');
+  }
+
+  updateWeeklyModalUI() {
+    if (!window.weeklyEngine) return;
+    const info = window.weeklyEngine.getCurrentWeekInfo();
+
+    const tagEl = document.getElementById('weekly-badge-tag');
+    if (tagEl) tagEl.textContent = info.weekId;
+
+    const cdEl = document.getElementById('weekly-countdown-display');
+    if (cdEl) cdEl.textContent = `${info.daysLeft}d ${info.hoursLeft}h ${info.minsLeft}m`;
+
+    const diffs = ['facil', 'medio', 'dificil', 'endemoniado'];
+    diffs.forEach(diff => {
+      const status = window.weeklyEngine.getLevelStatus(diff);
+      const scoreEl = document.getElementById(`weekly-score-${diff}`);
+      const statusEl = document.getElementById(`weekly-status-${diff}`);
+
+      if (status) {
+        if (scoreEl) scoreEl.textContent = `${status.score} / ${status.ceiling} (${status.efficiency}% ${status.tier.icon})`;
+        if (statusEl) {
+          statusEl.className = 'weekly-status-badge badge-done';
+          statusEl.textContent = status.tier.name;
+        }
+      } else {
+        if (scoreEl) scoreEl.textContent = '- / -';
+        if (statusEl) {
+          statusEl.className = 'weekly-status-badge badge-pending';
+          statusEl.textContent = window.i18n ? window.i18n.t('weekly_status_pending') : 'Pendiente';
+        }
+      }
+    });
+  }
+
+  startWeeklyGame(diff) {
+    if (!window.weeklyEngine) return;
+    const info = window.weeklyEngine.getCurrentWeekInfo();
+    const seed = window.weeklyEngine.getWeeklySeed(diff, info.year, info.week);
+    this.isWeeklyMode = true;
+    this.weeklyDiff = diff;
+    this.newGame(diff, seed);
+    this.closeModal('modal-weekly');
+    this.showToast(`🏆 ¡Iniciado Reto Semanal ${diff.toUpperCase()} (${info.weekId})!`, 'success');
+  }
+
   openCompetitionModal() {
     this.openNewDuelModal(this.selectedDifficulty);
     return;
@@ -608,6 +660,48 @@ class SudokuApp {
     // Botón de Nuevo Duelo en cabecera
     
     // Selector de Idioma (Modal 7)
+    
+    // Botón Reto Semanal en cabecera
+    document.getElementById('btn-open-weekly-modal')?.addEventListener('click', () => {
+      this.openWeeklyModal();
+    });
+
+    // Botones para jugar reto semanal de cada nivel
+    document.querySelectorAll('.btn-play-weekly').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const diff = btn.dataset.diff;
+        this.startWeeklyGame(diff);
+      });
+    });
+
+    // Compartir puntuaciones semanales
+    document.getElementById('btn-share-weekly-progress')?.addEventListener('click', () => {
+      if (!window.weeklyEngine) return;
+      const info = window.weeklyEngine.getCurrentWeekInfo();
+      const diffs = ['facil', 'medio', 'dificil', 'endemoniado'];
+      let lines = [`🏆 Mis Puntuaciones en Sudoku Arena (Semana ${info.weekId}):`];
+
+      diffs.forEach(d => {
+        const st = window.weeklyEngine.getLevelStatus(d);
+        if (st) {
+          lines.push(`• ${d.toUpperCase()}: ${st.score}/${st.ceiling} pts (${st.efficiency}% ${st.tier.icon} ${st.tier.name})`);
+        } else {
+          lines.push(`• ${d.toUpperCase()}: Pendiente`);
+        }
+      });
+      lines.push('¿Puedes superarme? Juega el reto semanal aquí:');
+      lines.push('https://guitusol.github.io/sudoku-arena/');
+
+      const text = lines.join('\n');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          this.showToast('¡Resumen del reto semanal copiado al portapapeles!', 'success');
+        });
+      } else {
+        prompt('Copia tus resultados semanales:', text);
+      }
+    });
+
     document.getElementById('btn-open-lang-modal')?.addEventListener('click', () => {
       this.openModal('modal-language');
     });
