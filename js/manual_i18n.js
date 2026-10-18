@@ -6,7 +6,7 @@
 const MANUAL_FULL_CONTENT = {
   "es": {
     "fair_play_title": "⚖️ Compromiso Ético y Juego Limpio:",
-    "fair_play_notice": "Sea ético y resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos.",
+    "fair_play_notice": "Sea ético, resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos.",
     "page_title": "Manual del Jugador — Sudoku Arena",
     "back": "🎮 Ir a Jugar al Tablero",
     "title": "Manual Oficial del Jugador",
@@ -398,7 +398,7 @@ const MANUAL_FULL_CONTENT = {
   },
   "ca": {
     "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
-    "fair_play_notice": "Sigueu ètic i resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs.",
+    "fair_play_notice": "Sigueu ètic, resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs.",
     "page_title": "Manual del Jugador — Sudoku Arena",
     "back": "🎮 Anar a Jugar al Tauler",
     "title": "Manual Oficial del Jugador",
@@ -496,7 +496,7 @@ const MANUAL_FULL_CONTENT = {
   },
   "va": {
     "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
-    "fair_play_notice": "Siga ètic i resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs.",
+    "fair_play_notice": "Siga ètic, resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs.",
     "page_title": "Manual del Jugador — Sudoku Arena",
     "back": "🎮 Anar a Jugar al Tauler",
     "title": "Manual Oficial del Jugador",
@@ -692,7 +692,7 @@ const MANUAL_FULL_CONTENT = {
   },
   "gl": {
     "fair_play_title": "⚖️ Compromiso Ético e Xogo Limpo:",
-    "fair_play_notice": "Sexa ético e resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos.",
+    "fair_play_notice": "Sexa ético, resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos.",
     "page_title": "Manual do Xogador — Sudoku Arena",
     "back": "🎮 Ir a Xogar ao Taboleiro",
     "title": "Manual Oficial do Xogador",
