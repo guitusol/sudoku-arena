@@ -782,6 +782,22 @@ class SudokuApp {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
+  /**
+   * Cambia la semilla aleatoria dentro del nivel de dificultad actual (Botón 🎲 o Teclas S / N)
+   */
+  rerollSeedForCurrentDifficulty() {
+    if (this.hasUserMadeMoves()) {
+      const msg = window.i18n ? window.i18n.t('confirm_abandon') : 'Tienes una partida en curso. ¿Deseas abandonarla e iniciar un nuevo tablero? Se perderá el progreso.';
+      if (!confirm(msg)) return;
+    }
+    this.clearActiveGame();
+    this.isWeeklyMode = false;
+    this.weeklyDiff = null;
+    const newSeed = Math.floor(10000 + Math.random() * 90000);
+    this.newGame(this.selectedDifficulty, newSeed);
+    this.showToast(window.i18n ? window.i18n.t('toast_new_seed_generated', { seed: newSeed }) : `Nueva semilla generada: ${newSeed}`, 'info');
+  }
+
   bindEvents() {
     // Teclado físico
     window.addEventListener('keydown', (e) => {
@@ -815,6 +831,9 @@ class SudokuApp {
       } else if (e.key.toLowerCase() === 'l') {
         e.preventDefault();
         this.openLedgerModal();
+      } else if (e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        this.rerollSeedForCurrentDifficulty();
       }
     });
 
@@ -963,11 +982,19 @@ class SudokuApp {
       this.saveActiveGame();
     });
 
-    // Botones de selector de dificultad con confirmación si hay partida viva
+    // Botón Cambiar Semilla (🎲) en la barra de dificultad
+    document.getElementById('btn-reroll-seed')?.addEventListener('click', () => {
+      this.rerollSeedForCurrentDifficulty();
+    });
+
+    // Botones de selector de dificultad (cambiar de nivel o reroll al hacer clic en el nivel activo)
     document.querySelectorAll('.diff-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const diff = btn.dataset.diff;
-        if (diff !== this.selectedDifficulty) {
+        if (diff === this.selectedDifficulty) {
+          // Si pulsa el mismo nivel activo, cambia de semilla en este nivel
+          this.rerollSeedForCurrentDifficulty();
+        } else {
           if (this.hasUserMadeMoves()) {
             const msg = window.i18n ? window.i18n.t('confirm_abandon') : 'Tienes una partida en curso. ¿Deseas abandonarla e iniciar un nuevo tablero? Se perderá el progreso.';
             if (!confirm(msg)) return;

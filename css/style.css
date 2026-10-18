@@ -1551,3 +1551,41 @@ body {
   font-size: 1.15rem;
   flex-shrink: 0;
 }
+
+/* Botón Reroll de Semilla en Barra de Dificultad */
+.btn-reroll-seed {
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  padding: 0.35rem 0.65rem;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 3px;
+}
+
+.btn-reroll-seed:hover {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: #f59e0b;
+  color: #fef08a;
+  transform: translateY(-1px);
+}
+
+.btn-reroll-seed:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .btn-reroll-seed {
+    padding: 0.35rem 0.45rem;
+  }
+  .btn-reroll-seed .seed-btn-text {
+    display: none;
+  }
+}

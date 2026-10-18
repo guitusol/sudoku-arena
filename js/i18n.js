@@ -200,7 +200,10 @@ const I18N_TRANSLATIONS = {
     "rank_casual": "Jugador Casual",
     "duel_seed_title": "Semilla de Duelo y Dificultad",
     "duel_rival_section": "¿Tienes un código de rival?",
-    "duel_rival_btn": "Cargar Desafío"
+    "duel_rival_btn": "Cargar Desafío",
+    "btn_reroll_seed": "Semilla",
+    "title_reroll_seed": "Cambiar semilla aleatoria dentro de este nivel (Tecla S o N)",
+    "toast_new_seed_generated": "Nueva semilla generada: {seed}"
   },
   "en": {
     "brand_tag": "Tactical & Audit",
@@ -347,7 +350,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Load Challenge",
     "confirm_restart": "Do you want to restart this game from scratch? Placed numbers and current score will be lost.",
     "confirm_abandon": "You have a game in progress. Do you want to abandon it and start a new board? Current progress will be lost.",
-    "toast_game_restored": "Game resumed automatically"
+    "toast_game_restored": "Game resumed automatically",
+    "btn_reroll_seed": "Seed",
+    "title_reroll_seed": "Change random seed in this difficulty (Key S or N)",
+    "toast_new_seed_generated": "New seed generated: {seed}"
   },
   "fr": {
     "brand_tag": "Tactique & Audit",
@@ -494,7 +500,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Charger le Défi",
     "confirm_restart": "Voulez-vous recommencer cette partie depuis le début ? Les chiffres placés et votre score actuel seront perdus.",
     "confirm_abandon": "Une partie est en cours. Voulez-vous l'abandonner et commencer une nouvelle grille ? La progression actuelle sera perdue.",
-    "toast_game_restored": "Partie reprise automatiquement"
+    "toast_game_restored": "Partie reprise automatiquement",
+    "btn_reroll_seed": "Graine",
+    "title_reroll_seed": "Changer la graine aléatoire dans ce niveau (Touche S ou N)",
+    "toast_new_seed_generated": "Nouvelle graine générée : {seed}"
   },
   "de": {
     "brand_tag": "Taktik & Audit",
@@ -641,7 +650,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Herausforderung laden",
     "confirm_restart": "Möchten Sie dieses Spiel von vorne beginnen? Gesetzte Zahlen und Ihre aktuelle Punktzahl gehen verloren.",
     "confirm_abandon": "Ein Spiel läuft bereits. Möchten Sie es abbrechen und ein neues Spielfeld beginnen? Der aktuelle Fortschritt geht verloren.",
-    "toast_game_restored": "Spiel automatisch fortgesetzt"
+    "toast_game_restored": "Spiel automatisch fortgesetzt",
+    "btn_reroll_seed": "Seed",
+    "title_reroll_seed": "Zufälligen Seed in dieser Stufe ändern (Taste S oder N)",
+    "toast_new_seed_generated": "Neuer Seed generiert: {seed}"
   },
   "ca": {
     "brand_tag": "Tàctic & Auditoria",
@@ -788,7 +800,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Carregar Desafiament",
     "confirm_restart": "Vols reiniciar aquesta partida des de zero? Es perdran els números col·locats i la puntuació actual.",
     "confirm_abandon": "Tens una partida en curs. Vols abandonar-la i iniciar un nou tauler? Es perdrà el progrés.",
-    "toast_game_restored": "Partida represa automàticament"
+    "toast_game_restored": "Partida represa automàticament",
+    "btn_reroll_seed": "Llavor",
+    "title_reroll_seed": "Canviar llavor aleatòria dins d'aquest nivell (Tecla S o N)",
+    "toast_new_seed_generated": "Nova llavor generada: {seed}"
   },
   "va": {
     "brand_tag": "Tàctic & Auditoria",
@@ -935,7 +950,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Carregar Desafiament",
     "confirm_restart": "Vols reiniciar esta partida des de zero? Es perdran els números col·locats i la puntuació actual.",
     "confirm_abandon": "Tens una partida en curs. Vols abandonar-la i iniciar un nou tauler? Es perdrà el progrés.",
-    "toast_game_restored": "Partida represa automàticament"
+    "toast_game_restored": "Partida represa automàticament",
+    "btn_reroll_seed": "Llavor",
+    "title_reroll_seed": "Canviar llavor aleatòria dins d'este nivell (Tecla S o N)",
+    "toast_new_seed_generated": "Nova llavor generada: {seed}"
   },
   "eu": {
     "brand_tag": "Taktikoa eta Ikuskaritza",
@@ -1082,7 +1100,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Kargatu Erronka",
     "confirm_restart": "Partida hau hasieratik berrabiarazi nahi duzu? Jarritako zenbakiak eta uneko puntuazioa galduko dira.",
     "confirm_abandon": "Partida bat martxan daukazu. Bertan behera utzi eta taula berri bat hasi nahi duzu? Aurrerapena galduko da.",
-    "toast_game_restored": "Partida automatikoki berrekin da"
+    "toast_game_restored": "Partida automatikoki berrekin da",
+    "btn_reroll_seed": "Hazia",
+    "title_reroll_seed": "Aldatu ausazko hazia maila honetan (S edo N tekla)",
+    "toast_new_seed_generated": "Hazi berria sortu da: {seed}"
   },
   "gl": {
     "brand_tag": "Táctico & Auditoría",
@@ -1229,7 +1250,10 @@ const I18N_TRANSLATIONS = {
     "duel_rival_btn": "Cargar Desafío",
     "confirm_restart": "Queres reiniciar esta partida dende cero? Perderanse os números colocados e a túa puntuación actual.",
     "confirm_abandon": "Tes unha partida en curso. Queres abandonala e iniciar un novo taboleiro? Perderase o progreso.",
-    "toast_game_restored": "Partida reiniciada automaticamente"
+    "toast_game_restored": "Partida reiniciada automaticamente",
+    "btn_reroll_seed": "Semente",
+    "title_reroll_seed": "Cambiar semente aleatoria dentro deste nivel (Tecla S ou N)",
+    "toast_new_seed_generated": "Nova semente xerada: {seed}"
   }
 };
 
