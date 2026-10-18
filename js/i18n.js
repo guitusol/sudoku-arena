@@ -1,5 +1,5 @@
 /**
- * Sudoku Arena - Sistema Internacional de Idiomas (i18n)
+ * Sudoku Arena - Diccionario de Internacionalización (i18n)
  * Soporta 8 idiomas: Español, English, Français, Deutsch, Català, Valencià (🦇), Euskara, Galego
  */
 
@@ -181,28 +181,26 @@ const I18N_TRANSLATIONS = {
     "confirm_restart": "¿Deseas reiniciar esta misma partida desde cero? Se perderán los números colocados y tu puntuación actual.",
     "confirm_abandon": "Tienes una partida en curso. ¿Deseas abandonarla e iniciar un nuevo tablero? Se perderá el progreso.",
     "toast_game_restored": "Partida reanudada automáticamente",
-    "confirm_restart": "Do you want to restart this game from scratch? Placed numbers and current score will be lost.",
-    "confirm_abandon": "You have a game in progress. Do you want to abandon it and start a new board? Current progress will be lost.",
-    "toast_game_restored": "Game resumed automatically",
-    "confirm_restart": "Voulez-vous recommencer cette partie depuis le début ? Les chiffres placés et votre score actuel seront perdus.",
-    "confirm_abandon": "Une partie est en cours. Voulez-vous l'abandonner et commencer une nouvelle grille ? La progression actuelle sera perdue.",
-    "toast_game_restored": "Partie reprise automatiquement",
-    "confirm_restart": "Möchten Sie dieses Spiel von vorne beginnen? Gesetzte Zahlen und Ihre aktuelle Punktzahl gehen verloren.",
-    "confirm_abandon": "Ein Spiel läuft bereits. Möchten Sie es abbrechen und ein neues Spielfeld beginnen? Der aktuelle Fortschritt geht verloren.",
-    "toast_game_restored": "Spiel automatisch fortgesetzt",
-    "confirm_restart": "Vols reiniciar aquesta partida des de zero? Es perdran els números col·locats i la puntuació actual.",
-    "confirm_abandon": "Tens una partida en curs. Vols abandonar-la i iniciar un nou tauler? Es perdrà el progrés.",
-    "toast_game_restored": "Partida represa automàticament",
-    "confirm_restart": "Vols reiniciar esta partida des de zero? Es perdran els números col·locats i la puntuació actual.",
-    "confirm_abandon": "Tens una partida en curs. Vols abandonar-la i iniciar un nou tauler? Es perdrà el progrés.",
-    "toast_game_restored": "Partida represa automàticament",
-    "confirm_restart": "Partida hau hasieratik berrabiarazi nahi duzu? Jarritako zenbakiak eta uneko puntuazioa galduko dira.",
-    "confirm_abandon": "Partida bat martxan daukazu. Bertan behera utzi eta taula berri bat hasi nahi duzu? Aurrerapena galduko da.",
-    "toast_game_restored": "Partida automatikoki berrekin da",
-    "confirm_restart": "Queres reiniciar esta partida dende cero? Perderanse os números colocados e a túa puntuación actual.",
-    "confirm_abandon": "Tes unha partida en curso. Queres abandonala e iniciar un novo taboleiro? Perderase o progreso.",
-    "toast_game_restored": "Partida reiniciada automaticamente",
-    "toast_challenge_loaded": "¡Desafío cargado! Código: {code}"
+    "toast_challenge_loaded": "¡Desafío cargado! Código: {code}",
+    "duel_share_msg": "⚔️ ¡Te reto a un duelo en Sudoku Arena!\n🎯 Nivel: {diff}\n🔑 Código: {code}\n¿Podrás superarme con el mismo tablero y techo de puntos?\n🎮 Juega aquí: {url}",
+    "toast_duel_copied": "¡Enlace de duelo copiado al portapapeles!",
+    "toast_duel_started": "¡Duelo iniciado! Código: {code}",
+    "toast_error_num": "Número erróneo ({num}). -15 pts",
+    "toast_select_empty": "Selecciona una casilla vacía para consultar",
+    "toast_cell_filled": "Esta casilla ya está rellena",
+    "toast_peek_revealed": "Casilla revelada (Fila {r}, Col {c})",
+    "toast_rayosx_already": "Los Rayos X globales ya están activos",
+    "toast_rayosx_active": "Rayos X activados: -{pts} pts del techo",
+    "toast_sudoku_done": "¡El sudoku ya está completado!",
+    "toast_autosolve_done": "Sudoku resuelto por el sistema (0 pts)",
+    "toast_sound_on": "Sonido activado 🔊",
+    "toast_sound_off": "Sonido desactivado 🔇",
+    "rank_tactical_master": "Maestro Táctico",
+    "rank_assisted_strategist": "Estratega Asistido",
+    "rank_casual": "Jugador Casual",
+    "duel_seed_title": "Semilla de Duelo y Dificultad",
+    "duel_rival_section": "¿Tienes un código de rival?",
+    "duel_rival_btn": "Cargar Desafío"
   },
   "en": {
     "brand_tag": "Tactical & Audit",
@@ -327,7 +325,29 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Select Your Language",
     "modal_lang_desc": "Choose your preferred language for the game interface and user manual.",
     "toast_lang_changed": "Language set to English",
-    "toast_challenge_loaded": "Challenge loaded! Code: {code}"
+    "toast_challenge_loaded": "Challenge loaded! Code: {code}",
+    "duel_share_msg": "⚔️ I challenge you to a duel on Sudoku Arena!\n🎯 Level: {diff}\n🔑 Code: {code}\nCan you beat my score on the exact same board?\n🎮 Play here: {url}",
+    "toast_duel_copied": "Duel link copied to clipboard!",
+    "toast_duel_started": "Duel started! Code: {code}",
+    "toast_error_num": "Wrong number ({num}). -15 pts",
+    "toast_select_empty": "Select an empty cell to inspect",
+    "toast_cell_filled": "This cell is already filled",
+    "toast_peek_revealed": "Cell revealed (Row {r}, Col {c})",
+    "toast_rayosx_already": "Global X-Ray is already active",
+    "toast_rayosx_active": "X-Ray activated: -{pts} pts from ceiling",
+    "toast_sudoku_done": "Sudoku is already completed!",
+    "toast_autosolve_done": "Solved by system (0 pts)",
+    "toast_sound_on": "Sound enabled 🔊",
+    "toast_sound_off": "Sound disabled 🔇",
+    "rank_tactical_master": "Tactical Master",
+    "rank_assisted_strategist": "Assisted Strategist",
+    "rank_casual": "Casual Solver",
+    "duel_seed_title": "Duel Seed & Difficulty",
+    "duel_rival_section": "Have a rival's code?",
+    "duel_rival_btn": "Load Challenge",
+    "confirm_restart": "Do you want to restart this game from scratch? Placed numbers and current score will be lost.",
+    "confirm_abandon": "You have a game in progress. Do you want to abandon it and start a new board? Current progress will be lost.",
+    "toast_game_restored": "Game resumed automatically"
   },
   "fr": {
     "brand_tag": "Tactique & Audit",
@@ -452,7 +472,29 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Sélectionnez votre Langue",
     "modal_lang_desc": "Choisissez votre langue pour l'interface et le manuel du joueur.",
     "toast_lang_changed": "Langue changée en Français",
-    "toast_challenge_loaded": "Défi chargé ! Code : {code}"
+    "toast_challenge_loaded": "Défi chargé ! Code : {code}",
+    "duel_share_msg": "⚔️ Je te défie en duel sur Sudoku Arena !\n🎯 Niveau : {diff}\n🔑 Code : {code}\nPeux-tu me battre sur la même grille et le même plafond de points ?\n🎮 Joue ici : {url}",
+    "toast_duel_copied": "Lien de duel copié dans le presse-papiers !",
+    "toast_duel_started": "Duel lancé ! Code : {code}",
+    "toast_error_num": "Chiffre incorrect ({num}). -15 pts",
+    "toast_select_empty": "Sélectionnez une case vide pour consulter",
+    "toast_cell_filled": "Cette case est déjà remplie",
+    "toast_peek_revealed": "Case révélée (Ligne {r}, Col {c})",
+    "toast_rayosx_already": "Les Rayons X globaux sont déjà actifs",
+    "toast_rayosx_active": "Rayons X activés : -{pts} pts du plafond",
+    "toast_sudoku_done": "Le sudoku est déjà terminé !",
+    "toast_autosolve_done": "Résolu par le système (0 pts)",
+    "toast_sound_on": "Son activé 🔊",
+    "toast_sound_off": "Son désactivé 🔇",
+    "rank_tactical_master": "Maître Tactique",
+    "rank_assisted_strategist": "Stratège Assisté",
+    "rank_casual": "Joueur Occasionnel",
+    "duel_seed_title": "Graine de Duel & Difficulté",
+    "duel_rival_section": "Avez-vous un code rival ?",
+    "duel_rival_btn": "Charger le Défi",
+    "confirm_restart": "Voulez-vous recommencer cette partie depuis le début ? Les chiffres placés et votre score actuel seront perdus.",
+    "confirm_abandon": "Une partie est en cours. Voulez-vous l'abandonner et commencer une nouvelle grille ? La progression actuelle sera perdue.",
+    "toast_game_restored": "Partie reprise automatiquement"
   },
   "de": {
     "brand_tag": "Taktik & Audit",
@@ -577,7 +619,29 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Sprache auswählen",
     "modal_lang_desc": "Wählen Sie Ihre bevorzugte Sprache für Oberfläche und Handbuch.",
     "toast_lang_changed": "Sprache auf Deutsch eingestellt",
-    "toast_challenge_loaded": "Herausforderung geladen! Code: {code}"
+    "toast_challenge_loaded": "Herausforderung geladen! Code: {code}",
+    "duel_share_msg": "⚔️ Ich fordere dich zu einem Duell auf Sudoku Arena heraus!\n🎯 Stufe: {diff}\n🔑 Code: {code}\nSchaffst du es, mich auf demselben Spielfeld zu schlagen?\n🎮 Spiele hier: {url}",
+    "toast_duel_copied": "Duell-Link in die Zwischenablage kopiert!",
+    "toast_duel_started": "Duell gestartet! Code: {code}",
+    "toast_error_num": "Falsche Zahl ({num}). -15 Pkt.",
+    "toast_select_empty": "Wählen Sie ein leeres Feld zur Ansicht",
+    "toast_cell_filled": "Dieses Feld ist bereits ausgefüllt",
+    "toast_peek_revealed": "Feld aufgedeckt (Zeile {r}, Spalte {c})",
+    "toast_rayosx_already": "Globales Röntgen ist bereits aktiv",
+    "toast_rayosx_active": "Röntgen aktiviert: -{pts} Pkt. vom Limit",
+    "toast_sudoku_done": "Das Sudoku ist bereits abgeschlossen!",
+    "toast_autosolve_done": "Vom System gelöst (0 Pkt.)",
+    "toast_sound_on": "Ton eingeschaltet 🔊",
+    "toast_sound_off": "Ton ausgeschaltet 🔇",
+    "rank_tactical_master": "Taktischer Meister",
+    "rank_assisted_strategist": "Unterstützter Stratege",
+    "rank_casual": "Gelegenheitsspieler",
+    "duel_seed_title": "Duell-Seed & Schwierigkeit",
+    "duel_rival_section": "Haben Sie einen Rivalen-Code?",
+    "duel_rival_btn": "Herausforderung laden",
+    "confirm_restart": "Möchten Sie dieses Spiel von vorne beginnen? Gesetzte Zahlen und Ihre aktuelle Punktzahl gehen verloren.",
+    "confirm_abandon": "Ein Spiel läuft bereits. Möchten Sie es abbrechen und ein neues Spielfeld beginnen? Der aktuelle Fortschritt geht verloren.",
+    "toast_game_restored": "Spiel automatisch fortgesetzt"
   },
   "ca": {
     "brand_tag": "Tàctic & Auditoria",
@@ -702,7 +766,29 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Selecciona el teu Idioma",
     "modal_lang_desc": "Tria el teu idioma preferit per a la interfície i el manual de joc.",
     "toast_lang_changed": "Idioma canviat a Català",
-    "toast_challenge_loaded": "Repte carregat! Codi: {code}"
+    "toast_challenge_loaded": "Repte carregat! Codi: {code}",
+    "duel_share_msg": "⚔️ Et repto a un duel a Sudoku Arena!\n🎯 Nivell: {diff}\n🔑 Codi: {code}\nPodràs superar-me amb el mateix tauler i sostre de punts?\n🎮 Juga aquí: {url}",
+    "toast_duel_copied": "Enllaç de duel copiat al porta-retalls!",
+    "toast_duel_started": "Duel iniciat! Codi: {code}",
+    "toast_error_num": "Número erroni ({num}). -15 pts",
+    "toast_select_empty": "Selecciona una casella buida per consultar",
+    "toast_cell_filled": "Aquesta casella ja està emplenada",
+    "toast_peek_revealed": "Casella revelada (Fila {r}, Col {c})",
+    "toast_rayosx_already": "Els Raigs X globals ja estan actius",
+    "toast_rayosx_active": "Raigs X activats: -{pts} pts del sostre",
+    "toast_sudoku_done": "El sudoku ja està completat!",
+    "toast_autosolve_done": "Sudoku resolt pel sistema (0 pts)",
+    "toast_sound_on": "So activat 🔊",
+    "toast_sound_off": "So desactivat 🔇",
+    "rank_tactical_master": "Mestre Tàctic",
+    "rank_assisted_strategist": "Estratega Assistit",
+    "rank_casual": "Jugador Casual",
+    "duel_seed_title": "Llavor de Duel i Dificultat",
+    "duel_rival_section": "Tens un codi de rival?",
+    "duel_rival_btn": "Carregar Desafiament",
+    "confirm_restart": "Vols reiniciar aquesta partida des de zero? Es perdran els números col·locats i la puntuació actual.",
+    "confirm_abandon": "Tens una partida en curs. Vols abandonar-la i iniciar un nou tauler? Es perdrà el progrés.",
+    "toast_game_restored": "Partida represa automàticament"
   },
   "va": {
     "brand_tag": "Tàctic & Auditoria",
@@ -827,7 +913,29 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Selecciona el teu Idioma",
     "modal_lang_desc": "Tria el teu idioma preferit per a la interfície i el manual de joc.",
     "toast_lang_changed": "Idioma canviat a Valencià",
-    "toast_challenge_loaded": "Repte carregat! Codi: {code}"
+    "toast_challenge_loaded": "Repte carregat! Codi: {code}",
+    "duel_share_msg": "⚔️ Et repte a un duel en Sudoku Arena!\n🎯 Nivell: {diff}\n🔑 Codi: {code}\nPodràs superar-me amb el mateix tauler i sostre de punts?\n🎮 Juga ací: {url}",
+    "toast_duel_copied": "Enllaç de duel copiat al porta-retalls!",
+    "toast_duel_started": "Duel iniciat! Codi: {code}",
+    "toast_error_num": "Número erroni ({num}). -15 pts",
+    "toast_select_empty": "Selecciona una casella buida per consultar",
+    "toast_cell_filled": "Esta casella ja està plena",
+    "toast_peek_revealed": "Casella revelada (Fila {r}, Col {c})",
+    "toast_rayosx_already": "Els Raigs X globals ja estan actius",
+    "toast_rayosx_active": "Raigs X activats: -{pts} pts del sostre",
+    "toast_sudoku_done": "El sudoku ja està completat!",
+    "toast_autosolve_done": "Sudoku resolt pel sistema (0 pts)",
+    "toast_sound_on": "So activat 🔊",
+    "toast_sound_off": "So desactivat 🔇",
+    "rank_tactical_master": "Mestre Tàctic",
+    "rank_assisted_strategist": "Estratega Assistit",
+    "rank_casual": "Jugador Casual",
+    "duel_seed_title": "Llavor de Duel i Dificultat",
+    "duel_rival_section": "Tens un codi de rival?",
+    "duel_rival_btn": "Carregar Desafiament",
+    "confirm_restart": "Vols reiniciar esta partida des de zero? Es perdran els números col·locats i la puntuació actual.",
+    "confirm_abandon": "Tens una partida en curs. Vols abandonar-la i iniciar un nou tauler? Es perdrà el progrés.",
+    "toast_game_restored": "Partida represa automàticament"
   },
   "eu": {
     "brand_tag": "Taktikoa eta Ikuskaritza",
@@ -952,7 +1060,29 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Hautatu Zure Hizkuntza",
     "modal_lang_desc": "Aukeratu zure hizkuntza jokorako eta eskulibururako.",
     "toast_lang_changed": "Hizkuntza Euskarara aldatu da",
-    "toast_challenge_loaded": "Erronka kargatuta! Kodea: {code}"
+    "toast_challenge_loaded": "Erronka kargatuta! Kodea: {code}",
+    "duel_share_msg": "⚔️ Sudoku Arenan duelura erronka botatzen dizut!\n🎯 Maila: {diff}\n🔑 Kodea: {code}\nTaula eta puntu-muga berarekin gainditu ahal nauzu?\n🎮 Jokatu hemen: {url}",
+    "toast_duel_copied": "Dueluaren esteka arbelera kopiatu da!",
+    "toast_duel_started": "Duelua hasi da! Kodea: {code}",
+    "toast_error_num": "Zenbaki okerra ({num}). -15 puntu",
+    "toast_select_empty": "Hautatu lauki huts bat ikusteko",
+    "toast_cell_filled": "Lauki hau beteta dago jada",
+    "toast_peek_revealed": "Laukia agerian (Errenkada {r}, Zutabea {c})",
+    "toast_rayosx_already": "X Izpi globalak aktibo daude jada",
+    "toast_rayosx_active": "X Izpiak aktibatuta: -{pts} puntu mugatik",
+    "toast_sudoku_done": "Sudokua amaituta dago jada!",
+    "toast_autosolve_done": "Sistemak ebatzitako sudokua (0 puntu)",
+    "toast_sound_on": "Soinua aktibatuta 🔊",
+    "toast_sound_off": "Soinua desaktibatuta 🔇",
+    "rank_tactical_master": "Maisu Taktikoa",
+    "rank_assisted_strategist": "Estrategia Lagundua",
+    "rank_casual": "Jokalari Arrunta",
+    "duel_seed_title": "Duelu Hazia eta Zailtasuna",
+    "duel_rival_section": "Aurkariaren koderik baduzu?",
+    "duel_rival_btn": "Kargatu Erronka",
+    "confirm_restart": "Partida hau hasieratik berrabiarazi nahi duzu? Jarritako zenbakiak eta uneko puntuazioa galduko dira.",
+    "confirm_abandon": "Partida bat martxan daukazu. Bertan behera utzi eta taula berri bat hasi nahi duzu? Aurrerapena galduko da.",
+    "toast_game_restored": "Partida automatikoki berrekin da"
   },
   "gl": {
     "brand_tag": "Táctico & Auditoría",
@@ -1077,45 +1207,60 @@ const I18N_TRANSLATIONS = {
     "modal_lang_title": "🌐 Selecciona o teu Idioma",
     "modal_lang_desc": "Elixe o teu idioma preferido para a interface e o manual de xogo.",
     "toast_lang_changed": "Idioma cambiado a Galego",
-    "toast_challenge_loaded": "Reto cargado! Código: {code}"
+    "toast_challenge_loaded": "Reto cargado! Código: {code}",
+    "duel_share_msg": "⚔️ Réptoche a un duelo en Sudoku Arena!\n🎯 Nivel: {diff}\n🔑 Código: {code}\nPoderás superarme co mesmo taboleiro e teito de puntos?\n🎮 Xoga aquí: {url}",
+    "toast_duel_copied": "Ligazón de duelo copiada ao portapapeis!",
+    "toast_duel_started": "Duelo iniciado! Código: {code}",
+    "toast_error_num": "Número erróneo ({num}). -15 pts",
+    "toast_select_empty": "Selecciona unha casa baleira para consultar",
+    "toast_cell_filled": "Esta casa xa está cuberta",
+    "toast_peek_revealed": "Casa revelada (Fila {r}, Col {c})",
+    "toast_rayosx_already": "Os Raios X globais xa están activos",
+    "toast_rayosx_active": "Raios X activados: -{pts} pts do teito",
+    "toast_sudoku_done": "O sudoku xa está completado!",
+    "toast_autosolve_done": "Sudoku resolto polo sistema (0 pts)",
+    "toast_sound_on": "Son activado 🔊",
+    "toast_sound_off": "Son desactivado 🔇",
+    "rank_tactical_master": "Mestre Táctico",
+    "rank_assisted_strategist": "Estratega Asistido",
+    "rank_casual": "Xogador Casual",
+    "duel_seed_title": "Semente de Duelo e Dificultade",
+    "duel_rival_section": "Tes un código de rival?",
+    "duel_rival_btn": "Cargar Desafío",
+    "confirm_restart": "Queres reiniciar esta partida dende cero? Perderanse os números colocados e a túa puntuación actual.",
+    "confirm_abandon": "Tes unha partida en curso. Queres abandonala e iniciar un novo taboleiro? Perderase o progreso.",
+    "toast_game_restored": "Partida reiniciada automaticamente"
   }
 };
 
 class I18nManager {
   constructor() {
+    this.storageKey = 'sudoku_arena_lang';
     this.currentLang = this.detectLanguage();
-    document.documentElement.lang = this.currentLang;
   }
 
   detectLanguage() {
-    const saved = localStorage.getItem('sudoku_arena_lang');
-    if (saved && I18N_LANGUAGES[saved]) {
-      return saved;
-    }
+    const saved = localStorage.getItem(this.storageKey);
+    if (saved && I18N_LANGUAGES[saved]) return saved;
 
-    if (typeof navigator !== 'undefined' && navigator.language) {
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.startsWith('ca') || browserLang.startsWith('val')) return 'ca';
-      if (browserLang.startsWith('gl')) return 'gl';
-      if (browserLang.startsWith('eu')) return 'eu';
-      if (browserLang.startsWith('fr')) return 'fr';
-      if (browserLang.startsWith('de')) return 'de';
-      if (browserLang.startsWith('en')) return 'en';
-    }
+    const navLang = (navigator.language || 'es').split('-')[0].toLowerCase();
+    if (I18N_LANGUAGES[navLang]) return navLang;
 
     return 'es';
   }
 
-  getLang() {
-    return this.currentLang;
-  }
-
   setLanguage(lang) {
-    if (!I18N_TRANSLATIONS[lang]) return;
+    if (!I18N_LANGUAGES[lang]) return;
     this.currentLang = lang;
-    localStorage.setItem('sudoku_arena_lang', lang);
-    document.documentElement.lang = lang;
+    try {
+      localStorage.setItem(this.storageKey, lang);
+    } catch (e) {}
+
     this.applyTranslations();
+
+    if (window.sudokuApp && typeof window.sudokuApp.onLanguageChanged === 'function') {
+      window.sudokuApp.onLanguageChanged(lang);
+    }
   }
 
   t(key, params = {}) {
@@ -1130,54 +1275,41 @@ class I18nManager {
 
   applyTranslations() {
     // 1. Textos data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(elem => {
-      const key = elem.getAttribute('data-i18n');
-      const val = this.t(key);
-      if (val) {
-        elem.innerHTML = val;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const translation = this.t(key);
+      if (translation && translation !== key) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = translation;
+        } else {
+          el.textContent = translation;
+        }
       }
     });
 
-    // 2. Títulos data-i18n-title
-    document.querySelectorAll('[data-i18n-title]').forEach(elem => {
-      const key = elem.getAttribute('data-i18n-title');
-      const val = this.t(key);
-      if (val) {
-        elem.setAttribute('title', val);
+    // 2. Títulos/Tooltips data-i18n-title
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+      const key = el.getAttribute('data-i18n-title');
+      const translation = this.t(key);
+      if (translation && translation !== key) {
+        el.title = translation;
       }
     });
 
-    // 3. Placeholders data-i18n-placeholder
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
-      const key = elem.getAttribute('data-i18n-placeholder');
-      const val = this.t(key);
-      if (val) {
-        elem.setAttribute('placeholder', val);
-      }
-    });
-
-    // 4. Actualizar badge visible en header
-    const langBadge = document.getElementById('current-lang-code');
-    if (langBadge) {
-      const current = I18N_LANGUAGES[this.currentLang];
-      langBadge.textContent = current ? current.code.toUpperCase() : this.currentLang.toUpperCase();
+    // 3. Actualizar etiqueta visible del selector en cabecera
+    const langBtnText = document.getElementById('current-lang-code');
+    if (langBtnText && I18N_LANGUAGES[this.currentLang]) {
+      langBtnText.textContent = I18N_LANGUAGES[this.currentLang].name;
     }
 
-    // 5. Marcar tarjeta activa en modal de idioma
+    // 4. Actualizar estado activo en modal de idioma
     document.querySelectorAll('.lang-card').forEach(card => {
       card.classList.toggle('active', card.dataset.lang === this.currentLang);
     });
 
-    // 6. Notificar a la app activa si existe
-    if (window.sudokuApp && typeof window.sudokuApp.onLanguageChanged === 'function') {
-      try {
-        window.sudokuApp.onLanguageChanged(this.currentLang);
-      } catch (e) {
-        console.error('Error in onLanguageChanged callback:', e);
-      }
-    }
+    // 5. Atributo lang en <html>
+    document.documentElement.lang = this.currentLang;
   }
 }
 
-// Singleton global
 window.i18n = new I18nManager();
