@@ -18,6 +18,8 @@ class SudokuApp {
     this.currentSeed = null;
     this.duelSelectedDiff = 'medio';
     this.duelSelectedSeed = Math.floor(10000 + Math.random() * 90000);
+    this.isWeeklyMode = false;
+    this.weeklyDiff = null;
 
     this.init();
   }
@@ -55,14 +57,160 @@ class SudokuApp {
   /**
    * Comprueba si se ha recibido un código de desafío en la URL (?desafio=ARENA-DIFI-12345 o ?duel=...)
    */
+  /**
+   * Guarda el estado completo de la partida viva en localStorage para auto-guardado continuo
+   */
+  saveActiveGame() {
+    if (!this.gameData || this.isGameOver) return;
+    try {
+      const state = {
+        version: 1,
+        difficulty: this.selectedDifficulty,
+        seed: this.currentSeed,
+        currentBoard: this.currentBoard,
+        timerSeconds: this.timerSeconds,
+        isWeeklyMode: this.isWeeklyMode || false,
+        weeklyDiff: this.weeklyDiff || null,
+        scoring: this.scoring ? this.scoring.serialize() : null,
+        revealedCells: this.boardUI ? this.boardUI.revealedCells : null,
+        globalRayosXActive: this.boardUI ? this.boardUI.globalRayosXActive : false,
+        selectedRow: this.boardUI ? this.boardUI.selectedRow : 0,
+        selectedCol: this.boardUI ? this.boardUI.selectedCol : 0,
+        savedAt: Date.now()
+      };
+      localStorage.setItem('sudoku_arena_active_game_v1', JSON.stringify(state));
+    } catch (e) {
+      console.warn('No se pudo guardar la partida en localStorage:', e);
+    }
+  }
+
+  /**
+   * Restaura la partida viva desde localStorage (recuperación tras F5 o cierre involuntario)
+   */
+  restoreActiveGame() {
+    try {
+      const raw = localStorage.getItem('sudoku_arena_active_game_v1');
+      if (!raw) return false;
+      const saved = JSON.parse(raw);
+      if (!saved || !saved.difficulty || typeof saved.seed !== 'number' || !saved.currentBoard || saved.isGameOver) {
+        return false;
+      }
+
+      this.stopTimer();
+      this.isGameOver = false;
+      this.selectedDifficulty = saved.difficulty;
+      this.currentSeed = saved.seed;
+      this.timerSeconds = saved.timerSeconds || 0;
+      this.isWeeklyMode = !!saved.isWeeklyMode;
+      this.weeklyDiff = saved.weeklyDiff || null;
+
+      // Reconstruir puzzle matemáticamente con la misma semilla exacta
+      this.gameData = SudokuEngine.generateGame(saved.difficulty, saved.seed);
+      this.currentBoard = saved.currentBoard.map(row => [...row]);
+      this.scoring = ScoringEngine.fromSerialized(saved.scoring, this.gameData);
+      this.candidateMap = SudokuEngine.getAllCandidates(this.currentBoard);
+
+      // Restaurar estado visual del tablero
+      if (this.boardUI) {
+        this.boardUI.revealedCells = (saved.revealedCells && saved.revealedCells.length === 9)
+          ? saved.revealedCells.map(r => [...r])
+          : Array.from({ length: 9 }, () => Array(9).fill(false));
+        this.boardUI.setGlobalRayosX(!!saved.globalRayosXActive);
+        this.boardUI.selectCell(saved.selectedRow ?? 0, saved.selectedCol ?? 0);
+      }
+
+      // Actualizar selector de dificultad en UI
+      document.querySelectorAll('.diff-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.diff === saved.difficulty);
+      });
+
+      // Actualizar reloj en pantalla
+      const timerElem = document.getElementById('timer-display');
+      if (timerElem) timerElem.textContent = this.formatTime(this.timerSeconds);
+
+      // Actualizar código de desafío visible
+      const challengeCode = CompetitionEngine.generateChallengeCode(saved.difficulty, saved.seed);
+      const codeElem = document.getElementById('challenge-code-display');
+      if (codeElem) codeElem.textContent = challengeCode;
+
+      // Mantener la URL en la barra del navegador sin recargar la página
+      if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('desafio', challengeCode);
+          window.history.replaceState({ desafio: challengeCode }, '', url.toString());
+        } catch (e) {}
+      }
+
+      this.startTimer();
+      this.updateStatsUI();
+      this.render();
+
+      if (this.hasUserMadeMoves()) {
+        const toastMsg = window.i18n ? window.i18n.t('toast_game_restored') : 'Partida reanudada automáticamente';
+        this.showToast(toastMsg, 'info');
+      }
+
+      return true;
+    } catch (e) {
+      console.error('Error al restaurar partida guardada:', e);
+      return false;
+    }
+  }
+
+  /**
+   * Elimina la partida activa guardada (tras victoria o abandono confirmado)
+   */
+  clearActiveGame() {
+    try {
+      localStorage.removeItem('sudoku_arena_active_game_v1');
+    } catch (e) {}
+  }
+
+  /**
+   * Comprueba si el jugador ha realizado movimientos o recibido penalizaciones
+   */
+  hasUserMadeMoves() {
+    if (!this.gameData || this.isGameOver) return false;
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (this.gameData.board[r][c] === 0 && this.currentBoard[r][c] !== 0) {
+          return true;
+        }
+      }
+    }
+    if (this.scoring && (this.scoring.errorsCount > 0 || this.scoring.peeksCellCount > 0 || this.scoring.peeksAllCount > 0)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Comprueba si se ha recibido un código de desafío en la URL (?desafio=ARENA-DIFI-12345 o ?duel=...)
+   */
   checkUrlChallenge() {
     const challenge = CompetitionEngine.getChallengeFromUrl();
     if (challenge) {
+      // Si la URL trae un desafío específico, comprobar si ya teníamos progreso en esa semilla
+      const raw = localStorage.getItem('sudoku_arena_active_game_v1');
+      if (raw) {
+        try {
+          const saved = JSON.parse(raw);
+          if (saved && saved.difficulty === challenge.difficulty && saved.seed === challenge.seed && !saved.isGameOver) {
+            if (this.restoreActiveGame()) {
+              return;
+            }
+          }
+        } catch (e) {}
+      }
       this.selectedDifficulty = challenge.difficulty;
       this.newGame(challenge.difficulty, challenge.seed);
       this.showToast(`¡Desafío cargado! Código: ${challenge.code}`, 'info');
     } else {
-      this.newGame('medio');
+      // Sin parámetro en URL: reanudar partida activa previa si existe
+      if (!this.restoreActiveGame()) {
+        this.newGame('medio');
+      }
     }
   }
 
@@ -92,14 +240,29 @@ class SudokuApp {
     this.boardUI.revealedCells = Array.from({ length: 9 }, () => Array(9).fill(false));
     this.boardUI.selectCell(0, 0);
 
+    const timerElem = document.getElementById('timer-display');
+    if (timerElem) timerElem.textContent = this.formatTime(0);
+
     this.startTimer();
     this.updateStatsUI();
     this.render();
 
     // Actualizar código de desafío visible
-    const code = CompetitionEngine.generateChallengeCode(difficulty, seed);
+    const challengeCode = CompetitionEngine.generateChallengeCode(difficulty, seed);
     const codeElem = document.getElementById('challenge-code-display');
-    if (codeElem) codeElem.textContent = code;
+    if (codeElem) codeElem.textContent = challengeCode;
+
+    // Sincronizar URL de forma transparente para que al compartir o pulsar F5 se conserve el puzle exacto
+    if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('desafio', challengeCode);
+        window.history.replaceState({ desafio: challengeCode }, '', url.toString());
+      } catch (e) {}
+    }
+
+    // Persistir estado inicial de inmediato
+    this.saveActiveGame();
 
     window.soundFx.playClick();
   }
@@ -144,6 +307,7 @@ class SudokuApp {
         this.currentBoard[r][c] = 0;
         this.scoring.cellCompleted[r][c] = false;
         this.render();
+        this.saveActiveGame();
         this.triggerHaptic(15);
         window.soundFx.playClick();
       }
@@ -160,6 +324,7 @@ class SudokuApp {
       this.triggerHaptic(25);
       window.soundFx.playSuccess();
       this.render();
+      this.saveActiveGame();
       this.checkVictoryCondition();
     } else {
       // Error
@@ -168,6 +333,7 @@ class SudokuApp {
       this.triggerHaptic(45);
       window.soundFx.playError();
       this.render();
+      this.saveActiveGame();
       this.showToast(window.i18n.t('toast_error_num', { num }), 'error');
     }
   }
@@ -206,6 +372,7 @@ class SudokuApp {
       window.soundFx.playPeek();
       this.triggerHaptic(30);
       this.render();
+      this.saveActiveGame();
       this.showToast(window.i18n.t('toast_peek_revealed', { r: r + 1, c: c + 1 }), 'info');
     };
 
@@ -255,6 +422,7 @@ class SudokuApp {
       window.soundFx.playPeek();
       this.triggerHaptic(40);
       this.render();
+      this.saveActiveGame();
       this.showToast(window.i18n.t('toast_rayosx_active', { pts: totalDeduction }), 'warning');
     };
 
@@ -435,6 +603,7 @@ class SudokuApp {
     this.isWeeklyMode = true;
     this.weeklyDiff = diff;
     this.newGame(diff, seed);
+    this.saveActiveGame();
     this.closeModal('modal-weekly');
     this.showToast(`🏆 ¡Iniciado Reto Semanal ${diff.toUpperCase()} (${info.weekId})!`, 'success');
   }
@@ -487,6 +656,10 @@ class SudokuApp {
 
     this.isGameOver = true;
     this.stopTimer();
+    this.clearActiveGame();
+    if (this.isWeeklyMode && window.weeklyEngine) {
+      window.weeklyEngine.saveWeeklyResult(this.weeklyDiff, this.scoring.currentScore, this.scoring.initialTotalPoints, Math.round((this.scoring.currentScore / this.scoring.initialTotalPoints) * 100), this.timerSeconds);
+    }
     window.soundFx.playVictory();
     this.triggerHaptic([50, 100, 50, 100, 150]);
 
@@ -590,6 +763,9 @@ class SudokuApp {
       this.timerSeconds++;
       const timerElem = document.getElementById('timer-display');
       if (timerElem) timerElem.textContent = this.formatTime(this.timerSeconds);
+      if (this.timerSeconds % 5 === 0) {
+        this.saveActiveGame();
+      }
     }, 1000);
   }
 
@@ -782,11 +958,23 @@ class SudokuApp {
 
     document.getElementById('btn-tool-competition-sidebar')?.addEventListener('click', () => this.openCompetitionModal());
 
-    // Botones de selector de dificultad
+    // Auto-guardado al cerrar o recargar la ventana
+    window.addEventListener('beforeunload', () => {
+      this.saveActiveGame();
+    });
+
+    // Botones de selector de dificultad con confirmación si hay partida viva
     document.querySelectorAll('.diff-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const diff = btn.dataset.diff;
         if (diff !== this.selectedDifficulty) {
+          if (this.hasUserMadeMoves()) {
+            const msg = window.i18n ? window.i18n.t('confirm_abandon') : 'Tienes una partida en curso. ¿Deseas abandonarla e iniciar un nuevo tablero? Se perderá el progreso.';
+            if (!confirm(msg)) return;
+          }
+          this.clearActiveGame();
+          this.isWeeklyMode = false;
+          this.weeklyDiff = null;
           this.newGame(diff);
         }
       });
@@ -794,12 +982,21 @@ class SudokuApp {
 
     // Botones de cabecera
     document.getElementById('btn-restart-game')?.addEventListener('click', () => {
-      if (confirm(window.i18n.t('confirm_restart'))) {
+      const msg = window.i18n ? window.i18n.t('confirm_restart') : '¿Deseas reiniciar esta misma partida desde cero? Se perderán los números colocados y tu puntuación actual.';
+      if (confirm(msg)) {
+        this.clearActiveGame();
         this.newGame(this.selectedDifficulty, this.currentSeed);
       }
     });
 
     document.getElementById('btn-new-game')?.addEventListener('click', () => {
+      if (this.hasUserMadeMoves()) {
+        const msg = window.i18n ? window.i18n.t('confirm_abandon') : 'Tienes una partida en curso. ¿Deseas abandonarla e iniciar un nuevo tablero? Se perderá el progreso.';
+        if (!confirm(msg)) return;
+      }
+      this.clearActiveGame();
+      this.isWeeklyMode = false;
+      this.weeklyDiff = null;
       this.newGame(this.selectedDifficulty);
     });
 

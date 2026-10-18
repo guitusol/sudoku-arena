@@ -254,6 +254,59 @@ class ScoringEngine {
       ledger: this.ledger
     };
   }
+
+  /**
+   * Serializa el estado completo del motor de puntuación para guardado persistente
+   */
+  serialize() {
+    return {
+      initialClues: this.initialClues,
+      initialTotalPoints: this.initialTotalPoints,
+      cellScores: this.cellScores,
+      cellTechniques: this.cellTechniques,
+      cellPeeked: this.cellPeeked,
+      cellSolvedBySystem: this.cellSolvedBySystem,
+      cellCompleted: this.cellCompleted,
+      currentScore: this.currentScore,
+      totalPenalties: this.totalPenalties,
+      currentMaxPossible: this.currentMaxPossible,
+      errorsCount: this.errorsCount,
+      peeksCellCount: this.peeksCellCount,
+      peeksAllCount: this.peeksAllCount,
+      ledger: this.ledger
+    };
+  }
+
+  /**
+   * Restaura una instancia del motor de puntuación desde un estado persistido
+   */
+  static fromSerialized(data, gameData) {
+    if (!data) return new ScoringEngine(gameData);
+    const engine = Object.create(ScoringEngine.prototype);
+    engine.initialClues = data.initialClues ?? gameData.initialClues;
+    engine.initialTotalPoints = data.initialTotalPoints ?? gameData.totalPoints;
+    engine.cellScores = (data.cellScores && data.cellScores.length === 9)
+      ? data.cellScores.map(r => [...r])
+      : gameData.cellScores.map(r => [...r]);
+    engine.cellTechniques = data.cellTechniques || gameData.cellTechniques;
+    engine.cellPeeked = (data.cellPeeked && data.cellPeeked.length === 9)
+      ? data.cellPeeked.map(r => [...r])
+      : Array.from({ length: 9 }, () => Array(9).fill(false));
+    engine.cellSolvedBySystem = (data.cellSolvedBySystem && data.cellSolvedBySystem.length === 9)
+      ? data.cellSolvedBySystem.map(r => [...r])
+      : Array.from({ length: 9 }, () => Array(9).fill(false));
+    engine.cellCompleted = (data.cellCompleted && data.cellCompleted.length === 9)
+      ? data.cellCompleted.map(r => [...r])
+      : Array.from({ length: 9 }, () => Array(9).fill(false));
+    engine.currentScore = data.currentScore ?? 0;
+    engine.totalPenalties = data.totalPenalties ?? 0;
+    engine.currentMaxPossible = data.currentMaxPossible ?? engine.initialTotalPoints;
+    engine.errorsCount = data.errorsCount ?? 0;
+    engine.peeksCellCount = data.peeksCellCount ?? 0;
+    engine.peeksAllCount = data.peeksAllCount ?? 0;
+    engine.ledger = Array.isArray(data.ledger) ? [...data.ledger] : [];
+    return engine;
+  }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
