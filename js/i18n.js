@@ -5,56 +5,48 @@
 
 const I18N_LANGUAGES = {
   "es": {
-    "fair_play_notice": "Sea ético y resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos.",
     "code": "es",
     "name": "Español",
     "flag": "🇪🇸",
     "native": "Español"
   },
   "en": {
-    "fair_play_notice": "Please play ethically: solve Weekly Challenges and Duels using only this platform; do not use external resources.",
     "code": "en",
     "name": "English",
     "flag": "🇬🇧",
     "native": "English"
   },
   "fr": {
-    "fair_play_notice": "Faites preuve d'éthique et résolvez les Défis Hebdomadaires et les Duels uniquement via cette plateforme, n'utilisez pas de ressources externes.",
     "code": "fr",
     "name": "Français",
     "flag": "🇫🇷",
     "native": "Français"
   },
   "de": {
-    "fair_play_notice": "Spielen Sie fair und ethisch: Lösen Sie die wöchentlichen Herausforderungen und Duelle ausschließlich über diese Plattform und nutzen Sie keine externen Ressourcen.",
     "code": "de",
     "name": "Deutsch",
     "flag": "🇩🇪",
     "native": "Deutsch"
   },
   "ca": {
-    "fair_play_notice": "Sigueu ètic i resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs.",
     "code": "ca",
     "name": "Català",
     "flag": "🟡",
     "native": "Català"
   },
   "va": {
-    "fair_play_notice": "Siga ètic i resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs.",
     "code": "va",
     "name": "Valencià",
     "flag": "🦇",
     "native": "Valencià"
   },
   "eu": {
-    "fair_play_notice": "Izan zaitez etikoa eta ebatzi Asteko Erronkak eta Dueluak plataforma honen bidez, ez erabili kanpoko baliabiderik.",
     "code": "eu",
     "name": "Euskara",
     "flag": "🟢",
     "native": "Euskara"
   },
   "gl": {
-    "fair_play_notice": "Sexa ético e resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos.",
     "code": "gl",
     "name": "Galego",
     "flag": "🔵",
@@ -182,6 +174,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Plata (Top 35%)",
     "weekly_tier_bronze": "Bronce (Top 60%)",
     "weekly_share_btn": "📋 Compartir Mis Puntuaciones Semanales",
+    "fair_play_notice": "Sea ético y resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos",
     "modal_lang_title": "🌐 Selecciona tu Idioma",
     "modal_lang_desc": "Elige tu idioma preferido para la interfaz y el manual de juego.",
     "toast_lang_changed": "Idioma cambiado a Español",
@@ -306,6 +299,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Silver (Top 35%)",
     "weekly_tier_bronze": "Bronze (Top 60%)",
     "weekly_share_btn": "📋 Share My Weekly Scores",
+    "fair_play_notice": "Please play ethically: solve Weekly Challenges and Duels using only this platform; do not use external resources",
     "modal_lang_title": "🌐 Select Your Language",
     "modal_lang_desc": "Choose your preferred language for the game interface and user manual.",
     "toast_lang_changed": "Language set to English",
@@ -430,6 +424,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Argent (Top 35%)",
     "weekly_tier_bronze": "Bronze (Top 60%)",
     "weekly_share_btn": "📋 Partager Mes Scores de la Semaine",
+    "fair_play_notice": "Faites preuve d'éthique et résolvez les Défis Hebdomadaires et les Duels uniquement via cette plateforme, n'utilisez pas de ressources externes",
     "modal_lang_title": "🌐 Sélectionnez votre Langue",
     "modal_lang_desc": "Choisissez votre langue pour l'interface et le manuel du joueur.",
     "toast_lang_changed": "Langue changée en Français",
@@ -554,6 +549,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Silber (Top 35%)",
     "weekly_tier_bronze": "Bronze (Top 60%)",
     "weekly_share_btn": "📋 Meine Wochen-Ergebnisse teilen",
+    "fair_play_notice": "Spielen Sie fair und ethisch: Lösen Sie die wöchentlichen Herausforderungen und Duelle ausschließlich über diese Plattform und nutzen Sie keine externen Ressourcen",
     "modal_lang_title": "🌐 Sprache auswählen",
     "modal_lang_desc": "Wählen Sie Ihre bevorzugte Sprache für Oberfläche und Handbuch.",
     "toast_lang_changed": "Sprache auf Deutsch eingestellt",
@@ -678,6 +674,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Plata (Top 35%)",
     "weekly_tier_bronze": "Bronze (Top 60%)",
     "weekly_share_btn": "📋 Compartir les Meves Puntuacions Setmanals",
+    "fair_play_notice": "Sigueu ètic i resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs",
     "modal_lang_title": "🌐 Selecciona el teu Idioma",
     "modal_lang_desc": "Tria el teu idioma preferit per a la interfície i el manual de joc.",
     "toast_lang_changed": "Idioma canviat a Català",
@@ -802,6 +799,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Plata (Top 35%)",
     "weekly_tier_bronze": "Bronze (Top 60%)",
     "weekly_share_btn": "📋 Compartir les Meues Puntuacions Setmanals",
+    "fair_play_notice": "Siga ètic i resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs",
     "modal_lang_title": "🌐 Selecciona el teu Idioma",
     "modal_lang_desc": "Tria el teu idioma preferit per a la interfície i el manual de joc.",
     "toast_lang_changed": "Idioma canviat a Valencià",
@@ -926,6 +924,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Zilarra (Top %35)",
     "weekly_tier_bronze": "Brontzea (Top %60)",
     "weekly_share_btn": "📋 Partekatu Nire Asteko Puntuazioak",
+    "fair_play_notice": "Izan zaitez etikoa eta ebatzi Asteko Erronkak eta Dueluak plataforma honen bidez, ez erabili kanpoko baliabiderik",
     "modal_lang_title": "🌐 Hautatu Zure Hizkuntza",
     "modal_lang_desc": "Aukeratu zure hizkuntza jokorako eta eskulibururako.",
     "toast_lang_changed": "Hizkuntza Euskarara aldatu da",
@@ -1050,6 +1049,7 @@ const I18N_TRANSLATIONS = {
     "weekly_tier_silver": "Prata (Top 35%)",
     "weekly_tier_bronze": "Bronce (Top 60%)",
     "weekly_share_btn": "📋 Compartir as Miñas Puntuacións Semanais",
+    "fair_play_notice": "Sexa ético e resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos",
     "modal_lang_title": "🌐 Selecciona o teu Idioma",
     "modal_lang_desc": "Elixe o teu idioma preferido para a interface e o manual de xogo.",
     "toast_lang_changed": "Idioma cambiado a Galego",
