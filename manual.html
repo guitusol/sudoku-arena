@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual del Jugador — Sudoku Arena</title>
+  <meta name="description" content="Guía completa y manual de usuario para jugar y competir en Sudoku Arena.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #111827;
+      --bg-surface: #1e293b;
+      --border: #334155;
+      --border-accent: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --gold: #f59e0b;
+      --emerald: #10b981;
+      --red: #ef4444;
+      --font-sans: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.25rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ffffff;
+    }
+    .btn-back {
+      background: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .btn-back:hover { background: #1d4ed8; }
+    h1 { font-size: 1.85rem; color: #ffffff; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--border-accent); font-size: 1rem; font-weight: 600; margin-bottom: 1.5rem; }
+    h2 {
+      font-size: 1.3rem;
+      color: var(--gold);
+      border-left: 4px solid var(--gold);
+      padding-left: 0.75rem;
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+    }
+    h3 { font-size: 1.05rem; color: var(--border-accent); margin-top: 1.25rem; margin-bottom: 0.4rem; }
+    p { margin-bottom: 0.85rem; color: #cbd5e1; font-size: 0.95rem; }
+    ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; color: #cbd5e1; font-size: 0.95rem; }
+    li { margin-bottom: 0.4rem; }
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+    th {
+      background: #1e293b;
+      padding: 0.75rem 1rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .badge-gold { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .card-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    .highlight-tip {
+      background: rgba(56, 189, 248, 0.1);
+      border-left: 4px solid var(--border-accent);
+      padding: 0.85rem 1.15rem;
+      border-radius: 4px;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+    }
+    .footer {
+      border-top: 1px solid var(--border);
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1.25rem 1rem; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-nav">
+      <div class="brand-title">
+        <span>⚡</span> SUDOKU ARENA
+      </div>
+      <a href="index.html" class="btn-back">🎮 Ir a Jugar al Tablero</a>
+    </div>
+
+    <h1>Manual Oficial del Jugador</h1>
+    <div class="subtitle">Guía de Uso, Motor de Puntuación Cognitiva y Duelos Multijugador</div>
+
+    <div class="highlight-tip">
+      <strong>Filosofía del Juego:</strong> Sudoku Arena es un reto mental táctico. Aquí no se gana adivinando números por suerte, sino deduciendo con rigor lógico. Cada casilla tiene un valor en puntos según la dificultad del descarte y cada ayuda que pidas reduce tu techo de puntos.
+    </div>
+
+    <h2>1. Niveles de Dificultad y Técnicas Humanas</h2>
+    <p>La dificultad se clasifica por la técnica deductiva mínima necesaria para resolver cada casilla:</p>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Nivel</th>
+            <th>Pistas</th>
+            <th>Técnica Requerida</th>
+            <th>Puntos / Casilla</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🟢 Fácil</strong></td>
+            <td>42 pistas</td>
+            <td>Candidatos Únicos Directos (Naked Singles)</td>
+            <td><span class="badge badge-emerald">10 pts</span></td>
+          </tr>
+          <tr>
+            <td><strong>🟡 Medio</strong></td>
+            <td>34 pistas</td>
+            <td>Candidatos Ocultos en fila/col/caja (Hidden Singles)</td>
+            <td><span class="badge badge-emerald">15 pts</span></td>
+          </tr>
+          <tr>
+            <td><strong>🔴 Difícil</strong></td>
+            <td>28 pistas</td>
+            <td>Pares Desnudos/Ocultos y Bloqueos de Línea</td>
+            <td><span class="badge badge-gold">25 - 30 pts</span></td>
+          </tr>
+          <tr>
+            <td><strong>🟣 Endemoniado</strong></td>
+            <td>22 pistas</td>
+            <td>X-Wing, Pez Espada (Swordfish), Cadenas Forzadas</td>
+            <td><span class="badge badge-gold">50 - 100 pts</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>2. Controles en Móvil y Ordenador</h2>
+    <h3>📱 En Smartphone o Tablet</h3>
+    <ul>
+      <li><strong>Tocar casilla</strong>: Selecciona la casilla activa y resalta en tiempo real su fila, columna y caja 3x3.</li>
+      <li><strong>Teclado táctil (1 al 9)</strong>: Introduce el número en la casilla seleccionada con respuesta háptica (vibración).</li>
+      <li><strong>⌫ Borrar</strong>: Limpia el número colocado si la casilla no era de las pistas fijas iniciales.</li>
+      <li><strong>Herramientas Rápidas</strong>: Accede a la <strong>Lupa</strong>, <strong>Rayos X</strong> o <strong>Retar</strong> en la barra inferior.</li>
+    </ul>
+
+    <h3>💻 En Ordenador (PC o Portátil)</h3>
+    <ul>
+      <li><strong>Flechas del teclado</strong>: Desplazamiento ágil entre casillas.</li>
+      <li><strong>Números 1 al 9</strong>: Rellenar casilla.</li>
+      <li><strong>Supr / Retroceso / 0</strong>: Borrar casilla.</li>
+      <li><strong>Barra Espaciadora o Tecla P</strong>: Inspección Quirúrgica (Lupa).</li>
+      <li><strong>Tecla X</strong>: Activar Rayos X Globales.</li>
+      <li><strong>Tecla L</strong>: Abrir Libro Mayor de Auditoría.</li>
+    </ul>
+
+    <h2>3. Motor de Puntuación por Coste de Oportunidad</h2>
+    <p>Cada partida comienza con un <strong>Techo Inicial de Puntos</strong> (la suma de todos los puntos de las casillas vacías). Tus decisiones modifican este techo:</p>
+    <ul>
+      <li><strong>Acierto correcto</strong>: Suma los puntos asignados a la casilla a tu saldo neto.</li>
+      <li><strong>Fallo / Error</strong>: Resta <strong>-15 puntos netos</strong> directos de tu marcador y queda anotado en tu historial.</li>
+      <li><strong>Uso de Ayudas</strong>: Deducen puntos de tu techo máximo según la información que te regalan.</li>
+    </ul>
+
+    <h2>4. Las Ayudas Tácticas y sus Penalizaciones</h2>
+    
+    <div class="card-box">
+      <h3>🔍 Inspección Quirúrgica (Modo Lupa)</h3>
+      <p>Calcula y te muestra los candidatos válidos <strong>exclusivamente para la casilla que tienes seleccionada</strong>.</p>
+      <p><span class="badge badge-gold">Coste de Oportunidad:</span> Se descuentan los puntos de esa casilla de tu techo máximo. Pierdes los puntos de esa celda por haber necesitado que la máquina te calcule las posibilidades.</p>
+    </div>
+
+    <div class="card-box">
+      <h3>⚡ Rayos X Globales (Todas las Posibilidades)</h3>
+      <p>Escanea y muestra todos los números válidos en <strong>todas las casillas vacías del tablero a la vez</strong>.</p>
+      <p><span class="badge badge-red">Penalización Escalonada:</span> Al ver todo el tablero, la máquina aplica una deducción matemática proporcional:</p>
+      <ul>
+        <li>Casillas con <strong>1 sola posibilidad</strong>: Deducción del <strong>100%</strong> de sus puntos.</li>
+        <li>Casillas con <strong>2 posibilidades</strong>: Deducción del <strong>50%</strong> de sus puntos.</li>
+        <li>Casillas con <strong>3 posibilidades</strong>: Deducción del <strong>25%</strong> de sus puntos.</li>
+        <li>Casillas con <strong>4 o más</strong>: Deducción del <strong>10%</strong> de sus puntos.</li>
+      </ul>
+    </div>
+
+    <div class="card-box">
+      <h3>🏳️ Resolución por Sistema (Rendición)</h3>
+      <p>El motor autocompleta el resto del tablero al instante. <strong>Todas las casillas resueltas por la máquina reciben 0 puntos</strong>. Solo conservarás los puntos de las casillas acertadas por ti mismo.</p>
+    </div>
+
+    <h2>5. Índice de Autonomía Mental y Rangos</h2>
+    <p>Tu maestría se mide calculando el porcentaje de puntos obtenidos frente al techo inicial posible:</p>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Rango</th>
+            <th>Medalla</th>
+            <th>Autonomía</th>
+            <th>Requisito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Gran Maestro Puro</strong></td>
+            <td>🥇</td>
+            <td><strong>100%</strong></td>
+            <td>Sin fallos, sin lupa y sin rayos X. Lógica 100% autónoma.</td>
+          </tr>
+          <tr>
+            <td><strong>Lógico Quirúrgico</strong></td>
+            <td>🥈</td>
+            <td><strong>80% – 99%</strong></td>
+            <td>Deducción brillante con mínimas consultas o fallos aislados.</td>
+          </tr>
+          <tr>
+            <td><strong>Resolutor Pragmático</strong></td>
+            <td>🥉</td>
+            <td><strong>50% – 79%</strong></td>
+            <td>Partida resuelta apoyándose en ayudas o escáner de rayos X.</td>
+          </tr>
+          <tr>
+            <td><strong>Con Ruedines</strong></td>
+            <td>🚸</td>
+            <td><strong>&lt; 50%</strong></td>
+            <td>Uso intensivo de asistencias o autocompletado por la máquina.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+        <h2>6. Modo Duelo: Cómo Crear un Nuevo Planteamiento y Competir</h2>
+    <p>Sudoku Arena permite celebrar <strong>competiciones justas en igualdad matemática de condiciones</strong>. Ambos contrincantes resuelven exactamente la misma matriz, con el mismo orden de casillas y el mismo techo inicial de puntos.</p>
+
+    <div class="card-box" style="border-left: 4px solid var(--border-accent);">
+      <h3>⚔️ Paso a Paso para Crear un Nuevo Duelo</h3>
+      <ol style="margin-top: 0.5rem;">
+        <li><strong>Pulsa el botón <code>⚔️ Nuevo Duelo</code></strong>: Ubicado prominentemente en la cabecera superior (o en la barra táctil del móvil).</li>
+        <li><strong>Selecciona la Dificultad deseada</strong>:
+          <ul style="margin-top: 0.3rem;">
+            <li><strong>🟢 Fácil</strong>: 42 pistas • 10 pts/celda (agilidad visual directa).</li>
+            <li><strong>🟡 Medio</strong>: 34 pistas • 15 pts/celda (equilibrio táctico recomendado).</li>
+            <li><strong>🔴 Difícil</strong>: 28 pistas • 30 pts/celda (pares y bloqueos de línea).</li>
+            <li><strong>🟣 Endemoniado</strong>: 22 pistas • 100 pts/celda (técnicas maestras: X-Wing, Pez Espada).</li>
+          </ul>
+        </li>
+        <li><strong>Generación de Semilla Matemática en Tiempo Real</strong>: El sistema calcula de inmediato el código reproducible (ej: <code>ARENA-DIFI-44026</code>). Si deseas otro planteamiento dentro del mismo nivel, pulsa <strong><code>🎲 Cambiar Semilla</code></strong>.</li>
+        <li><strong>Opciones de Juego e Invitación</strong>:
+          <ul style="margin-top: 0.3rem;">
+            <li><strong><code>📋 Copiar Enlace para Rivales</code></strong>: Copia el mensaje de desafío con enlace directo para pegarlo por WhatsApp, Telegram o correo.</li>
+            <li><strong><code>🎮 Jugar Este Duelo Ahora</code></strong>: Carga inmediatamente el planteamiento en tu tablero e inicia el cronómetro con el código fijado.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card-box">
+      <h3>👥 Cómo se Conecta tu Rival</h3>
+      <p>Tu rival puede conectarse de dos maneras:</p>
+      <ul>
+        <li><strong>Enlace Directo</strong>: Simplemente abre el enlace recibido en su navegador o móvil y la partida se cargará sola.</li>
+        <li><strong>Pegar Código</strong>: Pulsa el botón <code>⚔️ Nuevo Duelo</code>, introduce el código en la casilla <em>"¿Te han retado a ti?"</em> y pulsa <strong>Cargar Duelo</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="card-box">
+      <h3>🏆 Criterio Oficial de Victoria</h3>
+      <p>Al completarse el sudoku, la auditoría dictamina el ganador comparando:</p>
+      <ol>
+        <li><strong>Puntos Netos Obtenidos</strong> (quien haya sumado más aciertos y menos penalizaciones).</li>
+        <li><strong>Índice de Autonomía Mental (%)</strong> (quien haya necesitado menos ayudas).</li>
+        <li><strong>Tiempo Cronometrado</strong> (criterio de desempate en caso de puntuaciones idénticas).</li>
+      </ol>
+    </div>
+
+    <h2>7. Consejos para Lograr el Rango de Gran Maestro</h2>
+    <ul>
+      <li><strong>Fíjate en las restricciones cruzadas</strong>: Antes de colocar un número, revisa mentalmente la fila, la columna y la caja 3x3 para estar seguro al 100%.</li>
+      <li><strong>No te arriesgues al azar</strong>: Un fallo penaliza -15 puntos y destruye tu 100% de autonomía.</li>
+      <li><strong>Prefiere la Lupa a los Rayos X</strong>: Si estás atascado en un punto muerto, usar la Lupa en una sola casilla solo te penalizará esa celda, mientras que Rayos X castiga todo el tablero.</li>
+    </ul>
+
+    <div class="footer">
+      Sudoku Arena &copy; 2026 &bull; Diseñado por Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L.
+    </div>
+  </div>
+</body>
+</html>

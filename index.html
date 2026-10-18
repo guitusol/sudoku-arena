@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Sudoku Arena | Competición Lógica y Auditoría de Puntos</title>
+  <meta name="description" content="Juego de Sudoku táctico con clasificación de dificultad por técnicas lógicas humanas y motor de puntuación con coste de oportunidad.">
+  
+  <!-- Optimización PWA y Pantallas Móviles -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b0f19">
+  
+  <!-- Tipografía Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Manifiesto PWA e Iconos -->\n  <link rel="manifest" href="manifest.json">\n  <link rel="apple-touch-icon" href="icons/icon-192.svg">\n  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">\n\n  <!-- Estilos CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- CABECERA -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon">⚡</div>
+        <div class="brand-text-container">
+          <h1 class="brand-title">SUDOKU ARENA</h1>
+          <span class="brand-tag">Táctico & Auditoría</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad"><span>⚔️</span> <span>Nuevo Duelo</span></button>\n        <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida">
+          <span>⚔️</span>
+          <span class="duel-btn-label">Duelo: <strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
+        </button>
+        <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>\n        <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
+          <span id="sound-icon">🔊</span>
+        </button>
+        <button id="btn-restart-game" class="header-btn icon-only-btn" title="Reiniciar tablero actual">
+          <span>🔄</span>
+        </button>
+        <button id="btn-new-game" class="header-btn primary new-game-btn" title="Nuevo tablero aleatorio">
+          <span>➕ Nuevo</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-layout">
+    
+    <!-- COLUMNA PRINCIPAL / TABLERO Y CONTROLES -->
+    <section class="board-card">
+
+      <!-- BARRA DE ESTADO Y DIFICULTAD -->
+      <div class="board-top-bar">
+        <!-- Selector de Dificultad -->
+        <div class="diff-selector">
+          <button class="diff-btn active" data-diff="facil">Fácil</button>
+          <button class="diff-btn" data-diff="medio">Medio</button>
+          <button class="diff-btn" data-diff="dificil">Difícil</button>
+          <button class="diff-btn" data-diff="endemoniado">Endemoniado</button>
+        </div>
+
+        <!-- Cronómetro -->
+        <div class="timer-box">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- HUD MÓVIL: MARCADOR COGNITIVO EN VIVO (Visible en pantallas móviles) -->
+      <div class="mobile-score-hud">
+        <div class="mobile-hud-row">
+          <div class="mobile-hud-score-chip">
+            <span class="mobile-hud-label">Puntos:</span>
+            <strong id="mobile-stat-score" class="text-gold font-mono">0</strong>
+            <span class="mobile-hud-ceiling">/ <span id="mobile-stat-ceiling">0</span></span>
+          </div>
+
+          <div class="mobile-hud-autonomy-chip">
+            <span class="mobile-hud-label">Autonomía:</span>
+            <strong id="mobile-stat-autonomy" class="text-emerald font-mono">100%</strong>
+            <span id="mobile-stat-rank" class="mobile-rank-badge">Gran Maestro</span>
+          </div>
+
+          <button id="btn-mobile-ledger" class="mobile-hud-ledger-btn" title="Abrir libro mayor de auditoría">
+            📋 <span class="ledger-btn-text">Auditoría</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CUADRÍCULA 9x9 TÁCTICA -->
+      <div class="sudoku-grid-wrapper">
+        <div id="board-container"></div>
+      </div>
+
+      <!-- ZONA DE PULGAR: TECLADO NUMÉRICO TÁCTIL (1 AL 9) -->
+      <div class="numpad-container">
+        <button class="numpad-btn" data-num="1">1</button>
+        <button class="numpad-btn" data-num="2">2</button>
+        <button class="numpad-btn" data-num="3">3</button>
+        <button class="numpad-btn" data-num="4">4</button>
+        <button class="numpad-btn" data-num="5">5</button>
+        <button class="numpad-btn" data-num="6">6</button>
+        <button class="numpad-btn" data-num="7">7</button>
+        <button class="numpad-btn" data-num="8">8</button>
+        <button class="numpad-btn" data-num="9">9</button>
+      </div>
+
+      <!-- BARRA DE OPERACIONES TÁCTICAS MÓVIL (ZONA ERGONÓMICA INFERIOR) -->
+      <div class="mobile-tactical-toolbar">
+        <button class="tactical-action-btn btn-erase" data-action="erase" title="Borrar casilla activa">
+          <span class="action-icon">⌫</span>
+          <span class="action-label">Borrar</span>
+        </button>
+
+        <button class="tactical-action-btn btn-peek-active" data-action="peek" title="Inspección Quirúrgica (Lupa)">
+          <span class="action-icon">🔍</span>
+          <span class="action-label">Lupa</span>
+          <span class="action-penalty-mini">-pts</span>
+        </button>
+
+        <button class="tactical-action-btn btn-rayosx-active" data-action="rayosx" title="Rayos X Globales">
+          <span class="action-icon">⚡</span>
+          <span class="action-label">Rayos X</span>
+          <span class="action-penalty-mini">-100%</span>
+        </button>
+
+        <button class="tactical-action-btn btn-autosolve-active" data-action="autosolve" title="Rendirse y Resolver por Máquina">
+          <span class="action-icon">🏳️</span>
+          <span class="action-label">Resolver</span>
+          <span class="action-penalty-mini">0 pts</span>
+        </button>
+
+        <button class="tactical-action-btn btn-duel-active" data-action="duel" title="Desafiar a un rival con este tablero">
+          <span class="action-icon">⚔️</span>
+          <span class="action-label">Retar</span>
+        </button>
+      </div>
+
+      <!-- Atajos de teclado para escritorio -->
+      <div class="desktop-keyboard-shortcuts">
+        <span><strong>Flechas:</strong> Mover</span>
+        <span><strong>1-9:</strong> Colocar</span>
+        <span><strong>Supr/0:</strong> Borrar</span>
+        <span><strong>P / Espacio:</strong> Lupa</span>
+        <span><strong>X:</strong> Rayos X</span>
+        <span><strong>L:</strong> Auditoría</span>
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA: MARCADOR DE PUNTOS Y AUDITORÍA (Visible en pantallas grandes) -->
+    <aside class="sidebar-panel">
+      
+      <!-- Tarjeta de Puntuación Hero -->
+      <div class="card-panel">
+        <div class="panel-title">
+          <span>Puntuación en Vivo</span>
+          <span>🏆</span>
+        </div>
+
+        <div class="score-hero-box">
+          <div class="score-label">Puntos Actuales</div>
+          <div class="score-value" id="stat-current-score">0</div>
+          <div class="score-sub">
+            <span>Techo actual: <strong id="stat-max-possible">0</strong></span>
+            <span>&bull;</span>
+            <span>Inicial: <strong id="stat-initial-ceiling">0</strong></span>
+          </div>
+        </div>
+
+        <!-- Barra de Autonomía -->
+        <div class="autonomy-section">
+          <div class="autonomy-header">
+            <span class="text-muted">Índice de Autonomía</span>
+            <strong id="stat-autonomy-pct" class="font-mono text-emerald">100%</strong>
+          </div>
+          <div class="progress-track">
+            <div id="autonomy-progress-bar" class="progress-fill" style="width: 100%;"></div>
+          </div>
+          <div id="stat-rank-badge" class="rank-badge-text">Gran Maestro Puro</div>
+        </div>
+
+        <!-- Métricas Rápidas -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-item-label">Penalizaciones</div>
+            <div id="stat-penalties" class="stat-item-val text-red">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-label">Historial</div>
+            <button id="btn-tool-ledger" class="stat-item-val text-accent" style="background:none; border:none; cursor:pointer; font-size:0.85rem; padding:0;">
+              Ver Auditoría &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Ayudas Tácticas con Penalización -->
+        <div class="panel-title" style="margin-top: 1rem;">
+          <span>Ayudas con Penalización</span>
+          <span>⚠️</span>
+        </div>
+
+        <div class="action-buttons-list">
+          <button id="btn-tool-peek" class="action-tool-btn" title="Ver solo los candidatos de la casilla seleccionada">
+            <div class="btn-left">
+              <span>🔍</span>
+              <span>Lupa (Casilla activa)</span>
+            </div>
+            <span class="tool-penalty-badge warning">-Puntos celda</span>
+          </button>
+
+          <button id="btn-tool-rayosx" class="action-tool-btn" title="Ver todos los candidatos de todo el tablero">
+            <div class="btn-left">
+              <span>⚡</span>
+              <span>Rayos X (Todo el tablero)</span>
+            </div>
+            <span class="tool-penalty-badge">-100% / -50%</span>
+          </button>
+
+          <button id="btn-tool-autosolve" class="action-tool-btn" title="Rendirse y que la máquina complete el sudoku">
+            <div class="btn-left">
+              <span>🏳️</span>
+              <span>Resolver por Sistema</span>
+            </div>
+            <span class="tool-penalty-badge">0 pts restan</span>
+          </button>
+        </div>
+
+        <!-- Panel de Competición / Duelo en Sidebar -->
+        <div class="panel-title" style="margin-top: 1.25rem;">
+          <span>Competición y Duelos</span>
+          <span>⚔️</span>
+        </div>
+        <button id="btn-tool-competition-sidebar" class="action-tool-btn" style="background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(16,185,129,0.15)); border-color: #2563eb;">
+          <div class="btn-left">
+            <span>🏆</span>
+            <span>Compartir Reto o Código</span>
+          </div>
+          <span class="tool-penalty-badge" style="background:rgba(37,99,235,0.2); color:#60a5fa; border-color:#2563eb;">DUELO</span>
+        </button>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- MODALES Y DIÁLOGOS TÁCTICOS (Estilo Bottom Sheet en móviles) -->
+
+  <!-- Modal 1: Consulta Quirúrgica (Lupa) -->
+  <div id="modal-cell-peek" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🔍 Inspección Quirúrgica (Lupa)</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+          ¿Deseas consultar las posibilidades lógicas de la casilla seleccionada en <strong id="peek-cell-coord" class="text-accent">Fila -, Col -</strong>?
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-grid); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Coste de Oportunidad:</span>
+            <strong id="peek-cell-points" class="font-mono text-red">-0 pts del techo</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Candidatos calculados:</span>
+            <span id="peek-cell-options-preview" class="font-mono text-accent">[ Calculando... ]</span>
+          </div>
+        </div>
+        <p style="font-size: 0.8rem; color: #fbbf24;">
+          ⚠️ Al aceptar, verás los números viables solo para esta casilla, pero renunciarás a sumar los puntos correspondientes a su dificultad lógica.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal">Cancelar</button>
+        <button id="btn-confirm-cell-peek" class="modal-btn primary">Revelar Casilla</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Rayos X Globales -->
+  <div id="modal-rayosx" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>⚡ Rayos X Globales (Todas las Posibilidades)</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+          Activar la visualización de <strong>todos los candidatos de todo el tablero</strong> aplicará una penalización matemática escalonada según la facilidad de deducción:
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-grid); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6;">
+            <li>Casillas con <strong>1 sola posibilidad</strong>: deducción del <strong class="text-red">100%</strong> de sus puntos (<span id="rayosx-singles-count">0</span> casillas).</li>
+            <li>Casillas con <strong>2 posibilidades</strong>: deducción del <strong class="text-red">50%</strong> de sus puntos (<span id="rayosx-doubles-count">0</span> casillas).</li>
+            <li>Casillas con <strong>3 posibilidades</strong>: deducción del <strong class="text-red">25%</strong>.</li>
+            <li>Casillas con <strong>4 o más</strong>: deducción del <strong class="text-red">10%</strong>.</li>
+          </ul>
+          <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-grid); display: flex; justify-content: space-between;">
+            <span>Penalización total estimada:</span>
+            <strong id="rayosx-total-deduction" class="font-mono text-red" style="font-size: 1.1rem;">-0 pts</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.8rem; color: #fbbf24;">
+          Esta acción reduce permanentemente el techo máximo de puntos que puedes alcanzar en esta partida.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal">Seguir pensando</button>
+        <button id="btn-confirm-rayosx" class="modal-btn danger">Activar Rayos X</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Auto-Resolver / Rendición -->
+  <div id="modal-autosolve" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🏳️ Resolución por Sistema</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+          ¿Deseas que el motor resuelva el sudoku a partir de este punto?
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-grid); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+            <span>Casillas restantes:</span>
+            <strong id="autosolve-cells-count" class="font-mono">0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Puntos que se anularán:</span>
+            <strong id="autosolve-points-lost" class="font-mono text-red">-0 pts</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.8rem; color: #fbbf24;">
+          Solo conservarás los puntos netos que hayas colocado correctamente por ti mismo.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal">Prefiero intentarlo</button>
+        <button id="btn-confirm-autosolve" class="modal-btn danger">Resolver por la máquina</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Libro Mayor / Auditoría de Puntos -->
+  <div id="modal-ledger" class="modal-overlay">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <h3>📋 Libro Mayor de Auditoría de Puntos</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="ledger-kpis-grid">
+          <div class="stat-item">
+            <div class="stat-item-label">Puntos Netos</div>
+            <div id="ledger-total-score" class="stat-item-val text-gold">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-label">Techo Restante</div>
+            <div id="ledger-max-possible" class="stat-item-val text-accent">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-label">Penalizaciones</div>
+            <div id="ledger-total-penalties" class="stat-item-val text-red">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-label">Autonomía</div>
+            <div id="ledger-autonomy-pct" class="stat-item-val text-emerald">100%</div>
+          </div>
+        </div>
+
+        <div class="ledger-table-wrapper">
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Acción</th>
+                <th>Delta</th>
+                <th>Saldo</th>
+                <th>Techo</th>
+                <th>Detalle Operativo</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn primary btn-close-modal">Volver al tablero</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Veredicto Final de Partida -->
+  <div id="modal-gameover" class="modal-overlay">
+    <div class="modal-card" style="text-align: center;">
+      <div class="modal-header" style="justify-content: center;">
+        <h3 id="verdict-title">¡Sudoku Completado!</h3>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 3rem; margin: 0.5rem 0;">🏅</div>
+        <div id="verdict-rank" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem;">
+          Gran Maestro Puro
+        </div>
+
+        <div class="verdict-stats-grid">
+          <div>
+            <span class="text-muted" style="font-size: 0.75rem;">Puntos Obtenidos:</span>
+            <div id="verdict-score" class="font-bold text-gold" style="font-size: 1.2rem;">0 pts</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size: 0.75rem;">Techo Teórico Máximo:</span>
+            <div id="verdict-max-theoretical" class="font-bold text-accent" style="font-size: 1.2rem;">0 pts</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size: 0.75rem;">Índice de Autonomía:</span>
+            <div id="verdict-autonomy" class="font-bold text-emerald" style="font-size: 1.2rem;">100%</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size: 0.75rem;">Tiempo Empleado:</span>
+            <div id="verdict-time" class="font-bold font-mono" style="font-size: 1.2rem;">00:00</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size: 0.75rem;">Penalizaciones:</span>
+            <div id="verdict-penalties" class="font-bold text-red" style="font-size: 0.95rem;">-0 pts</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size: 0.75rem;">Consultas / Errores:</span>
+            <div style="font-size: 0.95rem;"><span id="verdict-peeks">0</span> ayudas / <span id="verdict-errors" class="text-red">0</span> fallos</div>
+          </div>
+        </div>
+
+        <button id="btn-share-verdict" class="modal-btn primary" style="width: 100%; margin-bottom: 0.5rem; background: linear-gradient(135deg, #10b981, #059669);">
+          📋 Copiar Resultado y Código de Desafío para Retar
+        </button>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="modal-btn secondary btn-close-modal">Cerrar y Ver Tablero</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Modal 6: Sala de Duelo / Nuevo Planteamiento por Dificultad -->
+  <div id="modal-competition" class="modal-overlay">
+    <div class="modal-card" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3>⚔️ Nuevo Planteamiento para Duelo</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+          Genera un nuevo tablero eligiendo la dificultad deseada. Ambos jugadores se enfrentarán al <strong>mismo sudoku exacto</strong> con idéntico techo inicial de puntos y penalizaciones.
+        </p>
+
+        <!-- Selector de Dificultad para el Duelo -->
+        <label style="font-size: 0.78rem; text-transform: uppercase; font-family: var(--font-mono); color: var(--border-thick); font-weight: 700; margin-top: 0.75rem; display: block;">
+          1. Selecciona la Dificultad del Duelo:
+        </label>
+        
+        <div class="duel-diff-grid">
+          <div class="duel-diff-card" data-diff="facil">
+            <div class="duel-card-icon">🟢</div>
+            <div class="duel-card-title">Fácil</div>
+            <div class="duel-card-sub">42 pistas • 10 pts</div>
+          </div>
+          <div class="duel-diff-card active" data-diff="medio">
+            <div class="duel-card-icon">🟡</div>
+            <div class="duel-card-title">Medio</div>
+            <div class="duel-card-sub">34 pistas • 15 pts</div>
+          </div>
+          <div class="duel-diff-card" data-diff="dificil">
+            <div class="duel-card-icon">🔴</div>
+            <div class="duel-card-title">Difícil</div>
+            <div class="duel-card-sub">28 pistas • 30 pts</div>
+          </div>
+          <div class="duel-diff-card" data-diff="endemoniado">
+            <div class="duel-card-icon">🟣</div>
+            <div class="duel-card-title">Endemoniado</div>
+            <div class="duel-card-sub">22 pistas • 100 pts</div>
+          </div>
+        </div>
+
+        <!-- Previsualización del Planteamiento Generado -->
+        <label style="font-size: 0.78rem; text-transform: uppercase; font-family: var(--font-mono); color: var(--border-thick); font-weight: 700; display: block;">
+          2. Código de Partida y Desafío:
+        </label>
+        
+        <div class="duel-preview-box">
+          <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Semilla Matemática Reproducible</div>
+          <div id="duel-modal-code" class="font-mono font-bold text-accent duel-preview-code">ARENA-MEDI-12345</div>
+          <div class="duel-preview-meta">
+            <span>Dificultad: <strong id="duel-modal-diff-label" class="text-gold">Medio</strong></span>
+            <span>&bull;</span>
+            <button id="btn-duel-reroll-seed" class="modal-btn secondary" style="padding: 2px 8px; font-size: 0.75rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+              🎲 Cambiar Semilla
+            </button>
+          </div>
+        </div>
+
+        <!-- Acciones del Duelo -->
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+          <button id="btn-duel-start-now" class="modal-btn primary" style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; font-size: 0.95rem; background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+            🎮 Jugar Este Duelo Ahora
+          </button>
+          <button id="btn-duel-copy-link" class="modal-btn secondary" style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; font-size: 0.95rem; border-color: #38bdf8; color: #38bdf8;">
+            📋 Copiar Enlace para Rivales
+          </button>
+        </div>
+
+        <!-- Cargar código de rival -->
+        <div style="border-top: 1px solid var(--border-grid); padding-top: 0.85rem;">
+          <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">
+            ¿Te han retado a ti? Introduce el código de tu rival:
+          </label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="comp-input-code" placeholder="Ej: ARENA-DIFI-84210" style="flex:1; background: var(--bg-surface); border: 1px solid var(--border-grid); color: #fff; padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.9rem;">
+            <button id="btn-load-custom-challenge" class="modal-btn primary" style="white-space: nowrap;">Cargar Duelo</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificación Toast flotante -->
+  <div id="toast-notification" class="toast-box"></div>
+
+  <!-- Scripts -->
+  <script src="js/engine/sudoku.js"></script>
+  <script src="js/engine/scoring.js"></script>
+  <script src="js/engine/competition.js"></script>
+  <script src="js/ui/audio.js"></script>
+  <script src="js/ui/board.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

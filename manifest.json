@@ -1,0 +1,28 @@
+{
+  "name": "Sudoku Arena — Competición y Reto Lógico",
+  "short_name": "Sudoku Arena",
+  "description": "Juego táctico de Sudoku con motor de puntuación por coste de oportunidad, clasificación de dificultad humana y duelos multijugador.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "categories": [
+    "games",
+    "puzzle"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
