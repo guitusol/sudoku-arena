@@ -315,6 +315,13 @@ body {
 }
 
 /* --- TABLERO SUDOKU 9x9 --- */
+#board-container {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+}
+
 .sudoku-grid-wrapper {
   position: relative;
   width: 100%;
@@ -329,6 +336,7 @@ body {
   grid-template-rows: repeat(9, 1fr);
   width: 100%;
   height: 100%;
+  aspect-ratio: 1 / 1;
   background: var(--border-grid);
   border: 3px solid var(--border-thick);
   border-radius: 8px;
@@ -338,6 +346,11 @@ body {
 }
 
 .sudoku-cell {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   background: var(--bg-cell);
   position: relative;
   display: flex;
@@ -1050,60 +1063,91 @@ body {
     min-height: 32px;
   }
 
-  /* Rejilla de Sudoku móvil: casi pantalla completa */
+  /* Rejilla de Sudoku móvil: ampliada verticalmente con proporción 1:1 estricta */
   .sudoku-grid-wrapper {
-    width: min(calc(100vw - 16px), 430px);
+    width: min(calc(100vw - 18px), 440px);
     max-width: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
   }
 
-  /* Numpad de una fila adaptativa para pulgares */
+  #board-container {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .sudoku-grid {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .sudoku-cell {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* BANDA INFERIOR 1: Numpad elevado con mayor ergonomía para el pulgar */
   .numpad-container {
-    max-width: min(calc(100vw - 16px), 430px);
-    gap: 3px;
-    margin-top: 0.65rem;
+    max-width: min(calc(100vw - 18px), 440px);
+    gap: 4px;
+    margin-top: 0.85rem;
   }
 
   .numpad-btn {
-    padding: 0.55rem 0;
-    min-height: 48px;
-    font-size: 1.35rem;
-    border-radius: 6px;
+    padding: 0.6rem 0;
+    min-height: 50px;
+    font-size: 1.4rem;
+    border-radius: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-grid);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   }
 
-  /* Barra táctil de operaciones */
+  /* BANDA INFERIOR 2: Barra táctica elevada con margen de seguridad para botones del sistema móvil */
   .mobile-tactical-toolbar {
-    max-width: min(calc(100vw - 16px), 430px);
-    gap: 3px;
-    margin-top: 0.45rem;
+    max-width: min(calc(100vw - 18px), 440px);
+    gap: 4px;
+    margin-top: 0.65rem;
+    margin-bottom: calc(5.5rem + env(safe-area-inset-bottom, 32px)); /* Eleva las bandas por encima de los botones de Android */
   }
 
   .tactical-action-btn {
-    min-height: 46px;
-    padding: 0.4rem 0.1rem;
-    border-radius: 6px;
+    min-height: 48px;
+    padding: 0.45rem 0.15rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   }
 
   .tactical-action-btn .action-icon {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .tactical-action-btn .action-label {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
+    font-weight: 600;
   }
 
-  /* Modales convertidos en Bottom Sheets */
+  /* MODALES Y BOTÓN DE CERRAR ELEVADOS EN MÓVIL */
   .modal-overlay {
     align-items: flex-end;
-    padding: 0;
+    padding: 0.5rem;
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom, 36px)); /* Margen inferior para que nunca quede tapado */
   }
 
   .modal-card {
-    border-radius: 16px 16px 0 0;
+    border-radius: 16px !important;
     max-width: 100%;
     width: 100%;
-    max-height: 85vh;
+    max-height: 82vh;
     transform: translateY(100%);
-    border-bottom: none;
+    border: 1px solid var(--border-accent);
+    margin-bottom: calc(1.5rem + env(safe-area-inset-bottom, 28px));
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.7);
   }
 
   .modal-overlay.active .modal-card {
@@ -1111,12 +1155,24 @@ body {
   }
 
   .modal-body {
-    padding: 1rem;
+    padding: 1.1rem;
+    max-height: calc(82vh - 130px);
+    overflow-y: auto;
   }
 
+  /* Botón de cerrar elevado y destacado */
   .modal-footer {
-    padding: 0.75rem 1rem;
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.85rem 1.1rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 28px));
+    background: rgba(15, 23, 42, 0.95);
+  }
+
+  .modal-footer .modal-btn {
+    min-height: 46px;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .ledger-kpis-grid {

@@ -163,24 +163,24 @@
       <!-- Tarjeta de Puntuación Hero -->
       <div class="card-panel">
         <div class="panel-title">
-          <span>Puntuación en Vivo</span>
+          <span data-i18n="sidebar_live_score">Puntuación en Vivo</span>
           <span>🏆</span>
         </div>
 
         <div class="score-hero-box">
-          <div class="score-label">Puntos Actuales</div>
+          <div class="score-label" data-i18n="sidebar_current_points">Puntos Actuales</div>
           <div class="score-value" id="stat-current-score">0</div>
           <div class="score-sub">
-            <span>Techo actual: <strong id="stat-max-possible">0</strong></span>
+            <span data-i18n="sidebar_ceiling_label">Techo actual: </span><strong id="stat-max-possible">0</strong></span>
             <span>&bull;</span>
-            <span>Inicial: <strong id="stat-initial-ceiling">0</strong></span>
+            <span data-i18n="sidebar_initial_label">Inicial: </span><strong id="stat-initial-ceiling">0</strong></span>
           </div>
         </div>
 
         <!-- Barra de Autonomía -->
         <div class="autonomy-section">
           <div class="autonomy-header">
-            <span class="text-muted">Índice de Autonomía</span>
+            <span class="text-muted" data-i18n="sidebar_autonomy_index">Índice de Autonomía</span>
             <strong id="stat-autonomy-pct" class="font-mono text-emerald">100%</strong>
           </div>
           <div class="progress-track">
@@ -192,20 +192,20 @@
         <!-- Métricas Rápidas -->
         <div class="stats-grid">
           <div class="stat-item">
-            <div class="stat-item-label">Penalizaciones</div>
+            <div class="stat-item-label" data-i18n="sidebar_penalties_label">Penalizaciones</div>
             <div id="stat-penalties" class="stat-item-val text-red">0</div>
           </div>
           <div class="stat-item">
-            <div class="stat-item-label">Historial</div>
+            <div class="stat-item-label" data-i18n="sidebar_history_label">Historial</div>
             <button id="btn-tool-ledger" class="stat-item-val text-accent" style="background:none; border:none; cursor:pointer; font-size:0.85rem; padding:0;">
-              Ver Auditoría &rarr;
+              <span data-i18n="sidebar_view_audit">Ver Auditoría →</span>
             </button>
           </div>
         </div>
 
         <!-- Ayudas Tácticas con Penalización -->
         <div class="panel-title" style="margin-top: 1rem;">
-          <span>Ayudas con Penalización</span>
+          <span data-i18n="sidebar_assists_title">Ayudas con Penalización</span>
           <span>⚠️</span>
         </div>
 
@@ -213,15 +213,15 @@
           <button id="btn-tool-peek" class="action-tool-btn" title="Ver solo los candidatos de la casilla seleccionada">
             <div class="btn-left">
               <span>🔍</span>
-              <span>Lupa (Casilla activa)</span>
+              <span data-i18n="sidebar_lupa_btn">Lupa (Casilla activa)</span>
             </div>
-            <span class="tool-penalty-badge warning">-Puntos celda</span>
+            <span class="tool-penalty-badge warning" data-i18n="sidebar_penalty_cell">-Puntos celda</span>
           </button>
 
           <button id="btn-tool-rayosx" class="action-tool-btn" title="Ver todos los candidatos de todo el tablero">
             <div class="btn-left">
               <span>⚡</span>
-              <span>Rayos X (Todo el tablero)</span>
+              <span data-i18n="sidebar_rayosx_btn">Rayos X (Todo el tablero)</span>
             </div>
             <span class="tool-penalty-badge">-100% / -50%</span>
           </button>
@@ -229,21 +229,21 @@
           <button id="btn-tool-autosolve" class="action-tool-btn" title="Rendirse y que la máquina complete el sudoku">
             <div class="btn-left">
               <span>🏳️</span>
-              <span>Resolver por Sistema</span>
+              <span data-i18n="sidebar_autosolve_btn">Resolver por Sistema</span>
             </div>
-            <span class="tool-penalty-badge">0 pts restan</span>
+            <span class="tool-penalty-badge" data-i18n="sidebar_penalty_zero">0 pts restan</span>
           </button>
         </div>
 
         <!-- Panel de Competición / Duelo en Sidebar -->
         <div class="panel-title" style="margin-top: 1.25rem;">
-          <span>Competición y Duelos</span>
+          <span data-i18n="sidebar_duel_title">Competición y Duelos</span>
           <span>⚔️</span>
         </div>
         <button id="btn-tool-competition-sidebar" class="action-tool-btn" style="background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(16,185,129,0.15)); border-color: #2563eb;">
           <div class="btn-left">
             <span>🏆</span>
-            <span>Compartir Reto o Código</span>
+            <span data-i18n="sidebar_share_duel">Compartir Reto o Código</span>
           </div>
           <span class="tool-penalty-badge" style="background:rgba(37,99,235,0.2); color:#60a5fa; border-color:#2563eb;">DUELO</span>
         </button>
@@ -259,7 +259,7 @@
   <div id="modal-cell-peek" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>🔍 Inspección Quirúrgica (Lupa)</h3>
+        <h3 data-i18n="modal_peek_title">🔍 Inspección Quirúrgica (Lupa)</h3>
         <button class="btn-close-modal">&times;</button>
       </div>
       <div class="modal-body">
@@ -281,7 +281,7 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal">Cancelar</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="modal_peek_cancel">Cancelar</button>
         <button id="btn-confirm-cell-peek" class="modal-btn primary">Revelar Casilla</button>
       </div>
     </div>
@@ -316,7 +316,7 @@
       </div>
       <div class="modal-footer">
         <button class="modal-btn secondary btn-close-modal">Seguir pensando</button>
-        <button id="btn-confirm-rayosx" class="modal-btn danger">Activar Rayos X</button>
+        <button id="btn-confirm-rayosx" class="modal-btn danger" data-i18n="modal_rayosx_confirm">Activar Rayos X</button>
       </div>
     </div>
   </div>
@@ -357,7 +357,7 @@
   <div id="modal-ledger" class="modal-overlay">
     <div class="modal-card modal-card-wide">
       <div class="modal-header">
-        <h3>📋 Libro Mayor de Auditoría de Puntos</h3>
+        <h3 data-i18n="modal_ledger_title">📋 Libro Mayor de Auditoría de Puntos</h3>
         <button class="btn-close-modal">&times;</button>
       </div>
       <div class="modal-body">
@@ -384,12 +384,12 @@
           <table class="ledger-table">
             <thead>
               <tr>
-                <th>Hora</th>
-                <th>Acción</th>
-                <th>Delta</th>
-                <th>Saldo</th>
-                <th>Techo</th>
-                <th>Detalle Operativo</th>
+                <th data-i18n="modal_ledger_th_time">Hora</th>
+                <th data-i18n="modal_ledger_th_action">Acción</th>
+                <th data-i18n="modal_ledger_th_delta">Delta</th>
+                <th data-i18n="modal_ledger_th_balance">Saldo</th>
+                <th data-i18n="modal_ledger_th_ceiling">Techo</th>
+                <th data-i18n="modal_ledger_th_detail">Detalle Operativo</th>
               </tr>
             </thead>
             <tbody id="ledger-table-body"></tbody>
@@ -397,7 +397,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn primary btn-close-modal">Volver al tablero</button>
+        <button class="modal-btn primary btn-close-modal" data-i18n="modal_ledger_return">Volver al tablero</button>
       </div>
     </div>
   </div>
@@ -406,7 +406,7 @@
   <div id="modal-gameover" class="modal-overlay">
     <div class="modal-card" style="text-align: center;">
       <div class="modal-header" style="justify-content: center;">
-        <h3 id="verdict-title">¡Sudoku Completado!</h3>
+        <h3 id="verdict-title" data-i18n="verdict_title">¡Sudoku Completado!</h3>
       </div>
       <div class="modal-body">
         <div style="font-size: 3rem; margin: 0.5rem 0;">🏅</div>
@@ -416,37 +416,37 @@
 
         <div class="verdict-stats-grid">
           <div>
-            <span class="text-muted" style="font-size: 0.75rem;">Puntos Obtenidos:</span>
+            <span class="text-muted" style="font-size: 0.75rem;" data-i18n="verdict_score">Puntos Obtenidos:</span>
             <div id="verdict-score" class="font-bold text-gold" style="font-size: 1.2rem;">0 pts</div>
           </div>
           <div>
-            <span class="text-muted" style="font-size: 0.75rem;">Techo Teórico Máximo:</span>
+            <span class="text-muted" style="font-size: 0.75rem;"><span data-i18n="modal_ledger_max">Techo Teórico Máximo:</span>
             <div id="verdict-max-theoretical" class="font-bold text-accent" style="font-size: 1.2rem;">0 pts</div>
           </div>
           <div>
-            <span class="text-muted" style="font-size: 0.75rem;">Índice de Autonomía:</span>
+            <span class="text-muted" style="font-size: 0.75rem;"><span data-i18n="modal_ledger_autonomy">Índice de Autonomía:</span>
             <div id="verdict-autonomy" class="font-bold text-emerald" style="font-size: 1.2rem;">100%</div>
           </div>
           <div>
-            <span class="text-muted" style="font-size: 0.75rem;">Tiempo Empleado:</span>
+            <span class="text-muted" style="font-size: 0.75rem;" data-i18n="verdict_time">Tiempo Empleado:</span>
             <div id="verdict-time" class="font-bold font-mono" style="font-size: 1.2rem;">00:00</div>
           </div>
           <div>
-            <span class="text-muted" style="font-size: 0.75rem;">Penalizaciones:</span>
+            <span class="text-muted" style="font-size: 0.75rem;" data-i18n="verdict_penalties">Penalizaciones:</span>
             <div id="verdict-penalties" class="font-bold text-red" style="font-size: 0.95rem;">-0 pts</div>
           </div>
           <div>
-            <span class="text-muted" style="font-size: 0.75rem;">Consultas / Errores:</span>
+            <span class="text-muted" style="font-size: 0.75rem;" data-i18n="verdict_peeks">Consultas / Errores:</span>
             <div style="font-size: 0.95rem;"><span id="verdict-peeks">0</span> ayudas / <span id="verdict-errors" class="text-red">0</span> fallos</div>
           </div>
         </div>
 
         <button id="btn-share-verdict" class="modal-btn primary" style="width: 100%; margin-bottom: 0.5rem; background: linear-gradient(135deg, #10b981, #059669);">
-          📋 Copiar Resultado y Código de Desafío para Retar
+          <span data-i18n="verdict_share">📋 Copiar Resultado y Código de Desafío para Retar</span>
         </button>
       </div>
       <div class="modal-footer" style="justify-content: center;">
-        <button class="modal-btn secondary btn-close-modal">Cerrar y Ver Tablero</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="verdict_close">Cerrar y Ver Tablero</button>
       </div>
     </div>
   </div>
