@@ -783,6 +783,33 @@ class SudokuApp {
   }
 
   /**
+   * Cierra o abandona la partida con confirmación previa si está empezada
+   */
+  exitGame() {
+    if (this.hasUserMadeMoves()) {
+      const msg = window.i18n ? window.i18n.t('confirm_abandon_exit') : 'Tienes una partida en curso. ¿Deseas abandonar la partida y salir? Se perderá el progreso actual.';
+      if (!confirm(msg)) return;
+    }
+    this.clearActiveGame();
+    this.stopTimer();
+    this.isGameOver = true;
+
+    // Si se ejecuta dentro de aplicación Capacitor móvil nativa
+    if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+      window.Capacitor.Plugins.App.exitApp();
+      return;
+    }
+
+    // Intentar cerrar la ventana/pestaña si el navegador lo permite
+    try {
+      window.close();
+    } catch (e) {}
+
+    // Si la pestaña sigue abierta en el navegador, mostrar la pantalla modal de salida
+    this.openModal('modal-exit');
+  }
+
+  /**
    * Cambia la semilla aleatoria dentro del nivel de dificultad actual (Botón 🎲 o Teclas S / N)
    */
   rerollSeedForCurrentDifficulty() {
@@ -977,9 +1004,34 @@ class SudokuApp {
 
     document.getElementById('btn-tool-competition-sidebar')?.addEventListener('click', () => this.openCompetitionModal());
 
-    // Auto-guardado al cerrar o recargar la ventana
-    window.addEventListener('beforeunload', () => {
+    // Auto-guardado al cerrar o recargar la ventana y aviso si hay partida empezada
+    window.addEventListener('beforeunload', (e) => {
       this.saveActiveGame();
+      if (this.hasUserMadeMoves()) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    });
+
+    // Soporte para botón atrás físico en móviles Android
+    document.addEventListener('backbutton', (e) => {
+      e.preventDefault();
+      this.exitGame();
+    });
+    if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+      window.Capacitor.Plugins.App.addListener('backButton', () => {
+        this.exitGame();
+      });
+    }
+
+    // Botón Salir en cabecera y modal de salida
+    document.getElementById('btn-exit-game')?.addEventListener('click', () => {
+      this.exitGame();
+    });
+    document.getElementById('btn-modal-exit-new')?.addEventListener('click', () => {
+      this.closeModal('modal-exit');
+      this.newGame(this.selectedDifficulty);
     });
 
     // Botón Cambiar Semilla (🎲) en la barra de dificultad

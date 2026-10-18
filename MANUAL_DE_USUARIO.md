@@ -118,7 +118,7 @@ Según tu porcentaje de autonomía, obtendrás uno de los 4 rangos de honor:
 | **Gran Maestro Puro** | 🥇 | **100%** | Resolución impecable sin un solo fallo, sin consultar la lupa y sin activar rayos X. Máxima maestría lógica. |
 | **Lógico Quirúrgico** | 🥈 | **80% – 99%** | Resolución brillante con mínimas consultas puntuales de lupa o fallos aislados rápidamente corregidos. |
 | **Resolutor Pragmático**| 🥉 | **50% – 79%** | Juego con uso moderado de asistencias o activación de rayos X para desatascar fases complejas. |
-| **Con Ruedines** | 🚸 | **< 50%** | Partida con alta dependencia de la máquina o resolución automática asistida. ¡Toca seguir entrenando! |
+| **Nivel Muy Bajo** | 🚸 | **< 50%** | Partida con alta dependencia de la máquina o resolución automática asistida. ¡Toca seguir entrenando! |
 
 ---
 

@@ -236,7 +236,7 @@ class ScoringEngine {
 
     const rank = (typeof window !== 'undefined' && window.i18n)
       ? window.i18n.t(rankKey)
-      : 'Con Ruedines';
+      : 'Nivel Muy Bajo';
 
     return {
       currentScore: this.currentScore,
