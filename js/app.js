@@ -20,10 +20,18 @@ class SudokuApp {
     this.init();
   }
 
+  
+  onLanguageChanged(lang) {
+    this.updateStatsUI();
+    this.updateDuelModalPreview();
+    this.render();
+  }
+
   init() {
     const gridContainer = document.getElementById('board-container');
     this.boardUI = new BoardUI(gridContainer, (r, c) => this.onCellSelected(r, c));
     this.boardUI.initDOM();
+    window.i18n.applyTranslations();
 
     this.bindEvents();
     this.checkUrlChallenge();
@@ -158,7 +166,7 @@ class SudokuApp {
       this.triggerHaptic(45);
       window.soundFx.playError();
       this.render();
-      this.showToast(`¡Error! El ${num} no va en esa casilla (-15 pts)`, 'error');
+      this.showToast(window.i18n.t('toast_error_num', { num }), 'error');
     }
   }
 
@@ -171,12 +179,12 @@ class SudokuApp {
     const c = this.boardUI.selectedCol;
 
     if (r === -1 || c === -1) {
-      this.showToast('Selecciona primero una casilla vacía', 'warning');
+      this.showToast(window.i18n.t('toast_select_empty'), 'warning');
       return;
     }
 
     if (this.gameData.board[r][c] !== 0 || this.currentBoard[r][c] !== 0) {
-      this.showToast('Esta casilla ya está rellena', 'warning');
+      this.showToast(window.i18n.t('toast_cell_filled'), 'warning');
       return;
     }
 
@@ -196,7 +204,7 @@ class SudokuApp {
       window.soundFx.playPeek();
       this.triggerHaptic(30);
       this.render();
-      this.showToast(`Posibilidades reveladas en Fila ${r + 1}, Col ${c + 1}`, 'info');
+      this.showToast(window.i18n.t('toast_peek_revealed', { r: r + 1, c: c + 1 }), 'info');
     };
 
     this.openModal('modal-cell-peek');
@@ -209,7 +217,7 @@ class SudokuApp {
     if (this.isGameOver) return;
 
     if (this.boardUI.globalRayosXActive) {
-      this.showToast('Los Rayos X globales ya están activos', 'info');
+      this.showToast(window.i18n.t('toast_rayosx_already'), 'info');
       return;
     }
 
@@ -245,7 +253,7 @@ class SudokuApp {
       window.soundFx.playPeek();
       this.triggerHaptic(40);
       this.render();
-      this.showToast(`¡Rayos X activados! (-${totalDeduction} pts deducidos del techo)`, 'warning');
+      this.showToast(window.i18n.t('toast_rayosx_active', { pts: totalDeduction }), 'warning');
     };
 
     this.openModal('modal-rayosx');
@@ -270,7 +278,7 @@ class SudokuApp {
     }
 
     if (remainingCells === 0) {
-      this.showToast('El sudoku ya está completado', 'info');
+      this.showToast(window.i18n.t('toast_sudoku_done'), 'info');
       return;
     }
 
@@ -291,7 +299,7 @@ class SudokuApp {
       window.soundFx.playError();
       this.render();
       this.checkVictoryCondition();
-      this.showToast('El sistema ha resuelto las casillas pendientes (0 puntos otorgados)', 'warning');
+      this.showToast(window.i18n.t('toast_autosolve_done'), 'warning');
     };
 
     this.openModal('modal-autosolve');
@@ -363,10 +371,10 @@ class SudokuApp {
     if (codeElem) codeElem.textContent = code;
 
     const diffLabels = {
-      'facil': 'Fácil (42 pistas)',
-      'medio': 'Medio (34 pistas)',
-      'dificil': 'Difícil (28 pistas)',
-      'endemoniado': 'Endemoniado (22 pistas)'
+      'facil': `${window.i18n.t('diff_facil')} (${window.i18n.t('duel_card_easy_sub')})`,
+      'medio': `${window.i18n.t('diff_medio')} (${window.i18n.t('duel_card_med_sub')})`,
+      'dificil': `${window.i18n.t('diff_dificil')} (${window.i18n.t('duel_card_hard_sub')})`,
+      'endemoniado': `${window.i18n.t('diff_endemoniado')} (${window.i18n.t('duel_card_evil_sub')})`
     };
 
     const diffLabelElem = document.getElementById('duel-modal-diff-label');
@@ -387,7 +395,7 @@ class SudokuApp {
     copyBtn.onclick = () => {
       const url = CompetitionEngine.getChallengeUrl(code);
       navigator.clipboard.writeText(url).then(() => {
-        this.showToast('¡Enlace de duelo copiado al portapapeles!', 'success');
+        this.showToast(window.i18n.t('toast_duel_copied'), 'success');
       }).catch(() => {
         prompt('Copia este enlace para retar a tu rival:', url);
       });
@@ -598,6 +606,22 @@ class SudokuApp {
     document.getElementById('btn-tool-competition')?.addEventListener('click', () => this.openCompetitionModal());
 
     // Botón de Nuevo Duelo en cabecera
+    
+    // Selector de Idioma (Modal 7)
+    document.getElementById('btn-open-lang-modal')?.addEventListener('click', () => {
+      this.openModal('modal-language');
+    });
+
+    document.querySelectorAll('.lang-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const lang = card.dataset.lang;
+        window.i18n.setLanguage(lang);
+        this.closeModal('modal-language');
+        window.soundFx.playClick();
+        this.showToast(window.i18n.t('toast_lang_changed'), 'success');
+      });
+    });
+
     document.getElementById('btn-open-new-duel-modal')?.addEventListener('click', () => {
       this.openNewDuelModal(this.selectedDifficulty);
     });
@@ -625,14 +649,18 @@ class SudokuApp {
       this.closeModal('modal-competition');
       this.newGame(this.duelSelectedDiff, this.duelSelectedSeed);
       const code = CompetitionEngine.generateChallengeCode(this.duelSelectedDiff, this.duelSelectedSeed);
-      this.showToast(`¡Nuevo duelo iniciado! Código: ${code}`, 'success');
+      this.showToast(window.i18n.t('toast_duel_started', { code }), 'success');
     });
 
     // Botón Copiar Enlace para Rivales
     document.getElementById('btn-duel-copy-link')?.addEventListener('click', () => {
       const code = CompetitionEngine.generateChallengeCode(this.duelSelectedDiff, this.duelSelectedSeed);
       const url = CompetitionEngine.getChallengeUrl(code);
-      const msg = `⚔️ ¡Te reto en Sudoku Arena!\nNivel: ${this.duelSelectedDiff.toUpperCase()}\nCódigo: ${code}\nEntra a competir directamente con este enlace:\n${url}`;
+      const msg = window.i18n.t('duel_share_msg', {
+        diff: this.duelSelectedDiff.toUpperCase(),
+        code: code,
+        url: url
+      });
 
       if (navigator.clipboard) {
         navigator.clipboard.writeText(msg).then(() => {
@@ -659,7 +687,7 @@ class SudokuApp {
 
     // Botones de cabecera
     document.getElementById('btn-restart-game')?.addEventListener('click', () => {
-      if (confirm('¿Reiniciar el tablero actual con el mismo código de partida?')) {
+      if (confirm(window.i18n.t('confirm_restart'))) {
         this.newGame(this.selectedDifficulty, this.currentSeed);
       }
     });
@@ -671,7 +699,7 @@ class SudokuApp {
     document.getElementById('btn-toggle-sound')?.addEventListener('click', () => {
       const active = window.soundFx.toggle();
       document.getElementById('sound-icon').textContent = active ? '🔊' : '🔇';
-      this.showToast(active ? 'Sonido activado' : 'Sonido silenciado', 'info');
+      this.showToast(active ? window.i18n.t('toast_sound_on') : window.i18n.t('toast_sound_off'), 'info');
     });
 
     // Cierre de modales

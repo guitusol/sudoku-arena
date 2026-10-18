@@ -29,11 +29,12 @@
         <div class="brand-logo-icon">⚡</div>
         <div class="brand-text-container">
           <h1 class="brand-title">SUDOKU ARENA</h1>
-          <span class="brand-tag">Táctico & Auditoría</span>
+          <span class="brand-tag" data-i18n="brand_tag">Táctico & Auditoría</span>
         </div>
       </div>
 
       <div class="header-actions">
+        <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
         <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad"><span>⚔️</span> <span>Nuevo Duelo</span></button>\n        <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida">
           <span>⚔️</span>
           <span class="duel-btn-label">Duelo: <strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
@@ -45,7 +46,7 @@
           <span>🔄</span>
         </button>
         <button id="btn-new-game" class="header-btn primary new-game-btn" title="Nuevo tablero aleatorio">
-          <span>➕ Nuevo</span>
+          <span data-i18n="btn_new_game">➕ Nuevo</span>
         </button>
       </div>
     </div>
@@ -61,10 +62,10 @@
       <div class="board-top-bar">
         <!-- Selector de Dificultad -->
         <div class="diff-selector">
-          <button class="diff-btn active" data-diff="facil">Fácil</button>
-          <button class="diff-btn" data-diff="medio">Medio</button>
-          <button class="diff-btn" data-diff="dificil">Difícil</button>
-          <button class="diff-btn" data-diff="endemoniado">Endemoniado</button>
+          <button class="diff-btn active" data-diff="facil" data-i18n="diff_facil">Fácil</button>
+          <button class="diff-btn" data-diff="medio" data-i18n="diff_medio">Medio</button>
+          <button class="diff-btn" data-diff="dificil" data-i18n="diff_dificil">Difícil</button>
+          <button class="diff-btn" data-diff="endemoniado" data-i18n="diff_endemoniado">Endemoniado</button>
         </div>
 
         <!-- Cronómetro -->
@@ -78,19 +79,19 @@
       <div class="mobile-score-hud">
         <div class="mobile-hud-row">
           <div class="mobile-hud-score-chip">
-            <span class="mobile-hud-label">Puntos:</span>
+            <span class="mobile-hud-label" data-i18n="hud_points">Puntos:</span>
             <strong id="mobile-stat-score" class="text-gold font-mono">0</strong>
             <span class="mobile-hud-ceiling">/ <span id="mobile-stat-ceiling">0</span></span>
           </div>
 
           <div class="mobile-hud-autonomy-chip">
-            <span class="mobile-hud-label">Autonomía:</span>
+            <span class="mobile-hud-label" data-i18n="hud_autonomy">Autonomía:</span>
             <strong id="mobile-stat-autonomy" class="text-emerald font-mono">100%</strong>
             <span id="mobile-stat-rank" class="mobile-rank-badge">Gran Maestro</span>
           </div>
 
           <button id="btn-mobile-ledger" class="mobile-hud-ledger-btn" title="Abrir libro mayor de auditoría">
-            📋 <span class="ledger-btn-text">Auditoría</span>
+            📋 <span class="ledger-btn-text" data-i18n="hud_ledger">Auditoría</span>
           </button>
         </div>
       </div>
@@ -117,30 +118,30 @@
       <div class="mobile-tactical-toolbar">
         <button class="tactical-action-btn btn-erase" data-action="erase" title="Borrar casilla activa">
           <span class="action-icon">⌫</span>
-          <span class="action-label">Borrar</span>
+          <span class="action-label" data-i18n="action_erase">Borrar</span>
         </button>
 
         <button class="tactical-action-btn btn-peek-active" data-action="peek" title="Inspección Quirúrgica (Lupa)">
           <span class="action-icon">🔍</span>
-          <span class="action-label">Lupa</span>
+          <span class="action-label" data-i18n="action_peek">Lupa</span>
           <span class="action-penalty-mini">-pts</span>
         </button>
 
         <button class="tactical-action-btn btn-rayosx-active" data-action="rayosx" title="Rayos X Globales">
           <span class="action-icon">⚡</span>
-          <span class="action-label">Rayos X</span>
+          <span class="action-label" data-i18n="action_rayosx">Rayos X</span>
           <span class="action-penalty-mini">-100%</span>
         </button>
 
         <button class="tactical-action-btn btn-autosolve-active" data-action="autosolve" title="Rendirse y Resolver por Máquina">
           <span class="action-icon">🏳️</span>
-          <span class="action-label">Resolver</span>
+          <span class="action-label" data-i18n="action_autosolve">Resolver</span>
           <span class="action-penalty-mini">0 pts</span>
         </button>
 
         <button class="tactical-action-btn btn-duel-active" data-action="duel" title="Desafiar a un rival con este tablero">
           <span class="action-icon">⚔️</span>
-          <span class="action-label">Retar</span>
+          <span class="action-label" data-i18n="action_duel">Retar</span>
         </button>
       </div>
 
@@ -453,55 +454,55 @@
   <div id="modal-competition" class="modal-overlay">
     <div class="modal-card" style="max-width: 580px;">
       <div class="modal-header">
-        <h3>⚔️ Nuevo Planteamiento para Duelo</h3>
+        <h3 data-i18n="duel_modal_title">⚔️ Nuevo Planteamiento para Duelo</h3>
         <button class="btn-close-modal">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-i18n="duel_modal_desc">
           Genera un nuevo tablero eligiendo la dificultad deseada. Ambos jugadores se enfrentarán al <strong>mismo sudoku exacto</strong> con idéntico techo inicial de puntos y penalizaciones.
         </p>
 
         <!-- Selector de Dificultad para el Duelo -->
         <label style="font-size: 0.78rem; text-transform: uppercase; font-family: var(--font-mono); color: var(--border-thick); font-weight: 700; margin-top: 0.75rem; display: block;">
-          1. Selecciona la Dificultad del Duelo:
+          <span data-i18n="duel_step1">1. Selecciona la Dificultad del Duelo:</span>
         </label>
         
         <div class="duel-diff-grid">
           <div class="duel-diff-card" data-diff="facil">
             <div class="duel-card-icon">🟢</div>
-            <div class="duel-card-title">Fácil</div>
-            <div class="duel-card-sub">42 pistas • 10 pts</div>
+            <div class="duel-card-title" data-i18n="diff_facil">Fácil</div>
+            <div class="duel-card-sub" data-i18n="duel_card_easy_sub">42 pistas • 10 pts</div>
           </div>
           <div class="duel-diff-card active" data-diff="medio">
             <div class="duel-card-icon">🟡</div>
-            <div class="duel-card-title">Medio</div>
-            <div class="duel-card-sub">34 pistas • 15 pts</div>
+            <div class="duel-card-title" data-i18n="diff_medio">Medio</div>
+            <div class="duel-card-sub" data-i18n="duel_card_med_sub">34 pistas • 15 pts</div>
           </div>
           <div class="duel-diff-card" data-diff="dificil">
             <div class="duel-card-icon">🔴</div>
-            <div class="duel-card-title">Difícil</div>
-            <div class="duel-card-sub">28 pistas • 30 pts</div>
+            <div class="duel-card-title" data-i18n="diff_dificil">Difícil</div>
+            <div class="duel-card-sub" data-i18n="duel_card_hard_sub">28 pistas • 30 pts</div>
           </div>
           <div class="duel-diff-card" data-diff="endemoniado">
             <div class="duel-card-icon">🟣</div>
-            <div class="duel-card-title">Endemoniado</div>
-            <div class="duel-card-sub">22 pistas • 100 pts</div>
+            <div class="duel-card-title" data-i18n="diff_endemoniado">Endemoniado</div>
+            <div class="duel-card-sub" data-i18n="duel_card_evil_sub">22 pistas • 100 pts</div>
           </div>
         </div>
 
         <!-- Previsualización del Planteamiento Generado -->
         <label style="font-size: 0.78rem; text-transform: uppercase; font-family: var(--font-mono); color: var(--border-thick); font-weight: 700; display: block;">
-          2. Código de Partida y Desafío:
+          <span data-i18n="duel_step2">2. Código de Partida y Desafío:</span>
         </label>
         
         <div class="duel-preview-box">
-          <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Semilla Matemática Reproducible</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;" data-i18n="duel_seed_title">Semilla Matemática Reproducible</div>
           <div id="duel-modal-code" class="font-mono font-bold text-accent duel-preview-code">ARENA-MEDI-12345</div>
           <div class="duel-preview-meta">
             <span>Dificultad: <strong id="duel-modal-diff-label" class="text-gold">Medio</strong></span>
             <span>&bull;</span>
             <button id="btn-duel-reroll-seed" class="modal-btn secondary" style="padding: 2px 8px; font-size: 0.75rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
-              🎲 Cambiar Semilla
+              <span data-i18n="duel_reroll">🎲 Cambiar Semilla</span>
             </button>
           </div>
         </div>
@@ -509,21 +510,21 @@
         <!-- Acciones del Duelo -->
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
           <button id="btn-duel-start-now" class="modal-btn primary" style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; font-size: 0.95rem; background: linear-gradient(135deg, #2563eb, #1d4ed8);">
-            🎮 Jugar Este Duelo Ahora
+            <span data-i18n="duel_play_now">🎮 Jugar Este Duelo Ahora</span>
           </button>
           <button id="btn-duel-copy-link" class="modal-btn secondary" style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; font-size: 0.95rem; border-color: #38bdf8; color: #38bdf8;">
-            📋 Copiar Enlace para Rivales
+            <span data-i18n="duel_copy_link">📋 Copiar Enlace para Rivales</span>
           </button>
         </div>
 
         <!-- Cargar código de rival -->
         <div style="border-top: 1px solid var(--border-grid); padding-top: 0.85rem;">
           <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">
-            ¿Te han retado a ti? Introduce el código de tu rival:
+            <span data-i18n="duel_rival_section">¿Te han retado a ti? Introduce el código de tu rival:</span>
           </label>
           <div style="display: flex; gap: 0.5rem;">
-            <input type="text" id="comp-input-code" placeholder="Ej: ARENA-DIFI-84210" style="flex:1; background: var(--bg-surface); border: 1px solid var(--border-grid); color: #fff; padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.9rem;">
-            <button id="btn-load-custom-challenge" class="modal-btn primary" style="white-space: nowrap;">Cargar Duelo</button>
+            <input type="text" id="comp-input-code" placeholder="Ej: ARENA-DIFI-84210" data-i18n-placeholder="duel_rival_placeholder" style="flex:1; background: var(--bg-surface); border: 1px solid var(--border-grid); color: #fff; padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.9rem;">
+            <button id="btn-load-custom-challenge" class="modal-btn primary" style="white-space: nowrap;" data-i18n="duel_rival_btn">Cargar Duelo</button>
           </div>
         </div>
       </div>
@@ -534,6 +535,77 @@
   </div>
       <div class="modal-footer">
         <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Modal 7: Selector de Idioma -->
+  <div id="modal-language" class="modal-overlay">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 data-i18n="modal_lang_title">🌐 Selecciona tu Idioma</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;" data-i18n="modal_lang_desc">
+          Elige tu idioma preferido para la interfaz y el manual de juego.
+        </p>
+
+        <div class="lang-grid">
+          <div class="lang-card active" data-lang="es">
+            <span class="lang-flag">🇪🇸</span>
+            <div class="lang-info">
+              <strong class="lang-name">Español</strong>
+              <span class="lang-sub">Castellano</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="en">
+            <span class="lang-flag">🇬🇧</span>
+            <div class="lang-info">
+              <strong class="lang-name">English</strong>
+              <span class="lang-sub">International</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="fr">
+            <span class="lang-flag">🇫🇷</span>
+            <div class="lang-info">
+              <strong class="lang-name">Français</strong>
+              <span class="lang-sub">France, Canada, Suisse</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="de">
+            <span class="lang-flag">🇩🇪</span>
+            <div class="lang-info">
+              <strong class="lang-name">Deutsch</strong>
+              <span class="lang-sub">Deutschland, Österreich</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="ca">
+            <span class="lang-flag">🟡</span>
+            <div class="lang-info">
+              <strong class="lang-name">Català</strong>
+              <span class="lang-sub">Catalunya, Illes Balears, València</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="eu">
+            <span class="lang-flag">🟢</span>
+            <div class="lang-info">
+              <strong class="lang-name">Euskara</strong>
+              <span class="lang-sub">Euskal Herria</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="gl">
+            <span class="lang-flag">🔵</span>
+            <div class="lang-info">
+              <strong class="lang-name">Galego</strong>
+              <span class="lang-sub">Galicia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary btn-close-modal" data-i18n="modal_peek_cancel">Cerrar</button>
       </div>
     </div>
   </div>
@@ -542,6 +614,7 @@
   <div id="toast-notification" class="toast-box"></div>
 
   <!-- Scripts -->
+  <script src="js/i18n.js"></script>
   <script src="js/engine/sudoku.js"></script>
   <script src="js/engine/scoring.js"></script>
   <script src="js/engine/competition.js"></script>

@@ -146,6 +146,35 @@
       h1 { font-size: 1.5rem; }
       h2 { font-size: 1.15rem; }
     }
+  
+    .lang-bar {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .manual-lang-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .manual-lang-btn:hover {
+      border-color: var(--border-accent);
+      color: #fff;
+    }
+    .manual-lang-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(245, 158, 11, 0.15);
+    }
+  
   </style>
 </head>
 <body>
@@ -155,16 +184,26 @@
         <span>⚡</span> SUDOKU ARENA
       </div>
       <a href="index.html" class="btn-back">🎮 Ir a Jugar al Tablero</a>
-    </div>
 
-    <h1>Manual Oficial del Jugador</h1>
+      <div class="lang-bar">
+        <button class="manual-lang-btn active" data-lang="es">🇪🇸 ES</button>
+        <button class="manual-lang-btn" data-lang="en">🇬🇧 EN</button>
+        <button class="manual-lang-btn" data-lang="fr">🇫🇷 FR</button>
+        <button class="manual-lang-btn" data-lang="de">🇩🇪 DE</button>
+        <button class="manual-lang-btn" data-lang="ca">🟡 CA</button>
+        <button class="manual-lang-btn" data-lang="eu">🟢 EU</button>
+        <button class="manual-lang-btn" data-lang="gl">🔵 GL</button>
+      </div>
+      </div>
+
+    <h1 data-m-i18n="title">Manual Oficial del Jugador</h1>
     <div class="subtitle">Guía de Uso, Motor de Puntuación Cognitiva y Duelos Multijugador</div>
 
     <div class="highlight-tip">
       <strong>Filosofía del Juego:</strong> Sudoku Arena es un reto mental táctico. Aquí no se gana adivinando números por suerte, sino deduciendo con rigor lógico. Cada casilla tiene un valor en puntos según la dificultad del descarte y cada ayuda que pidas reduce tu techo de puntos.
     </div>
 
-    <h2>1. Niveles de Dificultad y Técnicas Humanas</h2>
+    <h2 data-m-i18n="sec1_title">1. Niveles de Dificultad y Técnicas Humanas</h2>
     <p>La dificultad se clasifica por la técnica deductiva mínima necesaria para resolver cada casilla:</p>
     <div class="table-responsive">
       <table>
@@ -205,8 +244,8 @@
       </table>
     </div>
 
-    <h2>2. Controles en Móvil y Ordenador</h2>
-    <h3>📱 En Smartphone o Tablet</h3>
+    <h2 data-m-i18n="sec2_title">2. Controles en Móvil y Ordenador</h2>
+    <h3 data-m-i18n="sec2_sub1">📱 En Smartphone o Tablet</h3>
     <ul>
       <li><strong>Tocar casilla</strong>: Selecciona la casilla activa y resalta en tiempo real su fila, columna y caja 3x3.</li>
       <li><strong>Teclado táctil (1 al 9)</strong>: Introduce el número en la casilla seleccionada con respuesta háptica (vibración).</li>
@@ -214,7 +253,7 @@
       <li><strong>Herramientas Rápidas</strong>: Accede a la <strong>Lupa</strong>, <strong>Rayos X</strong> o <strong>Retar</strong> en la barra inferior.</li>
     </ul>
 
-    <h3>💻 En Ordenador (PC o Portátil)</h3>
+    <h3 data-m-i18n="sec2_sub2">💻 En Ordenador (PC o Portátil)</h3>
     <ul>
       <li><strong>Flechas del teclado</strong>: Desplazamiento ágil entre casillas.</li>
       <li><strong>Números 1 al 9</strong>: Rellenar casilla.</li>
@@ -224,7 +263,7 @@
       <li><strong>Tecla L</strong>: Abrir Libro Mayor de Auditoría.</li>
     </ul>
 
-    <h2>3. Motor de Puntuación por Coste de Oportunidad</h2>
+    <h2 data-m-i18n="sec3_title">3. Motor de Puntuación por Coste de Oportunidad</h2>
     <p>Cada partida comienza con un <strong>Techo Inicial de Puntos</strong> (la suma de todos los puntos de las casillas vacías). Tus decisiones modifican este techo:</p>
     <ul>
       <li><strong>Acierto correcto</strong>: Suma los puntos asignados a la casilla a tu saldo neto.</li>
@@ -232,16 +271,16 @@
       <li><strong>Uso de Ayudas</strong>: Deducen puntos de tu techo máximo según la información que te regalan.</li>
     </ul>
 
-    <h2>4. Las Ayudas Tácticas y sus Penalizaciones</h2>
+    <h2 data-m-i18n="sec4_title">4. Las Ayudas Tácticas y sus Penalizaciones</h2>
     
     <div class="card-box">
-      <h3>🔍 Inspección Quirúrgica (Modo Lupa)</h3>
+      <h3 data-m-i18n="sec4_sub1">🔍 Inspección Quirúrgica (Modo Lupa)</h3>
       <p>Calcula y te muestra los candidatos válidos <strong>exclusivamente para la casilla que tienes seleccionada</strong>.</p>
       <p><span class="badge badge-gold">Coste de Oportunidad:</span> Se descuentan los puntos de esa casilla de tu techo máximo. Pierdes los puntos de esa celda por haber necesitado que la máquina te calcule las posibilidades.</p>
     </div>
 
     <div class="card-box">
-      <h3>⚡ Rayos X Globales (Todas las Posibilidades)</h3>
+      <h3 data-m-i18n="sec4_sub2">⚡ Rayos X Globales (Todas las Posibilidades)</h3>
       <p>Escanea y muestra todos los números válidos en <strong>todas las casillas vacías del tablero a la vez</strong>.</p>
       <p><span class="badge badge-red">Penalización Escalonada:</span> Al ver todo el tablero, la máquina aplica una deducción matemática proporcional:</p>
       <ul>
@@ -253,11 +292,11 @@
     </div>
 
     <div class="card-box">
-      <h3>🏳️ Resolución por Sistema (Rendición)</h3>
+      <h3 data-m-i18n="sec4_sub3">🏳️ Resolución por Sistema (Rendición)</h3>
       <p>El motor autocompleta el resto del tablero al instante. <strong>Todas las casillas resueltas por la máquina reciben 0 puntos</strong>. Solo conservarás los puntos de las casillas acertadas por ti mismo.</p>
     </div>
 
-    <h2>5. Índice de Autonomía Mental y Rangos</h2>
+    <h2 data-m-i18n="sec5_title">5. Índice de Autonomía Mental y Rangos</h2>
     <p>Tu maestría se mide calculando el porcentaje de puntos obtenidos frente al techo inicial posible:</p>
     <div class="table-responsive">
       <table>
@@ -298,11 +337,11 @@
       </table>
     </div>
 
-        <h2>6. Modo Duelo: Cómo Crear un Nuevo Planteamiento y Competir</h2>
+        <h2 data-m-i18n="sec6_title">6. Modo Duelo: Cómo Crear un Nuevo Planteamiento y Competir</h2>
     <p>Sudoku Arena permite celebrar <strong>competiciones justas en igualdad matemática de condiciones</strong>. Ambos contrincantes resuelven exactamente la misma matriz, con el mismo orden de casillas y el mismo techo inicial de puntos.</p>
 
     <div class="card-box" style="border-left: 4px solid var(--border-accent);">
-      <h3>⚔️ Paso a Paso para Crear un Nuevo Duelo</h3>
+      <h3 data-m-i18n="sec6_sub1">⚔️ Paso a Paso para Crear un Nuevo Duelo</h3>
       <ol style="margin-top: 0.5rem;">
         <li><strong>Pulsa el botón <code>⚔️ Nuevo Duelo</code></strong>: Ubicado prominentemente en la cabecera superior (o en la barra táctil del móvil).</li>
         <li><strong>Selecciona la Dificultad deseada</strong>:
@@ -324,7 +363,7 @@
     </div>
 
     <div class="card-box">
-      <h3>👥 Cómo se Conecta tu Rival</h3>
+      <h3 data-m-i18n="sec6_sub2">👥 Cómo se Conecta tu Rival</h3>
       <p>Tu rival puede conectarse de dos maneras:</p>
       <ul>
         <li><strong>Enlace Directo</strong>: Simplemente abre el enlace recibido en su navegador o móvil y la partida se cargará sola.</li>
@@ -333,7 +372,7 @@
     </div>
 
     <div class="card-box">
-      <h3>🏆 Criterio Oficial de Victoria</h3>
+      <h3 data-m-i18n="sec6_sub3">🏆 Criterio Oficial de Victoria</h3>
       <p>Al completarse el sudoku, la auditoría dictamina el ganador comparando:</p>
       <ol>
         <li><strong>Puntos Netos Obtenidos</strong> (quien haya sumado más aciertos y menos penalizaciones).</li>
@@ -342,7 +381,7 @@
       </ol>
     </div>
 
-    <h2>7. Consejos para Lograr el Rango de Gran Maestro</h2>
+    <h2 data-m-i18n="sec7_title">7. Consejos para Lograr el Rango de Gran Maestro</h2>
     <ul>
       <li><strong>Fíjate en las restricciones cruzadas</strong>: Antes de colocar un número, revisa mentalmente la fila, la columna y la caja 3x3 para estar seguro al 100%.</li>
       <li><strong>No te arriesgues al azar</strong>: Un fallo penaliza -15 puntos y destruye tu 100% de autonomía.</li>
@@ -353,5 +392,6 @@
       Sudoku Arena &copy; 2026 &bull; Diseñado por Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L.
     </div>
   </div>
+<script src="js/manual_i18n.js"></script>
 </body>
 </html>
