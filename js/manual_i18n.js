@@ -5,6 +5,8 @@
 
 const MANUAL_FULL_CONTENT = {
   "es": {
+    "fair_play_title": "⚖️ Compromiso Ético y Juego Limpio:",
+    "fair_play_notice": "Sea ético y resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos.",
     "page_title": "Manual del Jugador — Sudoku Arena",
     "back": "🎮 Ir a Jugar al Tablero",
     "title": "Manual Oficial del Jugador",
@@ -101,6 +103,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Diseñado por Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
   },
   "en": {
+    "fair_play_title": "⚖️ Ethical Commitment & Fair Play:",
+    "fair_play_notice": "Please play ethically: solve Weekly Challenges and Duels using only this platform; do not use external resources.",
     "page_title": "Player Manual — Sudoku Arena",
     "back": "🎮 Play on Board",
     "title": "Official Player Manual",
@@ -197,6 +201,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Designed by Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
   },
   "fr": {
+    "fair_play_title": "⚖️ Engagement Éthique & Fair-Play :",
+    "fair_play_notice": "Faites preuve d'éthique et résolvez les Défis Hebdomadaires et les Duels uniquement via cette plateforme, n'utilisez pas de ressources externes.",
     "page_title": "Manuel du Joueur — Sudoku Arena",
     "back": "🎮 Aller Jouer sur la Grille",
     "title": "Manuel Officiel du Joueur",
@@ -293,6 +299,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Conçu par Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
   },
   "de": {
+    "fair_play_title": "⚖️ Fair-Play & Ethischer Ehrenkodex:",
+    "fair_play_notice": "Spielen Sie fair und ethisch: Lösen Sie die wöchentlichen Herausforderungen und Duelle ausschließlich über diese Plattform und nutzen Sie keine externen Ressourcen.",
     "page_title": "Spieler-Handbuch — Sudoku Arena",
     "back": "🎮 Zurück zum Spielfeld",
     "title": "Offizielles Spieler-Handbuch",
@@ -389,6 +397,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Entwickelt von Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
   },
   "ca": {
+    "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
+    "fair_play_notice": "Sigueu ètic i resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs.",
     "page_title": "Manual del Jugador — Sudoku Arena",
     "back": "🎮 Anar a Jugar al Tauler",
     "title": "Manual Oficial del Jugador",
@@ -485,6 +495,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Dissenyat per Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
   },
   "va": {
+    "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
+    "fair_play_notice": "Siga ètic i resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs.",
     "page_title": "Manual del Jugador — Sudoku Arena",
     "back": "🎮 Anar a Jugar al Tauler",
     "title": "Manual Oficial del Jugador",
@@ -581,6 +593,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Dissenyat per Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
   },
   "eu": {
+    "fair_play_title": "⚖️ Konpromiso Etikoa eta Joko Garbia:",
+    "fair_play_notice": "Izan zaitez etikoa eta ebatzi Asteko Erronkak eta Dueluak plataforma honen bidez, ez erabili kanpoko baliabiderik.",
     "page_title": "Jokalariaren Eskuliburua — Sudoku Arena",
     "back": "🎮 Taulara Jolastera Joan",
     "title": "Jokalariaren Eskuliburu Ofiziala",
@@ -677,6 +691,8 @@ const MANUAL_FULL_CONTENT = {
     "footer": "Sudoku Arena © 2026 • Guillermo Tudela Solerrek diseinatua / Conectividad y Comunicaciones, S.L."
   },
   "gl": {
+    "fair_play_title": "⚖️ Compromiso Ético e Xogo Limpo:",
+    "fair_play_notice": "Sexa ético e resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos.",
     "page_title": "Manual do Xogador — Sudoku Arena",
     "back": "🎮 Ir a Xogar ao Taboleiro",
     "title": "Manual Oficial do Xogador",

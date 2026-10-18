@@ -5,48 +5,56 @@
 
 const I18N_LANGUAGES = {
   "es": {
+    "fair_play_notice": "Sea ético y resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos.",
     "code": "es",
     "name": "Español",
     "flag": "🇪🇸",
     "native": "Español"
   },
   "en": {
+    "fair_play_notice": "Please play ethically: solve Weekly Challenges and Duels using only this platform; do not use external resources.",
     "code": "en",
     "name": "English",
     "flag": "🇬🇧",
     "native": "English"
   },
   "fr": {
+    "fair_play_notice": "Faites preuve d'éthique et résolvez les Défis Hebdomadaires et les Duels uniquement via cette plateforme, n'utilisez pas de ressources externes.",
     "code": "fr",
     "name": "Français",
     "flag": "🇫🇷",
     "native": "Français"
   },
   "de": {
+    "fair_play_notice": "Spielen Sie fair und ethisch: Lösen Sie die wöchentlichen Herausforderungen und Duelle ausschließlich über diese Plattform und nutzen Sie keine externen Ressourcen.",
     "code": "de",
     "name": "Deutsch",
     "flag": "🇩🇪",
     "native": "Deutsch"
   },
   "ca": {
+    "fair_play_notice": "Sigueu ètic i resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs.",
     "code": "ca",
     "name": "Català",
     "flag": "🟡",
     "native": "Català"
   },
   "va": {
+    "fair_play_notice": "Siga ètic i resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs.",
     "code": "va",
     "name": "Valencià",
     "flag": "🦇",
     "native": "Valencià"
   },
   "eu": {
+    "fair_play_notice": "Izan zaitez etikoa eta ebatzi Asteko Erronkak eta Dueluak plataforma honen bidez, ez erabili kanpoko baliabiderik.",
     "code": "eu",
     "name": "Euskara",
     "flag": "🟢",
     "native": "Euskara"
   },
   "gl": {
+    "fair_play_notice": "Sexa ético e resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos.",
     "code": "gl",
     "name": "Galego",
     "flag": "🔵",
