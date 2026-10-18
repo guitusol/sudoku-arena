@@ -216,23 +216,27 @@ class ScoringEngine {
       ? Math.round((this.currentScore / this.initialTotalPoints) * 100)
       : 0;
 
-    let rank = 'Con Ruedines (Dependiente de Ayudas)';
+    let rankKey = 'rank_training_wheels';
     let rankBadge = 'badge-starter';
     let rankColor = '#ef4444';
 
     if (autonomyIndex >= 90) {
-      rank = 'Gran Maestro Puro (Mente de Acero)';
+      rankKey = 'rank_grandmaster';
       rankBadge = 'badge-master';
       rankColor = '#10b981';
     } else if (autonomyIndex >= 70) {
-      rank = 'Lógico Quirúrgico';
+      rankKey = 'rank_surgical_logician';
       rankBadge = 'badge-expert';
       rankColor = '#06b6d4';
     } else if (autonomyIndex >= 45) {
-      rank = 'Resolutor Pragmático';
+      rankKey = 'rank_pragmatic_solver';
       rankBadge = 'badge-pragmatic';
       rankColor = '#f59e0b';
     }
+
+    const rank = (typeof window !== 'undefined' && window.i18n)
+      ? window.i18n.t(rankKey)
+      : 'Con Ruedines';
 
     return {
       currentScore: this.currentScore,
@@ -240,6 +244,7 @@ class ScoringEngine {
       currentMaxPossible: this.currentMaxPossible,
       totalPenalties: this.totalPenalties,
       autonomyIndex,
+      rankKey,
       rank,
       rankBadge,
       rankColor,

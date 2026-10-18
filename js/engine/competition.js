@@ -9,7 +9,7 @@ class CompetitionEngine {
    * Ej: "ARENA-MEDIO-72941"
    */
   static generateChallengeCode(difficulty, seed = Math.floor(10000 + Math.random() * 90000)) {
-    const diffCode = difficulty.toUpperCase().substring(0, 4);
+    const diffCode = (difficulty || 'medio').toUpperCase().substring(0, 4);
     return `ARENA-${diffCode}-${seed}`;
   }
 

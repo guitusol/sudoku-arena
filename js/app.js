@@ -16,15 +16,17 @@ class SudokuApp {
     this.isGameOver = false;
     this.selectedDifficulty = 'medio';
     this.currentSeed = null;
+    this.duelSelectedDiff = 'medio';
+    this.duelSelectedSeed = Math.floor(10000 + Math.random() * 90000);
 
     this.init();
   }
 
   
   onLanguageChanged(lang) {
-    this.updateStatsUI();
-    this.updateDuelModalPreview();
-    this.render();
+    try { this.updateStatsUI(); } catch (e) { console.error('Error updating stats UI on lang change:', e); }
+    try { this.updateDuelModalPreview(); } catch (e) { console.error('Error updating duel modal on lang change:', e); }
+    try { this.render(); } catch (e) { console.error('Error rendering on lang change:', e); }
   }
 
   init() {
@@ -366,6 +368,8 @@ class SudokuApp {
    * Actualiza la previsualización del código y dificultad dentro del modal de duelo
    */
   updateDuelModalPreview() {
+    if (!this.duelSelectedDiff) this.duelSelectedDiff = this.selectedDifficulty || 'medio';
+    if (!this.duelSelectedSeed) this.duelSelectedSeed = Math.floor(10000 + Math.random() * 90000);
     const code = CompetitionEngine.generateChallengeCode(this.duelSelectedDiff, this.duelSelectedSeed);
     const codeElem = document.getElementById('duel-modal-code');
     if (codeElem) codeElem.textContent = code;
@@ -488,7 +492,7 @@ class SudokuApp {
 
     const summary = this.scoring.getSummary();
 
-    document.getElementById('verdict-rank').textContent = summary.rank;
+    document.getElementById('verdict-rank').textContent = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
     document.getElementById('verdict-rank').style.color = summary.rankColor;
     document.getElementById('verdict-score').textContent = `${summary.currentScore} pts`;
     document.getElementById('verdict-max-theoretical').textContent = `${summary.initialTotalPoints} pts`;
@@ -523,6 +527,15 @@ class SudokuApp {
   /**
    * Actualiza los marcadores y tarjetas de estadísticas tanto en escritorio como en el HUD móvil
    */
+  
+  getRankBadge(autonomy) {
+    if (!window.i18n) return 'Gran Maestro';
+    if (autonomy >= 95) return window.i18n.t('rank_grandmaster');
+    if (autonomy >= 80) return window.i18n.t('rank_tactical_master');
+    if (autonomy >= 50) return window.i18n.t('rank_assisted_strategist');
+    return window.i18n.t('rank_casual');
+  }
+
   updateStatsUI() {
     const summary = this.scoring.getSummary();
 
@@ -550,7 +563,7 @@ class SudokuApp {
 
     const rankBadge = document.getElementById('stat-rank-badge');
     if (rankBadge) {
-      rankBadge.textContent = summary.rank;
+      rankBadge.textContent = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
       rankBadge.style.color = summary.rankColor;
     }
 
@@ -566,7 +579,7 @@ class SudokuApp {
 
     const mRank = document.getElementById('mobile-stat-rank');
     if (mRank) {
-      mRank.textContent = summary.rank;
+      mRank.textContent = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
       mRank.style.color = summary.rankColor;
     }
   }

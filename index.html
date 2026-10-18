@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Manifiesto PWA e Iconos -->\n  <link rel="manifest" href="manifest.json">\n  <link rel="apple-touch-icon" href="icons/icon-192.svg">\n  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">\n\n  <!-- Estilos CSS -->
+  <!-- Manifiesto PWA e Iconos -->  <link rel="manifest" href="manifest.json">  <link rel="apple-touch-icon" href="icons/icon-192.svg">  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">  <!-- Estilos CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -36,11 +36,11 @@
       <div class="header-actions">
         <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
         <button id="btn-open-weekly-modal" class="header-btn weekly-highlight-btn" title="Reto Semanal Oficial y Posicionamiento"><span>🏆</span> <span data-i18n="btn_weekly">Reto Semanal</span></button>
-        <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad"><span>⚔️</span> <span>Nuevo Duelo</span></button>\n        <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida">
+        <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad" data-i18n-title="title_duel_modal"><span>⚔️</span> <span data-i18n="btn_new_duel">Nuevo Duelo</span></button>        <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida" data-i18n-title="title_duel_btn">
           <span>⚔️</span>
-          <span class="duel-btn-label">Duelo: <strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
+          <span class="duel-btn-label"><span data-i18n="btn_duel">Duelo</span>: <strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
         </button>
-        <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>\n        <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
+        <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>        <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
           <span id="sound-icon">🔊</span>
         </button>
         <button id="btn-restart-game" class="header-btn icon-only-btn" title="Reiniciar tablero actual">
@@ -245,7 +245,7 @@
             <span>🏆</span>
             <span data-i18n="sidebar_share_duel">Compartir Reto o Código</span>
           </div>
-          <span class="tool-penalty-badge" style="background:rgba(37,99,235,0.2); color:#60a5fa; border-color:#2563eb;">DUELO</span>
+          <span class="tool-penalty-badge" style="background:rgba(37,99,235,0.2); color:#60a5fa; border-color:#2563eb;" data-i18n="btn_duel">DUELO</span>
         </button>
       </div>
 
@@ -268,21 +268,19 @@
         </p>
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-grid); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-            <span>Coste de Oportunidad:</span>
+            <span data-i18n="modal_peek_cost_label">Coste de Oportunidad:</span>
             <strong id="peek-cell-points" class="font-mono text-red">-0 pts del techo</strong>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span>Candidatos calculados:</span>
+            <span data-i18n="modal_peek_calc_label">Candidatos calculados:</span>
             <span id="peek-cell-options-preview" class="font-mono text-accent">[ Calculando... ]</span>
           </div>
         </div>
-        <p style="font-size: 0.8rem; color: #fbbf24;">
-          ⚠️ Al aceptar, verás los números viables solo para esta casilla, pero renunciarás a sumar los puntos correspondientes a su dificultad lógica.
-        </p>
+        <p style="font-size: 0.8rem; color: #fbbf24;" data-i18n="modal_peek_warning">⚠️ Al aceptar, verás los números viables solo para esta casilla, pero renunciarás a sumar los puntos correspondientes a su dificultad lógica.</p>
       </div>
       <div class="modal-footer">
         <button class="modal-btn secondary btn-close-modal" data-i18n="modal_peek_cancel">Cancelar</button>
-        <button id="btn-confirm-cell-peek" class="modal-btn primary">Revelar Casilla</button>
+        <button id="btn-confirm-cell-peek" class="modal-btn primary" data-i18n="modal_peek_confirm">Revelar Casilla</button>
       </div>
     </div>
   </div>
@@ -291,13 +289,11 @@
   <div id="modal-rayosx" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>⚡ Rayos X Globales (Todas las Posibilidades)</h3>
+        <h3 data-i18n="modal_rayosx_title">⚡ Rayos X Globales (Todas las Posibilidades)</h3>
         <button class="btn-close-modal">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
-          Activar la visualización de <strong>todos los candidatos de todo el tablero</strong> aplicará una penalización matemática escalonada según la facilidad de deducción:
-        </p>
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;" data-i18n="modal_rayosx_desc">Activar la visualización de todos los candidatos de todo el tablero aplicará una penalización matemática escalonada según la facilidad de deducción:</p>
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-grid); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
           <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6;">
             <li>Casillas con <strong>1 sola posibilidad</strong>: deducción del <strong class="text-red">100%</strong> de sus puntos (<span id="rayosx-singles-count">0</span> casillas).</li>
@@ -306,16 +302,14 @@
             <li>Casillas con <strong>4 o más</strong>: deducción del <strong class="text-red">10%</strong>.</li>
           </ul>
           <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-grid); display: flex; justify-content: space-between;">
-            <span>Penalización total estimada:</span>
+            <span data-i18n="modal_rayosx_total">Penalización total estimada:</span>
             <strong id="rayosx-total-deduction" class="font-mono text-red" style="font-size: 1.1rem;">-0 pts</strong>
           </div>
         </div>
-        <p style="font-size: 0.8rem; color: #fbbf24;">
-          Esta acción reduce permanentemente el techo máximo de puntos que puedes alcanzar en esta partida.
-        </p>
+        <p style="font-size: 0.8rem; color: #fbbf24;" data-i18n="modal_rayosx_warning">Esta acción reduce permanentemente el techo máximo de puntos que puedes alcanzar en esta partida.</p>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal">Seguir pensando</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="modal_rayosx_cancel">Seguir pensando</button>
         <button id="btn-confirm-rayosx" class="modal-btn danger" data-i18n="modal_rayosx_confirm">Activar Rayos X</button>
       </div>
     </div>
@@ -325,30 +319,26 @@
   <div id="modal-autosolve" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>🏳️ Resolución por Sistema</h3>
+        <h3 data-i18n="modal_autosolve_title">🏳️ Resolución por Sistema</h3>
         <button class="btn-close-modal">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
-          ¿Deseas que el motor resuelva el sudoku a partir de este punto?
-        </p>
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;" data-i18n="modal_autosolve_desc">¿Deseas que el motor resuelva el sudoku a partir de este punto?</p>
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-grid); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
-            <span>Casillas restantes:</span>
+            <span data-i18n="modal_autosolve_remaining">Casillas restantes:</span>
             <strong id="autosolve-cells-count" class="font-mono">0</strong>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span>Puntos que se anularán:</span>
+            <span data-i18n="modal_autosolve_lost">Puntos que se anularán:</span>
             <strong id="autosolve-points-lost" class="font-mono text-red">-0 pts</strong>
           </div>
         </div>
-        <p style="font-size: 0.8rem; color: #fbbf24;">
-          Solo conservarás los puntos netos que hayas colocado correctamente por ti mismo.
-        </p>
+        <p style="font-size: 0.8rem; color: #fbbf24;" data-i18n="modal_autosolve_warning">Solo conservarás los puntos netos que hayas colocado correctamente por ti mismo.</p>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal">Prefiero intentarlo</button>
-        <button id="btn-confirm-autosolve" class="modal-btn danger">Resolver por la máquina</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="modal_autosolve_cancel">Prefiero intentarlo</button>
+        <button id="btn-confirm-autosolve" class="modal-btn danger" data-i18n="modal_autosolve_confirm">Resolver por la máquina</button>
       </div>
     </div>
   </div>
@@ -363,19 +353,19 @@
       <div class="modal-body">
         <div class="ledger-kpis-grid">
           <div class="stat-item">
-            <div class="stat-item-label">Puntos Netos</div>
+            <div class="stat-item-label" data-i18n="modal_ledger_net">Puntos Netos</div>
             <div id="ledger-total-score" class="stat-item-val text-gold">0</div>
           </div>
           <div class="stat-item">
-            <div class="stat-item-label">Techo Restante</div>
+            <div class="stat-item-label" data-i18n="modal_ledger_ceiling">Techo Restante</div>
             <div id="ledger-max-possible" class="stat-item-val text-accent">0</div>
           </div>
           <div class="stat-item">
-            <div class="stat-item-label">Penalizaciones</div>
+            <div class="stat-item-label" data-i18n="modal_ledger_penalties">Penalizaciones</div>
             <div id="ledger-total-penalties" class="stat-item-val text-red">0</div>
           </div>
           <div class="stat-item">
-            <div class="stat-item-label">Autonomía</div>
+            <div class="stat-item-label" data-i18n="modal_ledger_autonomy">Autonomía</div>
             <div id="ledger-autonomy-pct" class="stat-item-val text-emerald">100%</div>
           </div>
         </div>
@@ -530,12 +520,12 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Cerrar</button>
       </div>
     </div>
   </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -578,7 +568,7 @@
             </div>
             <div class="weekly-card-body">
               <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
-                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <span style="color: var(--text-muted); font-size: 0.78rem;" data-i18n="weekly_pts_achieved">Puntos logrados:</span>
                 <strong id="weekly-score-facil" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
               </div>
               <button class="modal-btn primary btn-play-weekly" data-diff="facil" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
@@ -599,7 +589,7 @@
             </div>
             <div class="weekly-card-body">
               <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
-                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <span style="color: var(--text-muted); font-size: 0.78rem;" data-i18n="weekly_pts_achieved">Puntos logrados:</span>
                 <strong id="weekly-score-medio" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
               </div>
               <button class="modal-btn primary btn-play-weekly" data-diff="medio" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
@@ -620,7 +610,7 @@
             </div>
             <div class="weekly-card-body">
               <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
-                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <span style="color: var(--text-muted); font-size: 0.78rem;" data-i18n="weekly_pts_achieved">Puntos logrados:</span>
                 <strong id="weekly-score-dificil" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
               </div>
               <button class="modal-btn primary btn-play-weekly" data-diff="dificil" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
@@ -641,7 +631,7 @@
             </div>
             <div class="weekly-card-body">
               <div style="display:flex; justify-content:space-between; margin-bottom: 0.35rem;">
-                <span style="color: var(--text-muted); font-size: 0.78rem;">Puntos logrados:</span>
+                <span style="color: var(--text-muted); font-size: 0.78rem;" data-i18n="weekly_pts_achieved">Puntos logrados:</span>
                 <strong id="weekly-score-endemoniado" class="font-mono text-neutral" style="font-size: 0.85rem;">- / -</strong>
               </div>
               <button class="modal-btn primary btn-play-weekly" data-diff="endemoniado" style="width: 100%; padding: 0.45rem; font-size: 0.85rem;" data-i18n="weekly_play_btn">
@@ -657,20 +647,18 @@
             Escala Oficial de Posicionamiento Competitivo:
           </label>
           <div class="weekly-tiers-row">
-            <div class="tier-chip tier-diamond"><span>💎</span> <strong>95-100%</strong> <small>Élite (Top 5%)</small></div>
-            <div class="tier-chip tier-gold"><span>🥇</span> <strong>85-94%</strong> <small>Oro (Top 15%)</small></div>
-            <div class="tier-chip tier-silver"><span>🥈</span> <strong>70-84%</strong> <small>Plata (Top 35%)</small></div>
-            <div class="tier-chip tier-bronze"><span>🥉</span> <strong>50-69%</strong> <small>Bronce (Top 60%)</small></div>
+            <div class="tier-chip tier-diamond"><span>💎</span> <strong>95-100%</strong> <small data-i18n="weekly_tier_diamond">Élite (Top 5%)</small></div>
+            <div class="tier-chip tier-gold"><span>🥇</span> <strong>85-94%</strong> <small data-i18n="weekly_tier_gold">Oro (Top 15%)</small></div>
+            <div class="tier-chip tier-silver"><span>🥈</span> <strong>70-84%</strong> <small data-i18n="weekly_tier_silver">Plata (Top 35%)</small></div>
+            <div class="tier-chip tier-bronze"><span>🥉</span> <strong>50-69%</strong> <small data-i18n="weekly_tier_bronze">Bronce (Top 60%)</small></div>
           </div>
         </div>
 
         <!-- Botón Compartir Tarjeta de la Semana -->
-        <button id="btn-share-weekly-progress" class="modal-btn secondary" style="width: 100%; margin-top: 0.75rem; border-color: var(--gold); color: var(--gold); font-size: 0.9rem;">
-          📋 Compartir Mis Puntuaciones Semanales
-        </button>
+        <button id="btn-share-weekly-progress" class="modal-btn secondary" style="width: 100%; margin-top: 0.75rem; border-color: var(--gold); color: var(--gold); font-size: 0.9rem;" data-i18n="weekly_share_btn">📋 Compartir Mis Puntuaciones Semanales</button>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal">Cerrar</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Cerrar</button>
       </div>
     </div>
   </div>
@@ -717,28 +705,19 @@
             </div>
           </div>
           <div class="lang-card" data-lang="ca">
-
-            <!-- va -->
-              <span class="lang-flag">🦇</span>
-              <div class="lang-info">
-                <strong class="lang-name">Valencià</strong>
-                <span class="lang-sub">Comunitat Valenciana</span>
-              </div>
-            </div>
             <span class="lang-flag">🟡</span>
             <div class="lang-info">
               <strong class="lang-name">Català</strong>
               <span class="lang-sub">Catalunya, Illes Balears, València</span>
             </div>
           </div>
-          
-            <div class="lang-card" data-lang="va">
-              <span class="lang-flag">🦇</span>
-              <div class="lang-info">
-                <strong class="lang-name">Valencià</strong>
-                <span class="lang-sub">Comunitat Valenciana</span>
-              </div>
+          <div class="lang-card" data-lang="va">
+            <span class="lang-flag">🦇</span>
+            <div class="lang-info">
+              <strong class="lang-name">Valencià</strong>
+              <span class="lang-sub">Comunitat Valenciana</span>
             </div>
+          </div>
           <div class="lang-card" data-lang="eu">
             <span class="lang-flag">🟢</span>
             <div class="lang-info">
