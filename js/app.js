@@ -319,7 +319,11 @@ class SudokuApp {
     if (num === expected) {
       // Acierto correcto
       this.currentBoard[r][c] = num;
-      this.scoring.registerCorrectCell(r, c, num);
+      try {
+        this.scoring.registerCorrectCell(r, c, num);
+      } catch (err) {
+        console.error('Error registrando acierto en scoring:', err);
+      }
       this.boardUI.triggerSuccessAnimation(r, c);
       this.triggerHaptic(25);
       window.soundFx.playSuccess();
@@ -327,7 +331,7 @@ class SudokuApp {
       this.saveActiveGame();
 
       // Centinela de Juego Limpio: Alerta si se detecta barrido lineal de copia externa (ChatGPT / Solver)
-      if (this.scoring.fairPlayFlag && !this.scoring.fairPlayWarningTriggered) {
+      if (this.scoring && this.scoring.fairPlayFlag && !this.scoring.fairPlayWarningTriggered) {
         this.scoring.fairPlayWarningTriggered = true;
         this.openModal('modal-fair-play');
         window.soundFx?.playError?.();
@@ -337,7 +341,11 @@ class SudokuApp {
       this.checkVictoryCondition();
     } else {
       // Error
-      this.scoring.registerError(r, c, num);
+      try {
+        this.scoring.registerError(r, c, num);
+      } catch (err) {
+        console.error('Error registrando error en scoring:', err);
+      }
       this.boardUI.triggerErrorAnimation(r, c);
       this.triggerHaptic(45);
       window.soundFx.playError();

@@ -83,6 +83,16 @@ class ScoringEngine {
     const cellIndex = row * 9 + col;
     let fairPlayJustTriggered = false;
 
+    if (!Array.isArray(this.moveHistory)) {
+      this.moveHistory = [];
+    }
+    if (typeof this.scanStreak !== 'number') {
+      this.scanStreak = 0;
+    }
+    if (typeof this.reverseScanStreak !== 'number') {
+      this.reverseScanStreak = 0;
+    }
+
     if (this.moveHistory.length > 0) {
       const lastMove = this.moveHistory[this.moveHistory.length - 1];
       const timeDiff = (now - lastMove.time) / 1000;
@@ -331,7 +341,13 @@ class ScoringEngine {
       errorsCount: this.errorsCount,
       peeksCellCount: this.peeksCellCount,
       peeksAllCount: this.peeksAllCount,
-      ledger: this.ledger
+      ledger: this.ledger,
+      moveHistory: this.moveHistory,
+      scanStreak: this.scanStreak,
+      reverseScanStreak: this.reverseScanStreak,
+      fairPlayFlag: this.fairPlayFlag,
+      fairPlayReason: this.fairPlayReason,
+      fairPlayWarningTriggered: this.fairPlayWarningTriggered
     };
   }
 
@@ -363,6 +379,15 @@ class ScoringEngine {
     engine.peeksCellCount = data.peeksCellCount ?? 0;
     engine.peeksAllCount = data.peeksAllCount ?? 0;
     engine.ledger = Array.isArray(data.ledger) ? [...data.ledger] : [];
+
+    // Centinela de Juego Limpio (Detección Anti-Copia / Anti-IA)
+    engine.moveHistory = Array.isArray(data.moveHistory) ? [...data.moveHistory] : [];
+    engine.scanStreak = typeof data.scanStreak === 'number' ? data.scanStreak : 0;
+    engine.reverseScanStreak = typeof data.reverseScanStreak === 'number' ? data.reverseScanStreak : 0;
+    engine.fairPlayFlag = Boolean(data.fairPlayFlag);
+    engine.fairPlayReason = data.fairPlayReason || null;
+    engine.fairPlayWarningTriggered = Boolean(data.fairPlayWarningTriggered);
+
     return engine;
   }
 }
