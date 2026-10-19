@@ -21,6 +21,16 @@ class SudokuApp {
     this.isWeeklyMode = false;
     this.weeklyDiff = null;
 
+    // Motores de Visión OCR y Bóveda de Retos
+    this.ocr = (typeof window !== 'undefined' && window.SudokuOCR) ? new window.SudokuOCR() : null;
+    this.vault = (typeof window !== 'undefined' && window.VaultStorage) ? new window.VaultStorage() : null;
+    this.scanBoard = Array.from({ length: 9 }, () => Array(9).fill(0));
+    this.scanSelectedRow = 0;
+    this.scanSelectedCol = 0;
+    this.scanAnalysis = null;
+    this.vaultFilter = 'all';
+    this.vaultSearchQuery = '';
+
     this.init();
   }
 
@@ -38,6 +48,8 @@ class SudokuApp {
     window.i18n.applyTranslations();
 
     this.bindEvents();
+    this.buildReviewGrid();
+    this.updateVaultBadge();
     this.checkUrlChallenge();
   }
 
@@ -67,6 +79,10 @@ class SudokuApp {
         version: 1,
         difficulty: this.selectedDifficulty,
         seed: this.currentSeed,
+        isCustom: this.gameData ? !!this.gameData.isCustom : false,
+        customBoard: (this.gameData && this.gameData.isCustom) ? this.gameData.board : null,
+        customName: (this.gameData && this.gameData.isCustom) ? this.gameData.customName : null,
+        vaultId: (this.gameData && this.gameData.vaultId) ? this.gameData.vaultId : null,
         currentBoard: this.currentBoard,
         timerSeconds: this.timerSeconds,
         isWeeklyMode: this.isWeeklyMode || false,
@@ -104,8 +120,13 @@ class SudokuApp {
       this.isWeeklyMode = !!saved.isWeeklyMode;
       this.weeklyDiff = saved.weeklyDiff || null;
 
-      // Reconstruir puzzle matemáticamente con la misma semilla exacta
-      this.gameData = SudokuEngine.generateGame(saved.difficulty, saved.seed);
+      // Reconstruir puzzle: si era personalizado, crear desde customBoard
+      if (saved.isCustom && saved.customBoard) {
+        this.gameData = SudokuEngine.createGameFromCustomBoard(saved.customBoard, saved.customName, saved.seed);
+        this.gameData.vaultId = saved.vaultId || null;
+      } else {
+        this.gameData = SudokuEngine.generateGame(saved.difficulty, saved.seed);
+      }
       this.currentBoard = saved.currentBoard.map(row => [...row]);
       this.scoring = ScoringEngine.fromSerialized(saved.scoring, this.gameData);
       this.candidateMap = SudokuEngine.getAllCandidates(this.currentBoard);
@@ -189,6 +210,16 @@ class SudokuApp {
    * Comprueba si se ha recibido un código de desafío en la URL (?desafio=ARENA-DIFI-12345 o ?duel=...)
    */
   checkUrlChallenge() {
+    // 1. Comprobar si es un duelo con tablero personalizado (?tablero=... o ?custom=...)
+    if (typeof CompetitionEngine !== 'undefined' && CompetitionEngine.getCustomChallengeFromUrl) {
+      const customChallenge = CompetitionEngine.getCustomChallengeFromUrl();
+      if (customChallenge) {
+        this.startCustomGame(customChallenge.board, customChallenge.name);
+        const toastMsg = window.i18n ? window.i18n.t('toast_duel_loaded', { name: customChallenge.name }) : `¡Duelo cargado: ${customChallenge.name}!`;
+        this.showToast(toastMsg, 'info');
+        return;
+      }
+    }
     const challenge = CompetitionEngine.getChallengeFromUrl();
     if (challenge) {
       // Si la URL trae un desafío específico, comprobar si ya teníamos progreso en esa semilla
@@ -212,6 +243,52 @@ class SudokuApp {
         this.newGame('medio');
       }
     }
+  }
+
+  /**
+   * Inicia una partida basada en un tablero personalizado (OCR, planteado a mano o bóveda)
+   */
+  startCustomGame(board, name = 'Reto Personalizado', vaultId = null) {
+    this.stopTimer();
+    this.isGameOver = false;
+    this.isWeeklyMode = false;
+    this.weeklyDiff = null;
+    this.timerSeconds = 0;
+
+    // Generar puzle y auditoría cognitiva humana desde el tablero personalizado
+    this.gameData = SudokuEngine.createGameFromCustomBoard(board, name);
+    this.gameData.vaultId = vaultId;
+    this.selectedDifficulty = this.gameData.difficulty;
+    this.currentSeed = this.gameData.seed;
+
+    this.currentBoard = SudokuEngine.cloneBoard(this.gameData.board);
+    this.scoring = new ScoringEngine(this.gameData);
+    this.candidateMap = SudokuEngine.getAllCandidates(this.currentBoard);
+
+    // Actualizar botones de dificultad en UI
+    document.querySelectorAll('.diff-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.diff === this.gameData.difficulty);
+    });
+
+    // Resetear UI
+    this.boardUI.setGlobalRayosX(false);
+    this.boardUI.revealedCells = Array.from({ length: 9 }, () => Array(9).fill(false));
+    this.boardUI.selectCell(0, 0);
+
+    const timerElem = document.getElementById('timer-display');
+    if (timerElem) timerElem.textContent = this.formatTime(0);
+
+    this.startTimer();
+    this.updateStatsUI();
+    this.render();
+
+    // Actualizar etiqueta del desafío
+    const codeElem = document.getElementById('challenge-code-display');
+    if (codeElem) codeElem.textContent = 'CUSTOM';
+
+    this.saveActiveGame();
+    window.soundFx.playClick();
+    this.closeAllModals();
   }
 
   /**
@@ -686,6 +763,16 @@ class SudokuApp {
     if (this.isWeeklyMode && window.weeklyEngine) {
       window.weeklyEngine.saveWeeklyResult(this.weeklyDiff, this.scoring.currentScore, this.scoring.initialTotalPoints, Math.round((this.scoring.currentScore / this.scoring.initialTotalPoints) * 100), this.timerSeconds);
     }
+    // Si era un reto de la Bóveda, registrar récord personal
+    if (this.gameData && this.gameData.isCustom && this.vault && this.gameData.vaultId) {
+      const summary = this.scoring.getSummary();
+      this.vault.updateStats(this.gameData.vaultId, {
+        score: summary.currentScore,
+        timeSeconds: this.timerSeconds,
+        rank: summary.rank
+      });
+      this.updateVaultBadge();
+    }
     window.soundFx.playVictory();
     this.triggerHaptic([50, 100, 50, 100, 150]);
 
@@ -704,8 +791,14 @@ class SudokuApp {
 
     const shareBtn = document.getElementById('btn-share-verdict');
     shareBtn.onclick = () => {
-      const code = CompetitionEngine.generateChallengeCode(this.selectedDifficulty, this.currentSeed);
-      const text = `🏆 ¡He resuelto Sudoku Arena en nivel ${this.selectedDifficulty.toUpperCase()}!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero con este enlace:\n${CompetitionEngine.getChallengeUrl(code)}`;
+      let text = '';
+      if (this.gameData && this.gameData.isCustom) {
+        const url = CompetitionEngine.generateCustomChallengeUrl(this.gameData.boardString, this.gameData.customName || 'Reto Personalizado');
+        text = `🏆 ¡He resuelto este Sudoku personalizado en Sudoku Arena!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme en este reto? Juega aquí:\n${url}`;
+      } else {
+        const code = CompetitionEngine.generateChallengeCode(this.selectedDifficulty, this.currentSeed);
+        text = `🏆 ¡He resuelto Sudoku Arena en nivel ${this.selectedDifficulty.toUpperCase()}!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero con este enlace:\n${CompetitionEngine.getChallengeUrl(code)}`;
+      }
 
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
@@ -870,6 +963,398 @@ class SudokuApp {
     const newSeed = Math.floor(10000 + Math.random() * 90000);
     this.newGame(this.selectedDifficulty, newSeed);
     this.showToast(window.i18n ? window.i18n.t('toast_new_seed_generated', { seed: newSeed }) : `Nueva semilla generada: ${newSeed}`, 'info');
+  }
+
+
+  /* ==========================================================================
+     MÉTODOS DE ESCANEO OCR Y PLANTEAMIENTO MANUAL
+     ========================================================================== */
+
+  openScanModal(initialTab = 'ocr') {
+    this.openModal('modal-scan-create');
+    this.switchScanTab(initialTab);
+    this.renderReviewGrid();
+    this.validateScanBoard();
+  }
+
+  switchScanTab(tabName) {
+    document.querySelectorAll('.scan-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+
+    document.getElementById('tab-pane-ocr')?.classList.toggle('active', tabName === 'ocr');
+    document.getElementById('tab-pane-manual')?.classList.toggle('active', tabName === 'manual');
+    document.getElementById('tab-pane-string')?.classList.toggle('active', tabName === 'string');
+  }
+
+  buildReviewGrid() {
+    const container = document.getElementById('review-grid');
+    if (!container) return;
+    container.innerHTML = '';
+
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'review-cell';
+        cell.dataset.r = r;
+        cell.dataset.c = c;
+        cell.addEventListener('click', () => {
+          this.selectScanCell(r, c);
+        });
+        container.appendChild(cell);
+      }
+    }
+  }
+
+  selectScanCell(r, c) {
+    this.scanSelectedRow = r;
+    this.scanSelectedCol = c;
+    this.renderReviewGrid();
+  }
+
+  renderReviewGrid() {
+    const cells = document.querySelectorAll('#review-grid .review-cell');
+    cells.forEach(cell => {
+      const r = parseInt(cell.dataset.r, 10);
+      const c = parseInt(cell.dataset.c, 10);
+      const val = this.scanBoard[r][c];
+
+      cell.textContent = val > 0 ? val : '';
+      cell.classList.toggle('has-clue', val > 0);
+      cell.classList.toggle('selected', r === this.scanSelectedRow && c === this.scanSelectedCol);
+      cell.classList.toggle('highlighted', (r === this.scanSelectedRow || c === this.scanSelectedCol) && !(r === this.scanSelectedRow && c === this.scanSelectedCol));
+    });
+  }
+
+  inputScanDigit(num) {
+    this.scanBoard[this.scanSelectedRow][this.scanSelectedCol] = num;
+    this.renderReviewGrid();
+    this.validateScanBoard();
+
+    // Auto-avanzar a la siguiente celda si se introdujo un número > 0
+    if (num > 0) {
+      if (this.scanSelectedCol < 8) {
+        this.selectScanCell(this.scanSelectedRow, this.scanSelectedCol + 1);
+      } else if (this.scanSelectedRow < 8) {
+        this.selectScanCell(this.scanSelectedRow + 1, 0);
+      }
+    }
+  }
+
+  clearScanGrid() {
+    this.scanBoard = Array.from({ length: 9 }, () => Array(9).fill(0));
+    this.scanSelectedRow = 0;
+    this.scanSelectedCol = 0;
+    this.renderReviewGrid();
+    this.validateScanBoard();
+  }
+
+  async handleImageFile(fileOrUrl) {
+    if (!this.ocr) {
+      this.showToast('Módulo OCR no disponible', 'error');
+      return;
+    }
+
+    const progressBox = document.getElementById('ocr-progress-box');
+    const statusText = document.getElementById('ocr-status-text');
+    const progressFill = document.getElementById('ocr-progress-fill');
+
+    if (progressBox) progressBox.classList.remove('hidden');
+
+    try {
+      const result = await this.ocr.recognize(fileOrUrl, (progress) => {
+        if (statusText) statusText.textContent = progress.status;
+        if (progressFill) progressFill.style.width = `${Math.round(progress.percent * 100)}%`;
+      });
+
+      if (result && result.board) {
+        this.scanBoard = result.board;
+        this.renderReviewGrid();
+        this.validateScanBoard();
+        const toastMsg = window.i18n ? window.i18n.t('toast_ocr_success') : '¡Tablero detectado y digitalizado con éxito!';
+        this.showToast(toastMsg, 'success');
+        window.soundFx.playCorrect();
+      } else {
+        throw new Error('No se detectó tablero válido');
+      }
+    } catch (e) {
+      console.error('Error OCR:', e);
+      const toastErr = window.i18n ? window.i18n.t('toast_ocr_error') : 'No se pudo detectar el tablero. Revisa el contraste o introduce los dígitos a mano.';
+      this.showToast(toastErr, 'error');
+      window.soundFx.playError();
+    } finally {
+      if (progressBox) progressBox.classList.add('hidden');
+    }
+  }
+
+  loadSampleNewspaper() {
+    if (this.ocr) {
+      const sample = this.ocr.getSampleSudoku ? this.ocr.getSampleSudoku() : [
+        [0, 0, 0, 6, 0, 0, 4, 0, 0],
+        [7, 0, 0, 0, 0, 3, 6, 0, 0],
+        [0, 0, 0, 0, 9, 1, 0, 8, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 5, 0, 1, 8, 0, 0, 0, 3],
+        [0, 0, 0, 3, 0, 6, 0, 4, 5],
+        [0, 4, 0, 2, 0, 0, 0, 6, 0],
+        [9, 0, 3, 0, 0, 0, 0, 0, 0],
+        [0, 2, 0, 0, 0, 0, 1, 0, 0]
+      ];
+      this.scanBoard = sample.map(row => [...row]);
+      this.renderReviewGrid();
+      this.validateScanBoard();
+      const toastMsg = window.i18n ? window.i18n.t('toast_ocr_success') : '¡Tablero detectado y digitalizado con éxito!';
+      this.showToast(toastMsg, 'success');
+      window.soundFx.playCorrect();
+    }
+  }
+
+  loadStringIntoGrid() {
+    const input = document.getElementById('scan-string-input');
+    if (!input) return;
+    const raw = input.value.trim();
+    const parsed = SudokuEngine.parseBoardString(raw);
+    if (!parsed) {
+      this.showToast('Cadena inválida. Debe tener 81 caracteres numéricos o puntos.', 'error');
+      return;
+    }
+    this.scanBoard = parsed;
+    this.renderReviewGrid();
+    this.validateScanBoard();
+    this.showToast('¡Cadena cargada en la cuadrícula de verificación!', 'success');
+  }
+
+  validateScanBoard() {
+    let cluesCount = 0;
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (this.scanBoard[r][c] > 0) cluesCount++;
+      }
+    }
+
+    const cluesBadge = document.getElementById('review-clues-badge');
+    const diffBadge = document.getElementById('review-diff-badge');
+    const ptsBadge = document.getElementById('review-pts-badge');
+    const valText = document.getElementById('review-validation-text');
+
+    const saveBtn = document.getElementById('btn-save-to-vault');
+    const playBtn = document.getElementById('btn-play-custom');
+    const duelBtn = document.getElementById('btn-duel-custom');
+
+    const cluesWord = window.i18n ? window.i18n.t('review_clues') : 'pistas';
+    if (cluesBadge) cluesBadge.textContent = `${cluesCount} ${cluesWord}`;
+
+    if (cluesCount < 17) {
+      if (diffBadge) diffBadge.textContent = '--';
+      if (ptsBadge) ptsBadge.textContent = '-- pts';
+      if (valText) {
+        valText.className = 'review-validation-text text-invalid';
+        valText.textContent = `Se necesitan al menos 17 pistas para una solución única (actuales: ${cluesCount}).`;
+      }
+      if (saveBtn) saveBtn.disabled = true;
+      if (playBtn) playBtn.disabled = true;
+      if (duelBtn) duelBtn.disabled = true;
+      this.scanAnalysis = null;
+      return false;
+    }
+
+    // Comprobar si es resoluble con solución única
+    const solution = SudokuEngine.solve(this.scanBoard);
+    if (!solution) {
+      if (diffBadge) diffBadge.textContent = 'CONFLICTO';
+      if (ptsBadge) ptsBadge.textContent = '0 pts';
+      if (valText) {
+        valText.className = 'review-validation-text text-invalid';
+        valText.textContent = window.i18n ? window.i18n.t('review_invalid') : 'Tablero inválido o con números repetidos.';
+      }
+      if (saveBtn) saveBtn.disabled = true;
+      if (playBtn) playBtn.disabled = true;
+      if (duelBtn) duelBtn.disabled = true;
+      this.scanAnalysis = null;
+      return false;
+    }
+
+    // Análisis cognitivo completo
+    const analysis = SudokuEngine.analyzeBoard(this.scanBoard, solution);
+    this.scanAnalysis = analysis;
+
+    if (diffBadge) {
+      const diffKey = `diff_${analysis.difficulty}`;
+      diffBadge.textContent = window.i18n ? window.i18n.t(diffKey) : analysis.difficulty.toUpperCase();
+    }
+    if (ptsBadge) ptsBadge.textContent = `${analysis.initialTotalPoints} pts`;
+    if (valText) {
+      valText.className = 'review-validation-text text-valid';
+      valText.textContent = window.i18n ? window.i18n.t('review_valid') : '✓ Tablero válido y resoluble con solución única.';
+    }
+
+    if (saveBtn) saveBtn.disabled = false;
+    if (playBtn) playBtn.disabled = false;
+    if (duelBtn) duelBtn.disabled = false;
+    return true;
+  }
+
+  saveCurrentScanToVault() {
+    if (!this.scanAnalysis || !this.vault) return;
+    const nameInput = document.getElementById('scan-board-name');
+    const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : `Sudoku Escaneado ${new Date().toLocaleDateString()}`;
+
+    const saved = this.vault.saveBoard(this.scanBoard, {
+      name,
+      difficulty: this.scanAnalysis.difficulty,
+      initialTotalPoints: this.scanAnalysis.initialTotalPoints,
+      techniqueAudit: this.scanAnalysis.techniqueAudit
+    });
+
+    this.updateVaultBadge();
+    const msg = window.i18n ? window.i18n.t('toast_saved_to_vault') : '¡Sudoku guardado con éxito en tu Bóveda!';
+    this.showToast(msg, 'success');
+    window.soundFx.playCorrect();
+    this.closeModal('modal-scan-create');
+  }
+
+  /* ==========================================================================
+     MÉTODOS DE LA BÓVEDA DE RETOS ("MIS SUDOKUS")
+     ========================================================================== */
+
+  openVaultModal() {
+    this.openModal('modal-vault');
+    this.renderVaultItems();
+  }
+
+  renderVaultItems() {
+    const container = document.getElementById('vault-items-list');
+    if (!container || !this.vault) return;
+
+    let items = this.vault.getAll();
+
+    // Filtro por estado
+    if (this.vaultFilter === 'completed') {
+      items = items.filter(it => it.timesPlayed > 0 && it.bestScore > 0);
+    } else if (this.vaultFilter === 'pending') {
+      items = items.filter(it => !it.timesPlayed || it.bestScore === 0);
+    }
+
+    // Filtro por búsqueda
+    if (this.vaultSearchQuery.trim()) {
+      const q = this.vaultSearchQuery.toLowerCase();
+      items = items.filter(it => (it.name && it.name.toLowerCase().includes(q)) || (it.difficulty && it.difficulty.toLowerCase().includes(q)));
+    }
+
+    const statsElem = document.getElementById('vault-total-stats');
+    if (statsElem) {
+      const total = this.vault.getAll().length;
+      const completed = this.vault.getAll().filter(i => i.bestScore > 0).length;
+      statsElem.textContent = `${total} sudokus guardados · ${completed} completados`;
+    }
+
+    if (items.length === 0) {
+      const emptyTitle = window.i18n ? window.i18n.t('vault_empty_title') : 'Tu Bóveda de Retos está vacía';
+      const emptyDesc = window.i18n ? window.i18n.t('vault_empty_desc') : 'Escanea un sudoku desde un periódico o plantea tus propios desafíos para guardarlos aquí.';
+      const scanNowText = window.i18n ? window.i18n.t('vault_btn_scan_now') : 'Escanear o Crear Primer Sudoku';
+
+      container.innerHTML = `
+        <div class="vault-empty-state">
+          <div class="vault-empty-icon">📁</div>
+          <h4 class="vault-empty-title">${emptyTitle}</h4>
+          <p class="vault-empty-desc">${emptyDesc}</p>
+          <button id="btn-vault-empty-scan" class="modal-btn primary">
+            <span>📷</span> ${scanNowText}
+          </button>
+        </div>
+      `;
+      document.getElementById('btn-vault-empty-scan')?.addEventListener('click', () => {
+        this.closeModal('modal-vault');
+        this.openScanModal('ocr');
+      });
+      return;
+    }
+
+    container.innerHTML = '';
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = `vault-card ${item.bestScore > 0 ? 'completed' : ''}`;
+
+      const diffKey = `diff_${item.difficulty}`;
+      const diffLabel = window.i18n ? window.i18n.t(diffKey) : item.difficulty.toUpperCase();
+      const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '';
+
+      const playLabel = window.i18n ? window.i18n.t('vault_btn_play') : 'Jugar';
+      const duelLabel = window.i18n ? window.i18n.t('vault_btn_duel') : 'Duelo';
+
+      card.innerHTML = `
+        <div class="vault-card-main">
+          <div class="vault-card-title-row">
+            <strong class="vault-card-title">${item.name || 'Reto Sin Nombre'}</strong>
+            <span class="review-chip diff-badge">${diffLabel}</span>
+          </div>
+          <div class="vault-card-meta">
+            <span>📅 ${dateStr}</span>
+            <span>&bull;</span>
+            <span>🧩 ${item.cluesCount} pistas</span>
+            ${item.bestScore > 0 ? `<span>&bull;</span> <span class="text-gold font-mono">🏆 ${item.bestScore} pts (${item.bestRank || 'Completado'})</span>` : ''}
+          </div>
+        </div>
+        <div class="vault-card-actions">
+          <button class="vault-card-btn btn-play" data-id="${item.id}" title="Jugar en Arena">
+            <span>▶️</span> ${playLabel}
+          </button>
+          <button class="vault-card-btn btn-duel" data-id="${item.id}" title="Crear Duelo WhatsApp">
+            <span>⚔️</span> ${duelLabel}
+          </button>
+          <button class="vault-card-btn btn-del" data-id="${item.id}" title="Eliminar">
+            🗑️
+          </button>
+        </div>
+      `;
+
+      card.querySelector('.btn-play').addEventListener('click', () => {
+        this.startCustomGame(item.board, item.name, item.id);
+      });
+
+      card.querySelector('.btn-duel').addEventListener('click', () => {
+        const boardStr = SudokuEngine.boardToString(item.board);
+        const url = CompetitionEngine.generateCustomChallengeUrl(boardStr, item.name);
+        const text = `⚔️ ¡Te reto en Sudoku Arena a resolver este Sudoku de mi Bóveda!
+🧩 Reto: ${item.name} (${diffLabel})
+🔗 Pulsa aquí para jugar con cronómetro y auditoría de puntos:
+${url}`;
+
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(() => {
+            const toastMsg = window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!';
+            this.showToast(toastMsg, 'success');
+          });
+        } else {
+          prompt('Copia tu enlace de reto para WhatsApp:', text);
+        }
+      });
+
+      card.querySelector('.btn-del').addEventListener('click', () => {
+        const confirmMsg = window.i18n ? window.i18n.t('vault_delete_confirm') : '¿Seguro que deseas eliminar este sudoku de tu bóveda?';
+        if (confirm(confirmMsg)) {
+          this.vault.delete(item.id);
+          this.renderVaultItems();
+          this.updateVaultBadge();
+          this.showToast('Sudoku eliminado de la bóveda', 'info');
+        }
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  updateVaultBadge() {
+    if (!this.vault) return;
+    const badge = document.getElementById('vault-badge-count');
+    if (!badge) return;
+    const count = this.vault.getAll().length;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
   }
 
   bindEvents() {
@@ -1156,7 +1641,199 @@ class SudokuApp {
       btn.addEventListener('click', () => this.closeAllModals());
     });
 
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+
+    // Botones de Escaneo y Bóveda en Cabecera y Sidebar
+    document.getElementById('btn-open-scan-modal')?.addEventListener('click', () => this.openScanModal('ocr'));
+    document.getElementById('btn-sidebar-scan')?.addEventListener('click', () => this.openScanModal('ocr'));
+    document.getElementById('btn-open-vault-modal')?.addEventListener('click', () => this.openVaultModal());
+    document.getElementById('btn-sidebar-vault')?.addEventListener('click', () => this.openVaultModal());
+    document.getElementById('btn-vault-new-btn')?.addEventListener('click', () => {
+      this.closeModal('modal-vault');
+      this.openScanModal('ocr');
+    });
+
+    // Pestañas del modal de escaneo
+    document.querySelectorAll('.scan-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.switchScanTab(btn.dataset.tab);
+      });
+    });
+
+    // Zona Dropzone OCR
+    const dropzone = document.getElementById('ocr-dropzone');
+    const fileInput = document.getElementById('ocr-file-input');
+    const cameraInput = document.getElementById('ocr-camera-input');
+
+    if (dropzone && fileInput) {
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('dragover');
+      });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          this.handleImageFile(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    document.getElementById('btn-trigger-camera')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cameraInput?.click();
+    });
+
+    document.getElementById('btn-trigger-browse')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fileInput?.click();
+    });
+
+    document.getElementById('btn-trigger-sample')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.loadSampleNewspaper();
+    });
+
+    fileInput?.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        this.handleImageFile(e.target.files[0]);
+      }
+    });
+
+    cameraInput?.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        this.handleImageFile(e.target.files[0]);
+      }
+    });
+
+    // Soporte Pegar (Ctrl+V) de capturas de pantalla de sudokus
+    window.addEventListener('paste', (e) => {
+      const scanModal = document.getElementById('modal-scan-create');
+      if (scanModal && scanModal.classList.contains('active')) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (const item of items) {
+          if (item.kind === 'file' && item.type.startsWith('image/')) {
+            const blob = item.getAsFile();
+            this.handleImageFile(blob);
+            break;
+          }
+        }
+      }
+    });
+
+    // Teclado numérico táctil de revisión (1 al 9 y Borrar)
+    document.querySelectorAll('.arena-mini-keypad .mini-key').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = parseInt(btn.dataset.val, 10);
+        this.inputScanDigit(val);
+      });
+    });
+
+    // Botón Limpiar cuadrícula de escaneo
+    document.getElementById('btn-clear-scan-grid')?.addEventListener('click', () => {
+      this.clearScanGrid();
+    });
+
+    // Cadena 81 caracteres
+    document.getElementById('btn-load-string')?.addEventListener('click', () => {
+      this.loadStringIntoGrid();
+    });
+
+    document.getElementById('btn-paste-string')?.addEventListener('click', async () => {
+      try {
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          const text = await navigator.clipboard.readText();
+          const input = document.getElementById('scan-string-input');
+          if (input) input.value = text;
+          this.loadStringIntoGrid();
+        }
+      } catch (err) {
+        this.showToast('Por favor pulsa Ctrl+V dentro de la caja de texto', 'info');
+      }
+    });
+
+    // Botón Guardar en Bóveda
+    document.getElementById('btn-save-to-vault')?.addEventListener('click', () => {
+      this.saveCurrentScanToVault();
+    });
+
+    // Botón Jugar Ahora en Arena desde Scan Modal
+    document.getElementById('btn-play-custom')?.addEventListener('click', () => {
+      if (this.scanBoard) {
+        const nameInput = document.getElementById('scan-board-name');
+        const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Reto Personalizado';
+        this.startCustomGame(this.scanBoard, name);
+      }
+    });
+
+    // Botón Crear Duelo WhatsApp desde Scan Modal
+    document.getElementById('btn-duel-custom')?.addEventListener('click', () => {
+      if (!this.scanBoard) return;
+      const nameInput = document.getElementById('scan-board-name');
+      const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Reto Personalizado';
+      const boardStr = SudokuEngine.boardToString(this.scanBoard);
+      const url = CompetitionEngine.generateCustomChallengeUrl(boardStr, name);
+      const diffName = this.scanAnalysis ? this.scanAnalysis.difficulty.toUpperCase() : 'PERSONALIZADO';
+      const text = `⚔️ ¡Te reto en Sudoku Arena a resolver este Sudoku!
+🧩 Reto: ${name} (${diffName})
+🎯 Auditoría de Puntos Cognitivos en Vivo
+🔗 Pulsa aquí para jugar el mismo tablero:
+${url}`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          const toastMsg = window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!';
+          this.showToast(toastMsg, 'success');
+        });
+      } else {
+        prompt('Copia tu enlace de reto para WhatsApp:', text);
+      }
+    });
+
+    // Búsqueda y Filtros en la Bóveda
+    document.getElementById('vault-search-input')?.addEventListener('input', (e) => {
+      this.vaultSearchQuery = e.target.value;
+      this.renderVaultItems();
+    });
+
+    document.querySelectorAll('.vault-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.vault-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        this.vaultFilter = pill.dataset.filter;
+        this.renderVaultItems();
+      });
+    });
+
+    // Teclas numéricas dentro del modal de escaneo
+    window.addEventListener('keydown', (e) => {
+      const scanModal = document.getElementById('modal-scan-create');
+      if (scanModal && scanModal.classList.contains('active')) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key >= '1' && e.key <= '9') {
+          this.inputScanDigit(parseInt(e.key, 10));
+        } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+          this.inputScanDigit(0);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          this.selectScanCell(Math.max(0, this.scanSelectedRow - 1), this.scanSelectedCol);
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          this.selectScanCell(Math.min(8, this.scanSelectedRow + 1), this.scanSelectedCol);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.selectScanCell(this.scanSelectedRow, Math.max(0, this.scanSelectedCol - 1));
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.selectScanCell(this.scanSelectedRow, Math.min(8, this.scanSelectedCol + 1));
+        }
+      }
+    });
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', (e) => {
         if (e.target === overlay) this.closeAllModals();
       });

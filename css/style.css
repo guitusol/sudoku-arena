@@ -1733,3 +1733,605 @@ body {
   flex-direction: column;
   gap: 0.75rem;
 }
+
+
+/* ==========================================================================
+   MODULO OCR, ESCANEO Y BOVEDA DE RETOS ("MIS SUDOKUS") - CYBER TACTICAL
+   ========================================================================== */
+
+/* Botones en barra de cabecera */
+.header-btn.scan-highlight-btn {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+  border-color: rgba(16, 185, 129, 0.6);
+  color: #6ee7b7;
+}
+
+.header-btn.scan-highlight-btn:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(6, 182, 212, 0.35));
+  border-color: #10b981;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.header-btn.vault-highlight-btn {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.18), rgba(59, 130, 246, 0.18));
+  border-color: rgba(6, 182, 212, 0.5);
+  color: #38bdf8;
+  position: relative;
+}
+
+.header-btn.vault-highlight-btn:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(59, 130, 246, 0.3));
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.vault-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--gold);
+  color: #0b0f19;
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  margin-left: 0.25rem;
+}
+
+/* Selector de pestañas modal escaneo */
+.scan-tabs-bar {
+  display: flex;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-grid);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+
+.scan-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.5rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scan-tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.scan-tab-btn.active {
+  background: var(--bg-surface);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Zona Dropzone OCR */
+.arena-drop-zone {
+  border: 2px dashed rgba(56, 189, 248, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 10px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.arena-drop-zone:hover, .arena-drop-zone.dragover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+.drop-zone-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.drop-zone-title {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+}
+
+.drop-zone-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.drop-zone-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Tarjeta progreso OCR */
+.ocr-progress-card {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.ocr-radar-icon {
+  font-size: 1.6rem;
+  animation: pulse-radar 1.2s infinite ease-in-out;
+  color: #38bdf8;
+}
+
+@keyframes pulse-radar {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 6px #38bdf8); }
+}
+
+.ocr-progress-info {
+  flex: 1;
+}
+
+.ocr-status-text {
+  font-size: 0.82rem;
+  color: #e2e8f0;
+}
+
+.scan-info-box {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.84rem;
+  color: #93c5fd;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Inputs de texto / textarea arena */
+.arena-textarea {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid var(--border-grid);
+  border-radius: 6px;
+  color: #f8fafc;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.82rem;
+  resize: vertical;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.arena-textarea:focus, .arena-text-input:focus, .arena-search-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.arena-text-input {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid var(--border-grid);
+  border-radius: 6px;
+  color: #f8fafc;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+  box-sizing: border-box;
+}
+
+/* Tarjeta Cuadrícula de Verificación Táctica */
+.scan-review-card {
+  margin-top: 1rem;
+  padding: 0.85rem;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-grid);
+  border-radius: 10px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.review-grid-container {
+  max-width: 320px;
+  margin: 0 auto 0.75rem auto;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 1px;
+  background: var(--border-grid);
+  border: 2px solid #0284c7;
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.review-cell {
+  background: #111827;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.review-cell:hover {
+  background: #1e293b;
+}
+
+.review-cell.selected {
+  background: #1d4ed8 !important;
+  color: #fff;
+  box-shadow: inset 0 0 0 2px #60a5fa;
+}
+
+.review-cell.highlighted {
+  background: rgba(59, 130, 246, 0.18);
+}
+
+.review-cell.has-clue {
+  color: #38bdf8;
+}
+
+.review-cell.invalid-conflict {
+  background: rgba(239, 68, 68, 0.3) !important;
+  color: #fca5a5 !important;
+}
+
+/* Bordes de bloques 3x3 en la rejilla de revisión */
+.review-cell[data-c="2"], .review-cell[data-c="5"] {
+  border-right: 2px solid #0284c7;
+}
+
+.review-cell[data-r="2"], .review-cell[data-r="5"] {
+  border-bottom: 2px solid #0284c7;
+}
+
+/* Mini Teclado Táctil de Revisión */
+.arena-mini-keypad {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  max-width: 380px;
+  margin: 0 auto 0.75rem auto;
+}
+
+.mini-key {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-grid);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.55rem 0;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mini-key:hover {
+  background: #334155;
+  border-color: #38bdf8;
+  color: #fff;
+}
+
+.mini-key:active {
+  transform: scale(0.94);
+  background: #1d4ed8;
+}
+
+.mini-key.key-erase {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.mini-key.key-erase:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fff;
+}
+
+/* Auditoría en vivo de la cuadrícula de revisión */
+.review-audit-box {
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+}
+
+.audit-badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.review-chip {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+}
+
+.review-chip.diff-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  text-transform: uppercase;
+}
+
+.review-chip.pts-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.review-validation-text {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.review-validation-text.text-valid {
+  color: #34d399;
+}
+
+.review-validation-text.text-invalid {
+  color: #f87171;
+}
+
+/* ==========================================================================
+   ESTILOS DE LA BÓVEDA ("MIS SUDOKUS")
+   ========================================================================== */
+
+.vault-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.vault-search-box {
+  display: flex;
+  align-items: center;
+  background: #0f172a;
+  border: 1px solid var(--border-grid);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 180px;
+}
+
+.arena-search-input {
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  font-size: 0.84rem;
+  width: 100%;
+}
+
+.vault-filters-pills {
+  display: flex;
+  background: #0f172a;
+  border: 1px solid var(--border-grid);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.vault-pill {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.vault-pill:hover {
+  color: #f8fafc;
+}
+
+.vault-pill.active {
+  background: var(--bg-surface);
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.vault-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-height: 52vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.vault-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-grid);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.vault-card:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 41, 59, 0.6);
+  transform: translateY(-1px);
+}
+
+.vault-card.completed {
+  border-left: 3px solid #10b981;
+}
+
+.vault-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.vault-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.vault-card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vault-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.vault-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.vault-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.vault-card-btn {
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.vault-card-btn.btn-play {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #0b0f19;
+  border: none;
+  font-weight: 700;
+}
+
+.vault-card-btn.btn-play:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.vault-card-btn.btn-duel {
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.4);
+  color: #60a5fa;
+}
+
+.vault-card-btn.btn-duel:hover {
+  background: rgba(37, 99, 235, 0.3);
+  color: #fff;
+}
+
+.vault-card-btn.btn-del {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #64748b;
+  padding: 0.4rem 0.45rem;
+}
+
+.vault-card-btn.btn-del:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.vault-empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+
+.vault-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.8;
+}
+
+.vault-empty-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.4rem;
+}
+
+.vault-empty-desc {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  max-width: 420px;
+  margin: 0 auto 1.25rem auto;
+  line-height: 1.5;
+}

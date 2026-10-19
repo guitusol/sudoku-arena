@@ -67,6 +67,32 @@ class CompetitionEngine {
   }
 
   /**
+   * Genera una URL para compartir un duelo de Sudoku personalizado (escaneado o creado)
+   */
+  static generateCustomChallengeUrl(boardString, name = 'Reto') {
+    if (typeof window === 'undefined') return '';
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set('tablero', boardString);
+    if (name) url.searchParams.set('nombre', encodeURIComponent(name));
+    return url.toString();
+  }
+
+  /**
+   * Detecta si la URL trae un Sudoku personalizado completo en parámetros (?tablero=...81chars)
+   */
+  static getCustomChallengeFromUrl() {
+    if (typeof window === 'undefined') return null;
+    const params = new URLSearchParams(window.location.search);
+    const boardStr = params.get('tablero') || params.get('board') || params.get('custom');
+    if (!boardStr) return null;
+    const name = params.get('nombre') ? decodeURIComponent(params.get('nombre')) : 'Reto Personalizado';
+    return {
+      boardString: boardStr,
+      name
+    };
+  }
+
+  /**
    * Crea un paquete de evento listo para enviar por WebSockets en una futura sala
    */
   static createEventPayload(playerName, summary, actionType) {

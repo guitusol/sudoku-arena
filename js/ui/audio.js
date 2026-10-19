@@ -46,6 +46,10 @@ class SoundEffects {
     osc.stop(this.ctx.currentTime + 0.04);
   }
 
+  playCorrect() {
+    this.playSuccess();
+  }
+
   playSuccess() {
     if (this.muted) return;
     this._init();

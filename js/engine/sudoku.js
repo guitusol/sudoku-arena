@@ -461,6 +461,67 @@ class SudokuEngine {
       cellTechniques: analysis.cellTechniques
     };
   }
+
+  /**
+   * Crea una estructura oficial de partida (gameData) a partir de un tablero personalizado
+   * (escaneado por OCR, creado a mano o pegado en cadena).
+   * Mide dificultad humana, calcula techo de puntos cognitivos y soluciona matemáticamente.
+   */
+  static createGameFromCustomBoard(board, name = 'Reto Personalizado', customSeed = null) {
+    const solution = this.solve(board);
+    if (!solution) return null;
+
+    let clues = 0;
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (board[r][c] !== 0) clues++;
+      }
+    }
+
+    const analysis = this.analyzeBoard(board);
+    const seed = customSeed || Math.floor(10000 + Math.random() * 90000);
+
+    return {
+      seed,
+      isCustom: true,
+      customName: name,
+      difficulty: analysis.difficulty,
+      realAnalyzedDifficulty: analysis.difficulty,
+      board: this.cloneBoard(board),
+      solution: solution,
+      initialClues: clues,
+      totalPoints: analysis.totalPoints || (clues < 25 ? 5000 : (clues < 32 ? 3500 : 2000)),
+      cellScores: analysis.cellScores,
+      cellTechniques: analysis.cellTechniques
+    };
+  }
+
+  /**
+   * Parsea una cadena de 81 caracteres de números y puntos/ceros a una matriz 9x9
+   */
+  static parseBoardString(raw) {
+    if (!raw) return null;
+    const clean = String(raw).replace(/[\s\r\n|+-]/g, '');
+    if (clean.length < 81) return null;
+
+    const grid = Array.from({ length: 9 }, () => Array(9).fill(0));
+    let validClues = 0;
+
+    for (let i = 0; i < 81; i++) {
+      const ch = clean[i];
+      const r = Math.floor(i / 9);
+      const c = i % 9;
+      const num = parseInt(ch, 10);
+      if (!isNaN(num) && num >= 1 && num <= 9) {
+        grid[r][c] = num;
+        validClues++;
+      } else {
+        grid[r][c] = 0;
+      }
+    }
+
+    return validClues >= 10 ? grid : null;
+  }
 }
 
 // Exportación compatible navegador y node
