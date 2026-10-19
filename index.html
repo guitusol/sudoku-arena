@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Manifiesto PWA e Iconos -->  <link rel="manifest" href="manifest.json">  <link rel="apple-touch-icon" href="icons/icon-192.svg">  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">  <!-- Estilos CSS -->
-  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="stylesheet" href="css/style.css?v=3.1">
 </head>
 <body>
 
@@ -760,24 +760,29 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal" data-i18n="modal_peek_cancel">Cerrar</button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Volver al Tablero</button>
       </div>
     </div>
   </div>
 
   <!-- Notificación Toast flotante -->
-    <!-- MODAL SALIR / PARTIDA CERRADA -->
-  <div id="modal-exit" class="modal-overlay">
-    <div class="modal-card" style="max-width: 440px; text-align: center;">
-      <div class="modal-header">
-        <h3 class="modal-title"><span>🚪</span> <span data-i18n="modal_exit_title">Partida Cerrada</span></h3>
-        <button class="btn-close-modal">✕</button>
-      </div>
-      <div class="modal-body" style="padding: 1.25rem 0.5rem;">
-        <p style="margin-bottom: 1.25rem; color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;" data-i18n="modal_exit_desc">
-          Has salido de la partida con éxito. Ya puedes cerrar esta pestaña en tu navegador o pulsar el botón inferior para empezar un nuevo sudoku.
+    <!-- PANTALLA COMPLETA DE SALIDA DEL JUEGO -->
+  <div id="exit-screen" class="exit-screen-wrapper hidden">
+    <div class="exit-screen-card">
+      <div class="exit-screen-icon">🚪</div>
+      <h2 class="exit-screen-title" data-i18n="exit_screen_title">Partida Cerrada</h2>
+      <p class="exit-screen-subtitle" data-i18n="exit_screen_subtitle">Has salido de la partida con éxito.</p>
+
+      <div class="exit-instructions-card">
+        <div class="exit-instructions-header">📱 <strong>Cómo salir en tu teléfono móvil:</strong></div>
+        <p class="exit-instructions-text" data-i18n="exit_screen_instructions">
+          Para salir por completo al escritorio de tu móvil, pulsa el botón <strong>Inicio</strong> de tu teléfono o cierra esta pestaña en tu navegador web.
         </p>
-        <button id="btn-modal-exit-new" class="modal-btn primary" style="width: 100%; font-size: 0.95rem;" data-i18n="btn_new_game">➕ Iniciar Nuevo Sudoku</button>
+      </div>
+
+      <div class="exit-screen-actions">
+        <button id="btn-exit-try-close" class="modal-btn secondary" data-i18n="btn_exit_close_tab">🚪 Cerrar Pestaña / Atrás</button>
+        <button id="btn-exit-new-sudoku" class="modal-btn primary" data-i18n="btn_new_game">➕ Iniciar Nuevo Sudoku</button>
       </div>
     </div>
   </div>
@@ -785,14 +790,14 @@
   <div id="toast-notification" class="toast-box"></div>
 
   <!-- Scripts -->
-  <script src="js/i18n.js?v=3.0"></script>
-  <script src="js/engine/sudoku.js?v=3.0"></script>
-  <script src="js/engine/scoring.js?v=3.0"></script>
-  <script src="js/engine/competition.js?v=3.0"></script>
-  <script src="js/engine/weekly.js?v=3.0"></script>
-  <script src="js/ui/audio.js?v=3.0"></script>
-  <script src="js/ui/board.js?v=3.0"></script>
-  <script src="js/app.js?v=3.0"></script>
+  <script src="js/i18n.js?v=3.1"></script>
+  <script src="js/engine/sudoku.js?v=3.1"></script>
+  <script src="js/engine/scoring.js?v=3.1"></script>
+  <script src="js/engine/competition.js?v=3.1"></script>
+  <script src="js/engine/weekly.js?v=3.1"></script>
+  <script src="js/ui/audio.js?v=3.1"></script>
+  <script src="js/ui/board.js?v=3.1"></script>
+  <script src="js/app.js?v=3.1"></script>
 
 </body>
 </html>

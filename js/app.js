@@ -794,19 +794,40 @@ class SudokuApp {
     this.stopTimer();
     this.isGameOver = true;
 
-    // Si se ejecuta dentro de aplicación Capacitor móvil nativa
-    if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
-      window.Capacitor.Plugins.App.exitApp();
-      return;
-    }
-
-    // Intentar cerrar la ventana/pestaña si el navegador lo permite
+    // 1. Si se ejecuta dentro de aplicación móvil nativa (Capacitor / Cordova)
     try {
+      if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+        window.Capacitor.Plugins.App.exitApp();
+        return;
+      }
+      if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.App && typeof window.Capacitor.App.exitApp === 'function') {
+        window.Capacitor.App.exitApp();
+        return;
+      }
+      if (typeof navigator !== 'undefined' && navigator.app && typeof navigator.app.exitApp === 'function') {
+        navigator.app.exitApp();
+        return;
+      }
+    } catch (e) {}
+
+    // 2. Intentar cerrar la pestaña / ventana del navegador web
+    try {
+      window.open('', '_self', '');
       window.close();
     } catch (e) {}
 
-    // Si la pestaña sigue abierta en el navegador, mostrar la pantalla modal de salida
-    this.openModal('modal-exit');
+    // 3. Si el usuario llegó desde otra aplicación o página previa, volver atrás en el historial
+    try {
+      if (window.history && window.history.length > 1) {
+        window.history.back();
+      }
+    } catch (e) {}
+
+    // 4. Si la pestaña sigue abierta en el navegador, mostrar la pantalla completa opaca de salida
+    const exitScreen = document.getElementById('exit-screen');
+    if (exitScreen) {
+      exitScreen.classList.remove('hidden');
+    }
   }
 
   /**
@@ -1025,12 +1046,26 @@ class SudokuApp {
       });
     }
 
-    // Botón Salir en cabecera y modal de salida
+    // Botón Salir en cabecera
     document.getElementById('btn-exit-game')?.addEventListener('click', () => {
       this.exitGame();
     });
-    document.getElementById('btn-modal-exit-new')?.addEventListener('click', () => {
-      this.closeModal('modal-exit');
+
+    // Botones de la pantalla de salida
+    document.getElementById('btn-exit-try-close')?.addEventListener('click', () => {
+      try {
+        window.open('', '_self', '');
+        window.close();
+      } catch (e) {}
+      try {
+        if (window.history && window.history.length > 1) {
+          window.history.back();
+        }
+      } catch (e) {}
+    });
+
+    document.getElementById('btn-exit-new-sudoku')?.addEventListener('click', () => {
+      document.getElementById('exit-screen')?.classList.add('hidden');
       this.newGame(this.selectedDifficulty);
     });
 

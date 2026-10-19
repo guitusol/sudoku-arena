@@ -1657,3 +1657,79 @@ body {
     padding: 0.35rem 0.5rem;
   }
 }
+
+/* ========================================================
+   PANTALLA COMPLETA DE SALIDA DEL JUEGO
+======================================================== */
+.exit-screen-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #0b0f19;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.exit-screen-wrapper.hidden {
+  display: none !important;
+}
+
+.exit-screen-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-grid);
+  border-radius: 14px;
+  max-width: 460px;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.exit-screen-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.exit-screen-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+}
+
+.exit-screen-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.exit-instructions-card {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.exit-instructions-header {
+  font-size: 0.88rem;
+  color: #fbbf24;
+  margin-bottom: 0.35rem;
+}
+
+.exit-instructions-text {
+  font-size: 0.82rem;
+  color: #fde68a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.exit-screen-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
