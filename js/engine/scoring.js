@@ -21,6 +21,14 @@ class ScoringEngine {
     this.peeksAllCount = 0;
     this.ledger = [];
 
+    // Centinela de Juego Limpio (Detección Anti-Copia / Anti-IA)
+    this.moveHistory = [];
+    this.scanStreak = 0;
+    this.reverseScanStreak = 0;
+    this.fairPlayFlag = false;
+    this.fairPlayReason = null;
+    this.fairPlayWarningTriggered = false;
+
     // Marcar las celdas iniciales fijas
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
@@ -68,7 +76,55 @@ class ScoringEngine {
       ? `Acierto Fila ${row + 1}, Col ${col + 1} (${value}) [+${pointsAwarded} pts] — ${technique}`
       : `Colocada Fila ${row + 1}, Col ${col + 1} (${value}) [0 pts, casilla previamente consultada o penalizada]`;
 
-    return this._logTransaction('HIT', row, col, pointsAwarded, this.currentScore, desc);
+    const tx = this._logTransaction('HIT', row, col, pointsAwarded, this.currentScore, desc);
+
+    // Centinela de Juego Limpio: Detección de barrido lineal mecánico (ChatGPT / Solver externo)
+    const now = Date.now();
+    const cellIndex = row * 9 + col;
+    let fairPlayJustTriggered = false;
+
+    if (this.moveHistory.length > 0) {
+      const lastMove = this.moveHistory[this.moveHistory.length - 1];
+      const timeDiff = (now - lastMove.time) / 1000;
+
+      // Barrido ascendente (de arriba a abajo, izquierda a derecha)
+      if (cellIndex > lastMove.cellIndex && timeDiff < 7.0) {
+        this.scanStreak++;
+      } else if (cellIndex > lastMove.cellIndex) {
+        this.scanStreak = Math.min(this.scanStreak + 1, 8);
+      } else {
+        this.scanStreak = 1;
+      }
+
+      // Barrido descendente (de abajo a arriba)
+      if (cellIndex < lastMove.cellIndex && timeDiff < 7.0) {
+        this.reverseScanStreak++;
+      } else {
+        this.reverseScanStreak = 1;
+      }
+
+      // Si se acumulan 6 o más casillas consecutivas en barrido mecánico
+      if ((this.scanStreak >= 6 || this.reverseScanStreak >= 6) && !this.fairPlayFlag) {
+        this.fairPlayFlag = true;
+        this.fairPlayReason = 'LINEAR_SCAN_PATTERN';
+        fairPlayJustTriggered = true;
+        this._logTransaction(
+          'FAIR_PLAY_ALERT',
+          row,
+          col,
+          0,
+          this.currentScore,
+          `⚠️ Alerta de Integridad: Detectada secuencia de ${Math.max(this.scanStreak, this.reverseScanStreak)} casillas consecutivas en barrido lineal característico de transcripción externa.`
+        );
+      }
+    } else {
+      this.scanStreak = 1;
+      this.reverseScanStreak = 1;
+    }
+
+    this.moveHistory.push({ row, col, cellIndex, time: now });
+
+    return { ...tx, fairPlayJustTriggered };
   }
 
   /**
@@ -251,7 +307,9 @@ class ScoringEngine {
       errorsCount: this.errorsCount,
       peeksCellCount: this.peeksCellCount,
       peeksAllCount: this.peeksAllCount,
-      ledger: this.ledger
+      ledger: this.ledger,
+      fairPlayFlag: this.fairPlayFlag,
+      fairPlayReason: this.fairPlayReason
     };
   }
 

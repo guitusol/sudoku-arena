@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Manifiesto PWA e Iconos -->  <link rel="manifest" href="manifest.json">  <link rel="apple-touch-icon" href="icons/icon-192.svg">  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">  <!-- Estilos CSS -->
-  <link rel="stylesheet" href="css/style.css?v=3.2">
+  <link rel="stylesheet" href="css/style.css?v=3.3">
 </head>
 <body>
 
@@ -444,6 +444,16 @@
           </div>
         </div>
 
+        
+        <!-- Alerta de Juego Limpio en Veredicto -->
+        <div id="verdict-fair-play-banner" class="ethical-notice-box hidden" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.12); color: #fca5a5; margin: 0.75rem 0;">
+          <span style="font-size: 1.4rem;">⚠️</span>
+          <div>
+            <strong style="color: #ef4444; display: block; font-size: 0.85rem;" data-i18n="verdict_fair_play_title">Alerta de Integridad: Sospecha de Copia Externa</strong>
+            <span style="font-size: 0.78rem; line-height: 1.4;" data-i18n="verdict_fair_play_desc">Se detectó una secuencia continua de introducción lineal sin pausas de deducción lógica.</span>
+          </div>
+        </div>
+
         <button id="btn-share-verdict" class="modal-btn primary" style="width: 100%; margin-bottom: 0.5rem; background: linear-gradient(135deg, #10b981, #059669);">
           <span data-i18n="verdict_share">📋 Copiar Resultado y Código de Desafío para Retar</span>
         </button>
@@ -766,7 +776,30 @@
   </div>
 
   <!-- Notificación Toast flotante -->
-    <!-- PANTALLA COMPLETA DE SALIDA DEL JUEGO -->
+      <!-- MODAL AVISO DE JUEGO LIMPIO (ANTI-TRAMPAS / IA) -->
+  <div id="modal-fair-play" class="modal-overlay">
+    <div class="modal-card" style="max-width: 480px; text-align: center; border: 2px solid var(--gold); box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);">
+      <div class="modal-header" style="justify-content: center;">
+        <h3 class="modal-title" style="color: #fbbf24; display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem;">
+          <span>⚖️</span> <span data-i18n="fair_play_alert_title">Aviso de Juego Limpio</span>
+        </h3>
+      </div>
+      <div class="modal-body" style="padding: 1.5rem 1rem;">
+        <div style="font-size: 3.2rem; margin-bottom: 0.75rem;">🤖⚠️</div>
+        <p style="font-size: 1.05rem; font-weight: 800; color: #fde68a; line-height: 1.55; margin-bottom: 0.85rem;" data-i18n="fair_play_alert_msg">
+          Sea ético: resuelva este Sudoku dentro de la plataforma. No utilice recursos externos ni copie soluciones de Inteligencia Artificial.
+        </p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem;" data-i18n="fair_play_alert_desc">
+          Se ha detectado un patrón de introducción lineal celda a celda característico de copia externa. Sudoku Arena audita los patrones deductivos para garantizar la igualdad en duelos y retos.
+        </p>
+        <button id="btn-fair-play-ack" class="modal-btn primary" style="width: 100%; font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, #f59e0b, #d97706); color: #111827;" data-i18n="fair_play_btn_ack">
+          Comprendido, continuaré jugando éticamente
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA COMPLETA DE SALIDA DEL JUEGO -->
   <div id="exit-screen" class="exit-screen-wrapper hidden">
     <div class="exit-screen-card">
       <div class="exit-screen-icon">🚪</div>
@@ -790,14 +823,14 @@
   <div id="toast-notification" class="toast-box"></div>
 
   <!-- Scripts -->
-  <script src="js/i18n.js?v=3.2"></script>
-  <script src="js/engine/sudoku.js?v=3.2"></script>
-  <script src="js/engine/scoring.js?v=3.2"></script>
-  <script src="js/engine/competition.js?v=3.2"></script>
-  <script src="js/engine/weekly.js?v=3.2"></script>
-  <script src="js/ui/audio.js?v=3.2"></script>
-  <script src="js/ui/board.js?v=3.2"></script>
-  <script src="js/app.js?v=3.2"></script>
+  <script src="js/i18n.js?v=3.3"></script>
+  <script src="js/engine/sudoku.js?v=3.3"></script>
+  <script src="js/engine/scoring.js?v=3.3"></script>
+  <script src="js/engine/competition.js?v=3.3"></script>
+  <script src="js/engine/weekly.js?v=3.3"></script>
+  <script src="js/ui/audio.js?v=3.3"></script>
+  <script src="js/ui/board.js?v=3.3"></script>
+  <script src="js/app.js?v=3.3"></script>
 
 </body>
 </html>

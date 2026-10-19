@@ -186,6 +186,22 @@ Al finalizar el tablero, el sistema muestra la tarjeta oficial de auditoría:
 2. **2º Criterio (Índice de Autonomía Mental %)**: Quien haya resuelto con mayor autonomía (menos ayudas o consultas de lupa/rayos X).
 3. **3º Criterio (Tiempo de Cronómetro)**: En caso de empate a puntos y autonomía, el tiempo más rápido desempata la partida.
 
+---
+
+## 8. Centinela de Juego Limpio y Detección Forense (Anti-Trampas / IA)
+
+Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo auténtico. Para garantizar la máxima justicia en el **Reto Semanal** y en los **Duelos Multijugador**, el motor incorpora un **Centinela de Integridad (Fair Play Sentinel)** capaz de auditar la deducción en tiempo real:
+
+- **Detección de Barrido Lineal Mecánico (ChatGPT / Solvers externos)**:
+  Cuando un usuario resuelve un sudoku de forma natural, salta de una zona a otra del tablero deduciendo descartes y números únicos. Por el contrario, cuando alguien copia una solución externa o generada por Inteligencia Artificial, suele rellenar las casillas en orden estricto de lectura lineal (de izquierda a derecha y fila por fila).
+- **Alerta Ética en Vivo**:
+  Si el sistema detecta una secuencia continua de introducción lineal mecánica sin pausas de deducción lógica, activará de inmediato el **Aviso de Juego Limpio**:
+  > *«Sea ético: resuelva este Sudoku dentro de la plataforma. No utilice recursos externos ni copie soluciones de Inteligencia Artificial.»*
+- **Auditoría Forense y Validez de Récords**:
+  Las partidas marcadas por barrido lineal quedan etiquetadas en el libro mayor de auditoría con la advertencia de *Sospecha de Copia Externa*, invalidando la obtención de rangos de honor superiores en competiciones.
+
+---
+
 ## 9. Consejos Tácticos para Convertirte en Gran Maestro
 
 1. **Aprovecha el Descarte Sistemático**: Busca primero filas, columnas o cajas 3x3 que tengan ya 6 o 7 números colocados; en ellas es mucho más fácil deducir los números restantes.

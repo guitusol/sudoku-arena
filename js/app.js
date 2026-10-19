@@ -325,6 +325,15 @@ class SudokuApp {
       window.soundFx.playSuccess();
       this.render();
       this.saveActiveGame();
+
+      // Centinela de Juego Limpio: Alerta si se detecta barrido lineal de copia externa (ChatGPT / Solver)
+      if (this.scoring.fairPlayFlag && !this.scoring.fairPlayWarningTriggered) {
+        this.scoring.fairPlayWarningTriggered = true;
+        this.openModal('modal-fair-play');
+        window.soundFx?.playError?.();
+        this.triggerHaptic([100, 50, 100]);
+      }
+
       this.checkVictoryCondition();
     } else {
       // Error
@@ -480,6 +489,15 @@ class SudokuApp {
    */
   openLedgerModal() {
     const summary = this.scoring.getSummary();
+
+    const fairPlayBanner = document.getElementById('verdict-fair-play-banner');
+    if (fairPlayBanner) {
+      if (summary.fairPlayFlag) {
+        fairPlayBanner.classList.remove('hidden');
+      } else {
+        fairPlayBanner.classList.add('hidden');
+      }
+    }
     const ledger = this.scoring.ledger;
 
     document.getElementById('ledger-total-score').textContent = summary.currentScore;
@@ -1067,6 +1085,11 @@ class SudokuApp {
     document.getElementById('btn-exit-new-sudoku')?.addEventListener('click', () => {
       document.getElementById('exit-screen')?.classList.add('hidden');
       this.newGame(this.selectedDifficulty);
+    });
+
+    // Botón Aceptar Aviso de Juego Limpio
+    document.getElementById('btn-fair-play-ack')?.addEventListener('click', () => {
+      this.closeModal('modal-fair-play');
     });
 
     // Botón Cambiar Semilla (🎲) en la barra de dificultad
