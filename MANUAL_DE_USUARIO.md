@@ -192,3 +192,15 @@ Al finalizar el tablero, el sistema muestra la tarjeta oficial de auditoría:
 2. **No Adivines**: Cada fallo cuesta **-15 puntos** y reduce tu índice de autonomía. Si dudas entre dos casillas, busca otra zona del tablero antes de arriesgarte.
 3. **Usa la Lupa con Cabeza**: Si estás totalmente bloqueado, usar la **Lupa en una sola casilla estratégica** solo te resta los puntos de esa celda (ej. 15 o 25 pts), mientras que activar **Rayos X** deducirá puntos de decenas de casillas a la vez.
 4. **Vigila el Techo de Puntos**: Tu objetivo no es solo resolver el sudoku, sino mantener la barra de Autonomía lo más cerca posible del **100%**.
+
+---
+
+## 🎖️ Créditos y Dedicatoria
+
+> **Desarrollado por Guillermo Tudela**  
+> director de **CONECTIVIDAD Y COMUNICACIONES, S. L.**  
+>  
+> *«Esta APP está dedicada a mi familia, amigos y a todos los apasionados por los Rompecabezas y Sudokus»*
+
+---
+Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Todos los derechos reservados.

@@ -100,7 +100,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Fíjate en las restricciones cruzadas</strong>: Antes de colocar un número, revisa mentalmente la fila, la columna y la caja 3x3 para estar seguro al 100%.",
     "sec7_tip2": "<strong>No te arriesgues al azar</strong>: Un fallo penaliza -15 puntos y destruye tu 100% de autonomía.",
     "sec7_tip3": "<strong>Prefiere la Lupa a los Rayos X</strong>: Si estás atascado en un punto muerto, usar la Lupa en una sola casilla solo te penalizará esa celda, mientras que Rayos X castiga todo el tablero.",
-    "footer": "Sudoku Arena © 2026 • Diseñado por Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Desarrollado por Guillermo Tudela",
+    "author_role": "director de CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "Esta APP está dedicada a mi familia, amigos y a todos los apasionados por los Rompecabezas y Sudokus",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Todos los derechos reservados"
   },
   "en": {
     "fair_play_title": "⚖️ Ethical Commitment & Fair Play:",
@@ -198,7 +201,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Check cross-constraints</strong>: Before placing a number, mentally verify row, column, and 3x3 block to be 100% certain.",
     "sec7_tip2": "<strong>Never guess blindly</strong>: An error costs -15 net points and eliminates your 100% pure autonomy.",
     "sec7_tip3": "<strong>Prefer Magnifier over X-Ray</strong>: If stuck, Magnifier penalizes only one cell, whereas X-Ray affects the entire board.",
-    "footer": "Sudoku Arena © 2026 • Designed by Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Developed by Guillermo Tudela",
+    "author_role": "Director of CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "This APP is dedicated to my family, friends, and all puzzle and Sudoku enthusiasts",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • All rights reserved"
   },
   "fr": {
     "fair_play_title": "⚖️ Engagement Éthique & Fair-Play :",
@@ -296,7 +302,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Vérifiez les contraintes croisées</strong> : Avant de placer un chiffre, vérifiez mentalement ligne, colonne et bloc 3x3 pour être sûr à 100%.",
     "sec7_tip2": "<strong>Ne devinez jamais au hasard</strong> : Une faute coûte -15 points et brise vos 100% d'autonomie pure.",
     "sec7_tip3": "<strong>Préférez la Loupe aux Rayons X</strong> : Si vous êtes bloqué, la Loupe ne pénalise qu'une case, tandis que les Rayons X affectent toute la grille.",
-    "footer": "Sudoku Arena © 2026 • Conçu par Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Développé par Guillermo Tudela",
+    "author_role": "Directeur de CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "Cette application est dédiée à ma famille, à mes amis et à tous les passionnés de casse-têtes et de Sudokus",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Tous droits réservés"
   },
   "de": {
     "fair_play_title": "⚖️ Fair-Play & Ethischer Ehrenkodex:",
@@ -394,7 +403,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Kreuzbeschränkungen prüfen</strong>: Prüfen Sie Zeile, Spalte und 3x3-Block vor jeder Zahl gewissenhaft ab.",
     "sec7_tip2": "<strong>Niemals raten</strong>: Ein Fehler kostet -15 Punkte und beendet die 100% reine Autonomie sofort.",
     "sec7_tip3": "<strong>Lupe vor Röntgen bevorzugen</strong>: Stecken Sie fest, bestraft die Lupe nur eine Zelle, während Röntgen das ganze Feld betrifft.",
-    "footer": "Sudoku Arena © 2026 • Entwickelt von Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Entwickelt von Guillermo Tudela",
+    "author_role": "Geschäftsführer von CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "Diese App ist meiner Familie, Freunden und allen Rätsel- und Sudoku-Begeisterten gewidmet",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Alle Rechte vorbehalten"
   },
   "ca": {
     "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
@@ -492,7 +504,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Revisa les restriccions creuades</strong>: Abans de posar un número, revisa fila, columna i caixa 3x3 al 100%.",
     "sec7_tip2": "<strong>No t'arrisquis a l'atzar</strong>: Un error penalitza -15 punts i destrueix el 100% d'autonomia.",
     "sec7_tip3": "<strong>Prefereix la Lupa als Raigs X</strong>: La Lupa només penalitza una casella, mentre que Raigs X castiga tot el tauler.",
-    "footer": "Sudoku Arena © 2026 • Dissenyat per Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Desenvolupat per Guillermo Tudela",
+    "author_role": "director de CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "Aquesta APP està dedicada a la meva família, amics i a tots els apassionats pels Trencaclosques i Sudokus",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Tots els drets reservats"
   },
   "va": {
     "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
@@ -590,7 +605,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Fixa't en les restriccions creuades</strong>: Abans de posar un número, revisa mentalment fila, columna i caixa 3x3 per a estar segur al 100%.",
     "sec7_tip2": "<strong>No t'arrisques a l'atzar</strong>: Una fallada penalitza -15 punts i trenca el teu 100% d'autonomia.",
     "sec7_tip3": "<strong>Preferix la Lupa als Raigs X</strong>: Si estàs bloquejat, la Lupa només penalitza una casella, mentre que Raigs X castiga tot el tauler.",
-    "footer": "Sudoku Arena © 2026 • Dissenyat per Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Desenvolupat per Guillermo Tudela",
+    "author_role": "director de CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "Esta APP està dedicada a la meua família, amics i a tots els apassionats pels Trencaclosques i Sudokus",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Tots els drets reservats"
   },
   "eu": {
     "fair_play_title": "⚖️ Konpromiso Etikoa eta Joko Garbia:",
@@ -688,7 +706,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Begiratu murrizketa gurutzatuei</strong>: Zenbaki bat jarri aurretik, aztertu errenkada, zutabea eta 3x3 koadroa %100 seguru egoteko.",
     "sec7_tip2": "<strong>Ez arriskatu zortean</strong>: Huts egiteak -15 puntu zigortzen ditu eta zure %100eko autonomia suntsitzen du.",
     "sec7_tip3": "<strong>Nahiago izan Lupa X Izpiak baino</strong>: Lupak lauki bakarra zigortzen du; X Izpiek, berriz, taula osoa kaltetzen dute.",
-    "footer": "Sudoku Arena © 2026 • Guillermo Tudela Solerrek diseinatua / Conectividad y Comunicaciones, S.L."
+    "author_name": "Guillermo Tudelak garatua",
+    "author_role": "CONECTIVIDAD Y COMUNICACIONES, S. L. enpresako zuzendaria",
+    "author_dedication": "Aplikazio hau nire familiari, lagunei eta Buru-hausgarri eta Sudoku zale guztiei eskainia dago",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Eskubide guztiak erreserbatuta"
   },
   "gl": {
     "fair_play_title": "⚖️ Compromiso Ético e Xogo Limpo:",
@@ -786,7 +807,10 @@ const MANUAL_FULL_CONTENT = {
     "sec7_tip1": "<strong>Fíxate nas restricións cruzadas</strong>: Antes de colocar un número, revisa fila, columna e caixa 3x3 ao 100%.",
     "sec7_tip2": "<strong>Non te arrisques ao azar</strong>: Un fallo penaliza -15 puntos e destrúe o teu 100% de autonomía.",
     "sec7_tip3": "<strong>Prefire a Lupa aos Raios X</strong>: A Lupa só penaliza unha casa, mentres que Raios X castiga todo o taboleiro.",
-    "footer": "Sudoku Arena © 2026 • Deseñado por Guillermo Tudela Soler / Conectividad y Comunicaciones, S.L."
+    "author_name": "Desenvolvido por Guillermo Tudela",
+    "author_role": "director de CONECTIVIDAD Y COMUNICACIONES, S. L.",
+    "author_dedication": "Esta APP está dedicada á miña familia, amigos e a todos os apaixoados polos Crebacabezas e Sudokus",
+    "footer": "Sudoku Arena © 2026 • CONECTIVIDAD Y COMUNICACIONES, S.L. • Todos os dereitos reservados"
   }
 };
 
