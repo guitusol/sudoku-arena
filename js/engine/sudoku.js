@@ -65,6 +65,28 @@ class SudokuEngine {
   }
 
   /**
+   * Encuentra todas las celdas que contienen números repetidos o en colisión
+   * en su misma fila, columna o caja 3x3.
+   * Devuelve un Set con las claves "r-c" de las celdas en conflicto.
+   */
+  static findBoardConflicts(board) {
+    const conflicts = new Set();
+    if (!board || !Array.isArray(board)) return conflicts;
+
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        const val = board[r][c];
+        if (val > 0) {
+          if (!this.isValid(board, r, c, val)) {
+            conflicts.add(`${r}-${c}`);
+          }
+        }
+      }
+    }
+    return conflicts;
+  }
+
+  /**
    * Obtiene los candidatos legales para una celda
    */
   static getCandidates(board, row, col) {
@@ -149,6 +171,18 @@ class SudokuEngine {
    * Resuelve el tablero por completo devolviendo la solución o null
    */
   static solve(board) {
+    if (!board || !Array.isArray(board)) return null;
+
+    // Validar que el tablero inicial no tenga conflictos de pistas
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        const val = board[r][c];
+        if (val > 0 && !this.isValid(board, r, c, val)) {
+          return null;
+        }
+      }
+    }
+
     const b = this.cloneBoard(board);
     function backtrack() {
       for (let r = 0; r < 9; r++) {
@@ -409,8 +443,10 @@ class SudokuEngine {
     return {
       difficulty: diffCategory,
       totalPoints: totalInitialPoints,
+      initialTotalPoints: totalInitialPoints,
       cellScores,
-      cellTechniques
+      cellTechniques,
+      techniqueAudit: cellTechniques
     };
   }
 
@@ -521,6 +557,14 @@ class SudokuEngine {
     }
 
     return validClues >= 10 ? grid : null;
+  }
+
+  /**
+   * Convierte una matriz 9x9 a una cadena estándar de 81 caracteres numéricos
+   */
+  static boardToString(board) {
+    if (!board || !Array.isArray(board)) return '';
+    return board.map(row => row.map(cell => (cell > 0 ? cell : '0')).join('')).join('');
   }
 }
 

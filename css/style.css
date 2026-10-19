@@ -2030,8 +2030,9 @@ body {
 }
 
 .review-cell.invalid-conflict {
-  background: rgba(239, 68, 68, 0.3) !important;
+  background: rgba(239, 68, 68, 0.35) !important;
   color: #fca5a5 !important;
+  box-shadow: inset 0 0 0 2px #ef4444;
 }
 
 /* Bordes de bloques 3x3 en la rejilla de revisión */

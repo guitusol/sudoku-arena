@@ -28,6 +28,7 @@ class SudokuApp {
     this.scanSelectedRow = 0;
     this.scanSelectedCol = 0;
     this.scanAnalysis = null;
+    this.scanConflicts = new Set();
     this.vaultFilter = 'all';
     this.vaultSearchQuery = '';
 
@@ -214,10 +215,13 @@ class SudokuApp {
     if (typeof CompetitionEngine !== 'undefined' && CompetitionEngine.getCustomChallengeFromUrl) {
       const customChallenge = CompetitionEngine.getCustomChallengeFromUrl();
       if (customChallenge) {
-        this.startCustomGame(customChallenge.board, customChallenge.name);
-        const toastMsg = window.i18n ? window.i18n.t('toast_duel_loaded', { name: customChallenge.name }) : `¡Duelo cargado: ${customChallenge.name}!`;
-        this.showToast(toastMsg, 'info');
-        return;
+        const boardToPlay = customChallenge.board || (customChallenge.boardString ? SudokuEngine.parseBoardString(customChallenge.boardString) : null);
+        if (boardToPlay) {
+          this.startCustomGame(boardToPlay, customChallenge.name);
+          const toastMsg = window.i18n ? window.i18n.t('toast_duel_loaded', { name: customChallenge.name }) : `¡Duelo cargado: ${customChallenge.name}!`;
+          this.showToast(toastMsg, 'info');
+          return;
+        }
       }
     }
     const challenge = CompetitionEngine.getChallengeFromUrl();
@@ -1018,9 +1022,11 @@ class SudokuApp {
       const r = parseInt(cell.dataset.r, 10);
       const c = parseInt(cell.dataset.c, 10);
       const val = this.scanBoard[r][c];
+      const isConflict = this.scanConflicts && this.scanConflicts.has(`${r}-${c}`);
 
       cell.textContent = val > 0 ? val : '';
       cell.classList.toggle('has-clue', val > 0);
+      cell.classList.toggle('invalid-conflict', isConflict);
       cell.classList.toggle('selected', r === this.scanSelectedRow && c === this.scanSelectedCol);
       cell.classList.toggle('highlighted', (r === this.scanSelectedRow || c === this.scanSelectedCol) && !(r === this.scanSelectedRow && c === this.scanSelectedCol));
     });
@@ -1045,6 +1051,7 @@ class SudokuApp {
     this.scanBoard = Array.from({ length: 9 }, () => Array(9).fill(0));
     this.scanSelectedRow = 0;
     this.scanSelectedCol = 0;
+    this.scanConflicts = new Set();
     this.renderReviewGrid();
     this.validateScanBoard();
   }
@@ -1144,6 +1151,27 @@ class SudokuApp {
     const cluesWord = window.i18n ? window.i18n.t('review_clues') : 'pistas';
     if (cluesBadge) cluesBadge.textContent = `${cluesCount} ${cluesWord}`;
 
+    // 1. Detección inmediata de colisiones / números repetidos
+    this.scanConflicts = (typeof SudokuEngine !== 'undefined' && SudokuEngine.findBoardConflicts)
+      ? SudokuEngine.findBoardConflicts(this.scanBoard)
+      : new Set();
+
+    this.renderReviewGrid();
+
+    if (this.scanConflicts.size > 0) {
+      if (diffBadge) diffBadge.textContent = 'CONFLICTO';
+      if (ptsBadge) ptsBadge.textContent = '0 pts';
+      if (valText) {
+        valText.className = 'review-validation-text text-invalid';
+        valText.textContent = window.i18n ? window.i18n.t('review_invalid') : 'Hay números repetidos en la misma fila, columna o región 3x3.';
+      }
+      if (saveBtn) saveBtn.disabled = true;
+      if (playBtn) playBtn.disabled = true;
+      if (duelBtn) duelBtn.disabled = true;
+      this.scanAnalysis = null;
+      return false;
+    }
+
     if (cluesCount < 17) {
       if (diffBadge) diffBadge.textContent = '--';
       if (ptsBadge) ptsBadge.textContent = '-- pts';
@@ -1158,14 +1186,14 @@ class SudokuApp {
       return false;
     }
 
-    // Comprobar si es resoluble con solución única
+    // Comprobar si es resoluble
     const solution = SudokuEngine.solve(this.scanBoard);
     if (!solution) {
-      if (diffBadge) diffBadge.textContent = 'CONFLICTO';
+      if (diffBadge) diffBadge.textContent = 'SIN SOLUCIÓN';
       if (ptsBadge) ptsBadge.textContent = '0 pts';
       if (valText) {
         valText.className = 'review-validation-text text-invalid';
-        valText.textContent = window.i18n ? window.i18n.t('review_invalid') : 'Tablero inválido o con números repetidos.';
+        valText.textContent = 'El tablero planteado no tiene ninguna solución válida.';
       }
       if (saveBtn) saveBtn.disabled = true;
       if (playBtn) playBtn.disabled = true;
@@ -1182,10 +1210,11 @@ class SudokuApp {
       const diffKey = `diff_${analysis.difficulty}`;
       diffBadge.textContent = window.i18n ? window.i18n.t(diffKey) : analysis.difficulty.toUpperCase();
     }
-    if (ptsBadge) ptsBadge.textContent = `${analysis.initialTotalPoints} pts`;
+    const pts = analysis.totalPoints || analysis.initialTotalPoints || 0;
+    if (ptsBadge) ptsBadge.textContent = `${pts} pts`;
     if (valText) {
       valText.className = 'review-validation-text text-valid';
-      valText.textContent = window.i18n ? window.i18n.t('review_valid') : '✓ Tablero válido y resoluble con solución única.';
+      valText.textContent = window.i18n ? window.i18n.t('review_valid') : '✓ Tablero válido y resoluble.';
     }
 
     if (saveBtn) saveBtn.disabled = false;
@@ -1199,11 +1228,13 @@ class SudokuApp {
     const nameInput = document.getElementById('scan-board-name');
     const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : `Sudoku Escaneado ${new Date().toLocaleDateString()}`;
 
+    const totalPts = this.scanAnalysis.totalPoints || this.scanAnalysis.initialTotalPoints || 0;
     const saved = this.vault.saveBoard(this.scanBoard, {
       name,
       difficulty: this.scanAnalysis.difficulty,
-      initialTotalPoints: this.scanAnalysis.initialTotalPoints,
-      techniqueAudit: this.scanAnalysis.techniqueAudit
+      initialTotalPoints: totalPts,
+      totalPoints: totalPts,
+      techniqueAudit: this.scanAnalysis.cellTechniques || this.scanAnalysis.techniqueAudit
     });
 
     this.updateVaultBadge();
@@ -1320,14 +1351,16 @@ class SudokuApp {
 🔗 Pulsa aquí para jugar con cronómetro y auditoría de puntos:
 ${url}`;
 
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(text).then(() => {
-            const toastMsg = window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!';
-            this.showToast(toastMsg, 'success');
-          });
-        } else {
-          prompt('Copia tu enlace de reto para WhatsApp:', text);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(() => {});
         }
+
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        window.open(waUrl, '_blank');
+
+        const toastMsg = window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado y abriendo WhatsApp!';
+        this.showToast(toastMsg, 'success');
+        window.soundFx.playClick();
       });
 
       card.querySelector('.btn-del').addEventListener('click', () => {
@@ -1775,21 +1808,25 @@ ${url}`;
       const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Reto Personalizado';
       const boardStr = SudokuEngine.boardToString(this.scanBoard);
       const url = CompetitionEngine.generateCustomChallengeUrl(boardStr, name);
-      const diffName = this.scanAnalysis ? this.scanAnalysis.difficulty.toUpperCase() : 'PERSONALIZADO';
+      const diffName = this.scanAnalysis ? (window.i18n ? window.i18n.t(`diff_${this.scanAnalysis.difficulty}`) : this.scanAnalysis.difficulty.toUpperCase()) : 'PERSONALIZADO';
       const text = `⚔️ ¡Te reto en Sudoku Arena a resolver este Sudoku!
 🧩 Reto: ${name} (${diffName})
 🎯 Auditoría de Puntos Cognitivos en Vivo
 🔗 Pulsa aquí para jugar el mismo tablero:
 ${url}`;
 
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          const toastMsg = window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!';
-          this.showToast(toastMsg, 'success');
-        });
-      } else {
-        prompt('Copia tu enlace de reto para WhatsApp:', text);
+      // Copiar al portapapeles de forma segura
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
       }
+
+      // Abrir WhatsApp directamente
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank');
+
+      const toastMsg = window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado y abriendo WhatsApp!';
+      this.showToast(toastMsg, 'success');
+      window.soundFx.playClick();
     });
 
     // Búsqueda y Filtros en la Bóveda

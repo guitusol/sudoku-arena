@@ -73,7 +73,7 @@ class CompetitionEngine {
     if (typeof window === 'undefined') return '';
     const url = new URL(window.location.origin + window.location.pathname);
     url.searchParams.set('tablero', boardString);
-    if (name) url.searchParams.set('nombre', encodeURIComponent(name));
+    if (name) url.searchParams.set('nombre', name);
     return url.toString();
   }
 
@@ -85,9 +85,21 @@ class CompetitionEngine {
     const params = new URLSearchParams(window.location.search);
     const boardStr = params.get('tablero') || params.get('board') || params.get('custom');
     if (!boardStr) return null;
-    const name = params.get('nombre') ? decodeURIComponent(params.get('nombre')) : 'Reto Personalizado';
+    let name = 'Reto Personalizado';
+    const rawName = params.get('nombre');
+    if (rawName) {
+      try {
+        name = decodeURIComponent(rawName);
+      } catch (e) {
+        name = rawName;
+      }
+    }
+    const parsedBoard = (typeof SudokuEngine !== 'undefined' && SudokuEngine.parseBoardString)
+      ? SudokuEngine.parseBoardString(boardStr)
+      : null;
     return {
       boardString: boardStr,
+      board: parsedBoard,
       name
     };
   }
