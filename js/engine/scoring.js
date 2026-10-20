@@ -359,9 +359,19 @@ class ScoringEngine {
     const engine = Object.create(ScoringEngine.prototype);
     engine.initialClues = data.initialClues ?? gameData.initialClues;
     engine.initialTotalPoints = data.initialTotalPoints ?? gameData.totalPoints;
-    engine.cellScores = (data.cellScores && data.cellScores.length === 9)
-      ? data.cellScores.map(r => [...r])
-      : gameData.cellScores.map(r => [...r]);
+    if (data.cellScores && data.cellScores.length === 9) {
+      engine.cellScores = data.cellScores.map(r => [...r]);
+      // Sincronizar casillas no jugadas que pudieran estar en 0 por fallo de análisis previo
+      for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (gameData.board[r][c] === 0 && !data.cellCompleted?.[r]?.[c] && engine.cellScores[r][c] === 0 && gameData.cellScores && gameData.cellScores[r][c] > 0) {
+            engine.cellScores[r][c] = gameData.cellScores[r][c];
+          }
+        }
+      }
+    } else {
+      engine.cellScores = gameData.cellScores.map(r => [...r]);
+    }
     engine.cellTechniques = data.cellTechniques || gameData.cellTechniques;
     engine.cellPeeked = (data.cellPeeked && data.cellPeeked.length === 9)
       ? data.cellPeeked.map(r => [...r])
@@ -374,7 +384,15 @@ class ScoringEngine {
       : Array.from({ length: 9 }, () => Array(9).fill(false));
     engine.currentScore = data.currentScore ?? 0;
     engine.totalPenalties = data.totalPenalties ?? 0;
-    engine.currentMaxPossible = data.currentMaxPossible ?? engine.initialTotalPoints;
+
+    // Actualizar techo máximo si el total teórico fue corregido
+    if (gameData.totalPoints && engine.initialTotalPoints < gameData.totalPoints) {
+      const diff = gameData.totalPoints - engine.initialTotalPoints;
+      engine.initialTotalPoints = gameData.totalPoints;
+      engine.currentMaxPossible = (data.currentMaxPossible ?? engine.initialTotalPoints) + diff;
+    } else {
+      engine.currentMaxPossible = data.currentMaxPossible ?? engine.initialTotalPoints;
+    }
     engine.errorsCount = data.errorsCount ?? 0;
     engine.peeksCellCount = data.peeksCellCount ?? 0;
     engine.peeksAllCount = data.peeksAllCount ?? 0;

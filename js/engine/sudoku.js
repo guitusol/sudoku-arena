@@ -243,10 +243,11 @@ class SudokuEngine {
     let iterations = 0;
 
     // Bucle de resolución humana
+    let candidateMap = this.getAllCandidates(board);
+
     while (iterations < 200) {
       iterations++;
       let progress = false;
-      let candidateMap = this.getAllCandidates(board);
 
       // --- TÉCNICA 1: Naked Singles (Único en celda) ---
       for (let r = 0; r < 9 && !progress; r++) {
@@ -258,6 +259,7 @@ class SudokuEngine {
             cellTechniques[r][c] = 'Naked Single (Única opción visual)';
             totalInitialPoints += 10;
             progress = true;
+            candidateMap = this.getAllCandidates(board);
           }
         }
       }
@@ -278,6 +280,7 @@ class SudokuEngine {
             cellTechniques[r][c] = 'Hidden Single en Fila';
             totalInitialPoints += 15;
             progress = true;
+            candidateMap = this.getAllCandidates(board);
           }
         }
         if (progress) break;
@@ -295,6 +298,7 @@ class SudokuEngine {
             cellTechniques[r][c] = 'Hidden Single en Columna';
             totalInitialPoints += 15;
             progress = true;
+            candidateMap = this.getAllCandidates(board);
           }
         }
         if (progress) break;
@@ -320,6 +324,7 @@ class SudokuEngine {
             cellTechniques[r][c] = 'Hidden Single en Región 3x3';
             totalInitialPoints += 15;
             progress = true;
+            candidateMap = this.getAllCandidates(board);
           }
         }
       }
@@ -428,9 +433,22 @@ class SudokuEngine {
                 cellTechniques[r][c] = maxTechniqueTier === 3 ? 'Patrón Geométrico (X-Wing/Wing)' : 'Cadena Forzada / Inferencia';
                 totalInitialPoints += pts;
                 progress = true;
+                candidateMap = this.getAllCandidates(board);
               }
             }
           }
+        }
+      }
+    }
+
+    // Garantizar que cualquier casilla vacía residual tenga una puntuación base asignada
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (initialBoard[r][c] === 0 && cellScores[r][c] === 0) {
+          const fallbackPts = maxTechniqueTier >= 3 ? 50 : (maxTechniqueTier === 2 ? 15 : 10);
+          cellScores[r][c] = fallbackPts;
+          cellTechniques[r][c] = 'Deducción lógica estándar';
+          totalInitialPoints += fallbackPts;
         }
       }
     }
