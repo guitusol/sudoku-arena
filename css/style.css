@@ -1019,6 +1019,7 @@ body {
    ========================================================================== */
 
 
+.header-nav-bar,
 .header-competition-nav {
   display: flex;
   align-items: center;
@@ -1027,12 +1028,16 @@ body {
 
 @media (max-width: 860px) {
   .header-container {
+    display: flex;
     flex-wrap: wrap;
-    row-gap: 0.4rem;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 0.45rem;
   }
 
   .brand-wrapper {
     order: 1;
+    flex-shrink: 0;
   }
 
   .header-actions {
@@ -1041,16 +1046,24 @@ body {
     display: flex;
     align-items: center;
     gap: 0.35rem;
+    flex-shrink: 0;
   }
 
+  .header-nav-bar,
   .header-competition-nav {
     order: 3;
     width: 100%;
+    display: flex;
+    align-items: center;
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.35rem;
-    padding-top: 0.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 0.35rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .duel-text-prefix {
+    display: none;
   }
 
   /* Cambio de layout de 2 columnas a columna única */
