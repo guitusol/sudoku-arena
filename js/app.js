@@ -345,6 +345,14 @@ class SudokuApp {
     // Persistir estado inicial de inmediato
     this.saveActiveGame();
 
+    // Evento analítico de inicio de partida
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'game_start', {
+        difficulty: difficulty,
+        challenge_code: challengeCode
+      });
+    }
+
     window.soundFx.playClick();
   }
 
@@ -754,6 +762,19 @@ class SudokuApp {
     this.triggerHaptic([50, 100, 50, 100, 150]);
 
     const summary = this.scoring.getSummary();
+
+    // Evento analítico de finalización de partida
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'game_complete', {
+        difficulty: this.selectedDifficulty,
+        score: summary.currentScore,
+        autonomy: summary.autonomyIndex,
+        rank: summary.rank,
+        time_seconds: this.timerSeconds,
+        errors: summary.errorsCount,
+        peeks: summary.peeksCount
+      });
+    }
 
     document.getElementById('verdict-rank').textContent = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
     document.getElementById('verdict-rank').style.color = summary.rankColor;

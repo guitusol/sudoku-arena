@@ -26,6 +26,7 @@ npm install
 
 ### 2. Para Android (Google Play)
 ```bash
+npm run build
 npx cap add android
 npx cap sync
 npx cap open android
@@ -35,6 +36,7 @@ npx cap open android
 ### 3. Para iOS (Apple App Store)
 *(Desde macOS)*
 ```bash
+npm run build
 npx cap add ios
 npx cap sync
 npx cap open ios
@@ -51,7 +53,7 @@ sudoku-arena/
 ├── manual.html                  # Manual del jugador interactivo integrado
 ├── privacidad.html              # Política de privacidad obligatoria para las tiendas
 ├── manifest.json                # Manifiesto PWA para Android
-├── capacitor.config.json        # Configuración nativa de Capacitor (Bundle ID: com.toppharma.sudokuarena)
+├── capacitor.config.json        # Configuración nativa de Capacitor (Bundle ID: com.sudokuarena.mobile)
 ├── package.json                 # Dependencias oficiales de Capacitor
 ├── GUIA_PUBLICACION_TIENDAS.md  # Instrucciones paso a paso para compilar en tiendas
 ├── MANUAL_DE_USUARIO.md         # Documentación de reglas y puntuación

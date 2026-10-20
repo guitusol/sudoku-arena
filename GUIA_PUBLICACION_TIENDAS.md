@@ -9,7 +9,7 @@ Esta guía contiene todas las instrucciones técnicas y metadatos para que el de
 
 El proyecto ya incluye todo lo necesario para la compilación nativa:
 - `manifest.json`: Web App Manifest con orientación vertical, colores de tema y metadatos PWA.
-- `capacitor.config.json`: Configuración del Bundle ID (`com.toppharma.sudokuarena`), nombre de app y pantallas de inicio (*Splash Screen*).
+- `capacitor.config.json`: Configuración del Bundle ID (`com.sudokuarena.mobile`), nombre de app y pantallas de inicio (*Splash Screen*).
 - `package.json`: Dependencias de Capacitor 6/7 listas.
 - `icons/`: Iconos vectoriales de alta resolución (`icon-192.svg` e `icon-512.svg`).
 - `privacidad.html`: Política de privacidad obligatoria que exige Google Play y Apple para la ficha de la tienda.
@@ -30,8 +30,9 @@ El proyecto ya incluye todo lo necesario para la compilación nativa:
    npm install
    ```
 
-3. Generar el proyecto nativo de Android:
+3. Empaquetar y sincronizar el proyecto nativo de Android:
    ```bash
+   npm run build
    npx cap add android
    npx cap sync
    ```
@@ -58,8 +59,9 @@ El proyecto ya incluye todo lo necesario para la compilación nativa:
    npm install
    ```
 
-2. Añadir la plataforma iOS:
+2. Empaquetar y añadir la plataforma iOS:
    ```bash
+   npm run build
    npx cap add ios
    npx cap sync
    ```
@@ -82,7 +84,7 @@ El proyecto ya incluye todo lo necesario para la compilación nativa:
 #### Datos Básicos
 - **Nombre de la App**: Sudoku Arena — Reto Lógico
 - **Nombre Corto**: Sudoku Arena
-- **Bundle ID / Package Name**: `com.toppharma.sudokuarena`
+- **Bundle ID / Package Name**: `com.sudokuarena.mobile`
 - **Categoría**: Juegos / Puzles / Lógica / Juegos de Mesa
 - **Precio**: Gratis (Sin anuncios ni compras integradas)
 - **Clasificación por edades**: PEGI 3 / 4+ (Apto para todos los públicos)
