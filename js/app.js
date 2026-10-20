@@ -636,6 +636,9 @@ class SudokuApp {
       card.classList.toggle('active', card.dataset.diff === this.duelSelectedDiff);
     });
 
+    const compInput = document.getElementById('comp-input-code');
+    if (compInput) compInput.value = '';
+
     this.openModal('modal-competition');
   }
 
@@ -717,36 +720,6 @@ class SudokuApp {
 
   openCompetitionModal() {
     this.openNewDuelModal(this.selectedDifficulty);
-    return;
-
-    const code = CompetitionEngine.generateChallengeCode(this.selectedDifficulty, this.currentSeed);
-    const codeElem = document.getElementById('comp-current-code');
-    if (codeElem) codeElem.textContent = code;
-
-    const copyBtn = document.getElementById('btn-copy-challenge-url');
-    copyBtn.onclick = () => {
-      const url = CompetitionEngine.getChallengeUrl(code);
-      navigator.clipboard.writeText(url).then(() => {
-        this.showToast(window.i18n.t('toast_duel_copied'), 'success');
-      }).catch(() => {
-        prompt('Copia este enlace para retar a tu rival:', url);
-      });
-    };
-
-    const loadBtn = document.getElementById('btn-load-custom-challenge');
-    loadBtn.onclick = () => {
-      const input = document.getElementById('comp-input-code').value.trim();
-      const parsed = CompetitionEngine.parseChallengeCode(input);
-      if (parsed) {
-        this.closeModal('modal-competition');
-        this.newGame(parsed.difficulty, parsed.seed);
-        this.showToast(`¡Partida cargada! Reto: ${parsed.code}`, 'info');
-      } else {
-        this.showToast('Código de desafío no válido. Formato: ARENA-DIFI-XXXXX', 'error');
-      }
-    };
-
-    this.openModal('modal-competition');
   }
 
   /**
@@ -1564,6 +1537,43 @@ ${url}`;
         });
       } else {
         prompt('Copia este enlace para retar a tu rival:', url);
+      }
+    });
+
+    // Cargar código de rival (Botón 'Cargar Desafío' o pulsar Enter en el input)
+    const handleLoadCustomChallenge = () => {
+      const inputEl = document.getElementById('comp-input-code');
+      let input = inputEl ? inputEl.value.trim() : '';
+      if (!input) return;
+
+      // Si el rival pegó una URL completa (?desafio=ARENA-...), extraer el parámetro limpio
+      if (input.includes('desafio=')) {
+        try {
+          const match = input.match(/desafio=([^&]+)/);
+          if (match && match[1]) {
+            input = decodeURIComponent(match[1]).trim();
+          }
+        } catch (e) {}
+      }
+
+      const parsed = CompetitionEngine.parseChallengeCode(input);
+      if (parsed) {
+        this.closeModal('modal-competition');
+        if (inputEl) inputEl.value = '';
+        this.newGame(parsed.difficulty, parsed.seed);
+        const toastMsg = window.i18n ? window.i18n.t('toast_challenge_loaded', { code: parsed.code }) : `¡Desafío cargado! Código: ${parsed.code}`;
+        this.showToast(toastMsg, 'success');
+      } else {
+        const errorMsg = window.i18n ? window.i18n.t('toast_invalid_duel_code') : 'Código de desafío no válido. Formato: ARENA-DIFI-XXXXX';
+        this.showToast(errorMsg, 'error');
+      }
+    };
+
+    document.getElementById('btn-load-custom-challenge')?.addEventListener('click', handleLoadCustomChallenge);
+    document.getElementById('comp-input-code')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleLoadCustomChallenge();
       }
     });
 

@@ -28,7 +28,8 @@ class CompetitionEngine {
       'ENDE': 'endemoniado'
     };
 
-    const diff = diffMap[parts[1]] || 'medio';
+    const diffKey = parts[1].substring(0, 4);
+    const diff = diffMap[diffKey] || 'medio';
     const seed = parseInt(parts[2], 10);
     if (isNaN(seed)) return null;
 
