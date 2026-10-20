@@ -233,14 +233,67 @@ class SudokuEngine {
   /**
    * Analizador Humano (Human-Style Solver)
    * Clasifica la dificultad del tablero y desglosa el coste lógico de cada casilla
+   * según la dificultad solicitada o inferida.
    */
-  static analyzeBoard(initialBoard) {
+  static analyzeBoard(initialBoard, targetDifficulty = null) {
     const board = this.cloneBoard(initialBoard);
     const cellScores = Array.from({ length: 9 }, () => Array(9).fill(0));
     const cellTechniques = Array.from({ length: 9 }, () => Array(9).fill(''));
     let maxTechniqueTier = 1; // 1: Fácil, 2: Medio, 3: Difícil, 4: Endemoniado
     let totalInitialPoints = 0;
     let iterations = 0;
+    let postReductionBonus = false;
+
+    // Escala de puntuación armónica por nivel de exigencia cognitiva
+    const SCALES = {
+      facil: {
+        naked: 10,
+        hidden: 15,
+        interm: 18,
+        advanced: 20,
+        fallback: 10
+      },
+      medio: {
+        naked: 15,
+        hidden: 20,
+        interm: 25,
+        advanced: 30,
+        fallback: 20
+      },
+      dificil: {
+        naked: 25,
+        hidden: 35,
+        interm: 40,
+        advanced: 50,
+        fallback: 35
+      },
+      endemoniado: {
+        naked: 50,
+        hidden: 75,
+        interm: 80,
+        advanced: 100,
+        fallback: 100
+      }
+    };
+
+    let chosenDiff = (typeof targetDifficulty === 'string' && SCALES[targetDifficulty.toLowerCase()])
+      ? targetDifficulty.toLowerCase()
+      : null;
+
+    if (!chosenDiff) {
+      let clues = 0;
+      for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (initialBoard[r][c] !== 0) clues++;
+        }
+      }
+      if (clues <= 24) chosenDiff = 'endemoniado';
+      else if (clues <= 28) chosenDiff = 'dificil';
+      else if (clues <= 34) chosenDiff = 'medio';
+      else chosenDiff = 'facil';
+    }
+
+    const scale = SCALES[chosenDiff] || SCALES.medio;
 
     // Bucle de resolución humana
     let candidateMap = this.getAllCandidates(board);
@@ -255,9 +308,16 @@ class SudokuEngine {
           if (board[r][c] === 0 && candidateMap[r][c].length === 1) {
             const val = candidateMap[r][c][0];
             board[r][c] = val;
-            cellScores[r][c] = 10;
-            cellTechniques[r][c] = 'Naked Single (Única opción visual)';
-            totalInitialPoints += 10;
+            let pts = scale.naked;
+            let tech = 'Naked Single (Única opción visual)';
+            if (postReductionBonus) {
+              pts = scale.interm;
+              tech = 'Naked Single tras reducción de candidatos';
+              postReductionBonus = false;
+            }
+            cellScores[r][c] = pts;
+            cellTechniques[r][c] = `${tech} [${pts} pts]`;
+            totalInitialPoints += pts;
             progress = true;
             candidateMap = this.getAllCandidates(board);
           }
@@ -275,10 +335,18 @@ class SudokuEngine {
           }
           if (matchingCols.length === 1) {
             const c = matchingCols[0];
+            const candLen = candidateMap[r][c].length;
             board[r][c] = num;
-            cellScores[r][c] = 15;
-            cellTechniques[r][c] = 'Hidden Single en Fila';
-            totalInitialPoints += 15;
+            let pts = candLen >= 3 ? scale.advanced : scale.hidden;
+            let tech = candLen >= 3 ? 'Hidden Single en Fila (Alta Inferencia)' : 'Hidden Single en Fila';
+            if (postReductionBonus && pts < scale.interm) {
+              pts = scale.interm;
+              tech += ' tras reducción';
+              postReductionBonus = false;
+            }
+            cellScores[r][c] = pts;
+            cellTechniques[r][c] = `${tech} [${pts} pts]`;
+            totalInitialPoints += pts;
             progress = true;
             candidateMap = this.getAllCandidates(board);
           }
@@ -293,10 +361,18 @@ class SudokuEngine {
           }
           if (matchingRows.length === 1) {
             const r = matchingRows[0];
+            const candLen = candidateMap[r][c].length;
             board[r][c] = num;
-            cellScores[r][c] = 15;
-            cellTechniques[r][c] = 'Hidden Single en Columna';
-            totalInitialPoints += 15;
+            let pts = candLen >= 3 ? scale.advanced : scale.hidden;
+            let tech = candLen >= 3 ? 'Hidden Single en Columna (Alta Inferencia)' : 'Hidden Single en Columna';
+            if (postReductionBonus && pts < scale.interm) {
+              pts = scale.interm;
+              tech += ' tras reducción';
+              postReductionBonus = false;
+            }
+            cellScores[r][c] = pts;
+            cellTechniques[r][c] = `${tech} [${pts} pts]`;
+            totalInitialPoints += pts;
             progress = true;
             candidateMap = this.getAllCandidates(board);
           }
@@ -319,10 +395,18 @@ class SudokuEngine {
           }
           if (matchingCells.length === 1) {
             const [r, c] = matchingCells[0];
+            const candLen = candidateMap[r][c].length;
             board[r][c] = num;
-            cellScores[r][c] = 15;
-            cellTechniques[r][c] = 'Hidden Single en Región 3x3';
-            totalInitialPoints += 15;
+            let pts = candLen >= 3 ? scale.advanced : scale.hidden;
+            let tech = candLen >= 3 ? 'Hidden Single en Región 3x3 (Alta Inferencia)' : 'Hidden Single en Región 3x3';
+            if (postReductionBonus && pts < scale.interm) {
+              pts = scale.interm;
+              tech += ' tras reducción';
+              postReductionBonus = false;
+            }
+            cellScores[r][c] = pts;
+            cellTechniques[r][c] = `${tech} [${pts} pts]`;
+            totalInitialPoints += pts;
             progress = true;
             candidateMap = this.getAllCandidates(board);
           }
@@ -371,6 +455,7 @@ class SudokuEngine {
         }
       }
       if (lockedFound) {
+        postReductionBonus = true;
         progress = true;
         continue;
       }
@@ -398,6 +483,7 @@ class SudokuEngine {
         }
       }
       if (pairFound) {
+        postReductionBonus = true;
         maxTechniqueTier = Math.max(maxTechniqueTier, 2);
         progress = true;
         continue;
@@ -405,7 +491,6 @@ class SudokuEngine {
 
       // Si los métodos lógicos directos no avanzan, requiere técnicas avanzadas (Wings/Chains)
       if (!progress) {
-        // Encontrar una casilla no resuelta y aplicar salto lógico de dificultad alta
         let filledCount = 0;
         for (let r = 0; r < 9; r++) {
           for (let c = 0; c < 9; c++) {
@@ -414,11 +499,10 @@ class SudokuEngine {
         }
         if (filledCount === 81) break; // Completado
 
-        // Si se atasca:
-        if (maxTechniqueTier < 3) {
-          maxTechniqueTier = 3; // Escalamos a Difícil (X-Wing / XY-Wing)
-        } else if (maxTechniqueTier < 4) {
-          maxTechniqueTier = 4; // Escalamos a Endemoniado (Cadenas forzadas / bifurcación)
+        if (chosenDiff === 'endemoniado' || maxTechniqueTier >= 3) {
+          maxTechniqueTier = 4; // Endemoniado (Cadenas forzadas / inferencia profunda)
+        } else {
+          maxTechniqueTier = 3; // Difícil (X-Wing / XY-Wing)
         }
 
         // Forzar un paso con la solución real para seguir midiendo el resto de celdas
@@ -428,9 +512,12 @@ class SudokuEngine {
             for (let c = 0; c < 9 && !progress; c++) {
               if (board[r][c] === 0) {
                 board[r][c] = solved[r][c];
-                const pts = maxTechniqueTier === 3 ? 50 : 100;
+                const pts = scale.advanced;
+                const tech = maxTechniqueTier >= 4
+                  ? 'Cadena Forzada / Inferencia Avanzada'
+                  : 'Patrón Geométrico (X-Wing/Wing)';
                 cellScores[r][c] = pts;
-                cellTechniques[r][c] = maxTechniqueTier === 3 ? 'Patrón Geométrico (X-Wing/Wing)' : 'Cadena Forzada / Inferencia';
+                cellTechniques[r][c] = `${tech} [${pts} pts]`;
                 totalInitialPoints += pts;
                 progress = true;
                 candidateMap = this.getAllCandidates(board);
@@ -445,18 +532,21 @@ class SudokuEngine {
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
         if (initialBoard[r][c] === 0 && cellScores[r][c] === 0) {
-          const fallbackPts = maxTechniqueTier >= 4 ? 100 : (maxTechniqueTier === 3 ? 50 : (maxTechniqueTier === 2 ? 15 : 10));
+          const fallbackPts = scale.fallback;
           cellScores[r][c] = fallbackPts;
-          cellTechniques[r][c] = 'Deducción lógica estándar';
+          cellTechniques[r][c] = `Deducción lógica estándar [${fallbackPts} pts]`;
           totalInitialPoints += fallbackPts;
         }
       }
     }
 
-    let diffCategory = 'facil';
-    if (maxTechniqueTier === 2) diffCategory = 'medio';
-    else if (maxTechniqueTier === 3) diffCategory = 'dificil';
-    else if (maxTechniqueTier === 4) diffCategory = 'endemoniado';
+    let diffCategory = chosenDiff;
+    if (!targetDifficulty || typeof targetDifficulty !== 'string') {
+      if (maxTechniqueTier >= 4) diffCategory = 'endemoniado';
+      else if (maxTechniqueTier === 3) diffCategory = 'dificil';
+      else if (maxTechniqueTier === 2) diffCategory = 'medio';
+      else diffCategory = 'facil';
+    }
 
     return {
       difficulty: diffCategory,
@@ -500,8 +590,8 @@ class SudokuEngine {
       }
     }
 
-    // Análisis de puntos y dificultad real
-    const analysis = this.analyzeBoard(puzzle);
+    // Análisis de puntos y dificultad real vinculada a la escala de dificultad
+    const analysis = this.analyzeBoard(puzzle, targetDifficulty);
 
     return {
       seed,
@@ -532,7 +622,13 @@ class SudokuEngine {
       }
     }
 
-    const analysis = this.analyzeBoard(board);
+    let detectedDiff = 'medio';
+    if (clues <= 24) detectedDiff = 'endemoniado';
+    else if (clues <= 28) detectedDiff = 'dificil';
+    else if (clues <= 34) detectedDiff = 'medio';
+    else detectedDiff = 'facil';
+
+    const analysis = this.analyzeBoard(board, detectedDiff);
     const seed = customSeed || Math.floor(10000 + Math.random() * 90000);
 
     return {
