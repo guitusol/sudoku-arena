@@ -7,6 +7,7 @@ class ScoringEngine {
   constructor(gameData) {
     this.initialClues = gameData.initialClues;
     this.initialTotalPoints = gameData.totalPoints;
+    this.difficulty = gameData.difficulty || 'medio';
     this.cellScores = gameData.cellScores.map(row => [...row]); // Puntos vivos por celda
     this.cellTechniques = gameData.cellTechniques;
     this.cellPeeked = Array.from({ length: 9 }, () => Array(9).fill(false));
@@ -67,7 +68,13 @@ class ScoringEngine {
     if (this.cellCompleted[row][col]) return null;
 
     this.cellCompleted[row][col] = true;
-    const pointsAwarded = this.cellScores[row][col];
+    let pointsAwarded = this.cellScores[row][col];
+    if (pointsAwarded <= 0 && !this.cellPeeked[row][col] && !this.cellSolvedBySystem[row][col]) {
+      const diff = this.difficulty || 'medio';
+      pointsAwarded = diff === 'endemoniado' ? 100 : (diff === 'dificil' ? 50 : (diff === 'medio' ? 15 : 10));
+      this.initialTotalPoints += pointsAwarded;
+      this.currentMaxPossible += pointsAwarded;
+    }
     this.currentScore += pointsAwarded;
     this.cellScores[row][col] = 0; // Ya se han cobrado
 
@@ -330,6 +337,7 @@ class ScoringEngine {
     return {
       initialClues: this.initialClues,
       initialTotalPoints: this.initialTotalPoints,
+      difficulty: this.difficulty,
       cellScores: this.cellScores,
       cellTechniques: this.cellTechniques,
       cellPeeked: this.cellPeeked,
@@ -357,6 +365,7 @@ class ScoringEngine {
   static fromSerialized(data, gameData) {
     if (!data) return new ScoringEngine(gameData);
     const engine = Object.create(ScoringEngine.prototype);
+    engine.difficulty = data.difficulty || gameData.difficulty || 'medio';
     engine.initialClues = data.initialClues ?? gameData.initialClues;
     engine.initialTotalPoints = data.initialTotalPoints ?? gameData.totalPoints;
     if (data.cellScores && data.cellScores.length === 9) {

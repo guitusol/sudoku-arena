@@ -129,8 +129,17 @@ class BoardUI {
 
       // Insignia de puntos
       const badge = cell.querySelector('.cell-points-badge');
-      const pts = scoringEngine.cellScores[r][c];
-      if (val === 0 && pts > 0) {
+      let pts = (scoringEngine && scoringEngine.cellScores) ? scoringEngine.cellScores[r][c] : 0;
+      const isInitialClue = gameData && gameData.board && gameData.board[r][c] !== 0;
+      const isCompleted = scoringEngine && scoringEngine.cellCompleted && scoringEngine.cellCompleted[r][c];
+
+      // Fallback defensivo: toda casilla vacía no completada debe mostrar su puntuación
+      if (val === 0 && !isInitialClue && !isCompleted && (!pts || pts <= 0)) {
+        const diff = (gameData && gameData.difficulty) || 'medio';
+        pts = diff === 'endemoniado' ? 100 : (diff === 'dificil' ? 50 : (diff === 'medio' ? 15 : 10));
+      }
+
+      if (val === 0 && pts > 0 && !isInitialClue && !isCompleted) {
         badge.textContent = `+${pts}`;
         badge.style.display = 'block';
       } else {

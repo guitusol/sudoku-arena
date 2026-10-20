@@ -445,7 +445,7 @@ class SudokuEngine {
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
         if (initialBoard[r][c] === 0 && cellScores[r][c] === 0) {
-          const fallbackPts = maxTechniqueTier >= 3 ? 50 : (maxTechniqueTier === 2 ? 15 : 10);
+          const fallbackPts = maxTechniqueTier >= 4 ? 100 : (maxTechniqueTier === 3 ? 50 : (maxTechniqueTier === 2 ? 15 : 10));
           cellScores[r][c] = fallbackPts;
           cellTechniques[r][c] = 'Deducción lógica estándar';
           totalInitialPoints += fallbackPts;
