@@ -5,6 +5,7 @@
 
 const MANUAL_FULL_CONTENT = {
   "es": {
+    "btn_pdf_text": "Descargar en PDF",
     "fair_play_title": "⚖️ Compromiso Ético y Juego Limpio:",
     "fair_play_notice": "Sea ético, resuelva los Retos Semanales y los Duelos mediante esta plataforma, no utilice recursos externos.",
     "page_title": "Manual del Jugador — Sudoku Arena",
@@ -127,6 +128,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>Duelos por WhatsApp</strong>: Envía un reto de tu Bóveda a un amigo mediante un enlace directo para que compita en igualdad de condiciones."
   },
   "en": {
+    "btn_pdf_text": "Download PDF",
     "fair_play_title": "⚖️ Ethical Commitment & Fair Play:",
     "fair_play_notice": "Please play ethically: solve Weekly Challenges and Duels using only this platform; do not use external resources.",
     "page_title": "Player Manual — Sudoku Arena",
@@ -249,6 +251,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>WhatsApp Duels</strong>: Send any stored challenge to friends with an instant match link under equal conditions."
   },
   "fr": {
+    "btn_pdf_text": "Télécharger en PDF",
     "fair_play_title": "⚖️ Engagement Éthique & Fair-Play :",
     "fair_play_notice": "Faites preuve d'éthique et résolvez les Défis Hebdomadaires et les Duels uniquement via cette plateforme, n'utilisez pas de ressources externes.",
     "page_title": "Manuel du Joueur — Sudoku Arena",
@@ -371,6 +374,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>Duels WhatsApp</strong> : Partagez un sudoku de votre coffre avec un lien direct pour défier vos amis."
   },
   "de": {
+    "btn_pdf_text": "Als PDF herunterladen",
     "fair_play_title": "⚖️ Fair-Play & Ethischer Ehrenkodex:",
     "fair_play_notice": "Spielen Sie fair und ethisch: Lösen Sie die wöchentlichen Herausforderungen und Duelle ausschließlich über diese Plattform und nutzen Sie keine externen Ressourcen.",
     "page_title": "Spieler-Handbuch — Sudoku Arena",
@@ -493,6 +497,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>WhatsApp-Duelle</strong>: Sende Rätsel aus deinem Tresor per Direktlink an Freunde."
   },
   "ca": {
+    "btn_pdf_text": "Descarregar en PDF",
     "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
     "fair_play_notice": "Sigueu ètic, resoleu els Reptes Setmanals i els Dels mitjançant aquesta plataforma, no utilitzeu recursos externs.",
     "page_title": "Manual del Jugador — Sudoku Arena",
@@ -615,6 +620,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>Duels per WhatsApp</strong>: Envia un sudoku de la teva Bòveda a un amic amb un enllaç directe."
   },
   "va": {
+    "btn_pdf_text": "Descarregar en PDF",
     "fair_play_title": "⚖️ Compromís Ètic i Joc Net:",
     "fair_play_notice": "Siga ètic, resolga els Reptes Setmanals i els Dels mitjançant esta plataforma, no utilitze recursos externs.",
     "page_title": "Manual del Jugador — Sudoku Arena",
@@ -737,6 +743,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>Duels per WhatsApp</strong>: Envia un repte de la teua Bòveda a un amic mitjançant un enllaç directe."
   },
   "eu": {
+    "btn_pdf_text": "Deskargatu PDF gisa",
     "fair_play_title": "⚖️ Konpromiso Etikoa eta Joko Garbia:",
     "fair_play_notice": "Izan zaitez etikoa eta ebatzi Asteko Erronkak eta Dueluak plataforma honen bidez, ez erabili kanpoko baliabiderik.",
     "page_title": "Jokalariaren Eskuliburua — Sudoku Arena",
@@ -859,6 +866,7 @@ const MANUAL_FULL_CONTENT = {
     "sec8_vault_li3": "<strong>WhatsApp Erronkak</strong>: Bidali Gangako erronka bat lagun bati esteka zuzen baten bidez."
   },
   "gl": {
+    "btn_pdf_text": "Descargar en PDF",
     "fair_play_title": "⚖️ Compromiso Ético e Xogo Limpo:",
     "fair_play_notice": "Sexa ético, resolva os Retos Semanais e os Duelos mediante esta plataforma, non utilice recursos externos.",
     "page_title": "Manual do Xogador — Sudoku Arena",

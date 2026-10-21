@@ -183,15 +183,136 @@
       color: var(--gold);
       background: rgba(245, 158, 11, 0.15);
     }
+
+    .btn-pdf {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+    .btn-pdf:hover {
+      background: var(--gold);
+      color: #000000;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+    .btn-pdf:active {
+      transform: scale(0.96);
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+        font-size: 11pt;
+      }
+      .container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
+      }
+      .header-nav-actions,
+      .lang-bar,
+      .btn-back,
+      .btn-pdf,
+      #btn-print-pdf {
+        display: none !important;
+      }
+      .header-nav {
+        border-bottom: 2px solid #0284c7 !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .brand-title {
+        color: #0f172a !important;
+      }
+      h1 {
+        color: #0f172a !important;
+        font-size: 1.8rem !important;
+      }
+      .subtitle {
+        color: #0284c7 !important;
+      }
+      h2 {
+        color: #b45309 !important;
+        border-left: 4px solid #f59e0b !important;
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+      h3 {
+        color: #0369a1 !important;
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+      p, li, strong, td {
+        color: #1e293b !important;
+      }
+      .highlight-tip {
+        background: #f0f9ff !important;
+        border-left: 4px solid #0284c7 !important;
+        color: #0369a1 !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .card-box {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin: 1rem 0 !important;
+      }
+      th {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+      }
+      td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #334155 !important;
+      }
+      table {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .footer {
+        border-top: 1px solid #cbd5e1 !important;
+        color: #64748b !important;
+        margin-top: 2rem !important;
+      }
+      @page {
+        margin: 1.6cm 1.4cm;
+        size: A4 portrait;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header-nav">
       <div class="brand-title">
-        <span>⚡</span> SUDOKU ARENA
+        <img src="icons/icon-192.png" alt="Sudoku Arena" style="width:30px; height:30px; border-radius:7px; object-fit:contain; border:1px solid rgba(56,189,248,0.4); vertical-align:middle; margin-right:6px;"> SUDOKU ARENA
       </div>
-      <a href="index.html" class="btn-back" data-m-i18n="back">🎮 Ir a Jugar al Tablero</a>
+      <div class="header-nav-actions" style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+        <button id="btn-print-pdf" class="btn-pdf" onclick="window.print()" title="Descargar o guardar este manual en PDF">
+          <span>📄</span> <span data-m-i18n="btn_pdf_text">Descargar en PDF</span>
+        </button>
+        <a href="index.html" class="btn-back" data-m-i18n="back">🎮 Ir a Jugar al Tablero</a>
+      </div>
 
       <div class="lang-bar">
         <button class="manual-lang-btn active" data-lang="es">🇪🇸 ES</button>
