@@ -21,9 +21,10 @@ class SudokuApp {
     this.isWeeklyMode = false;
     this.weeklyDiff = null;
 
-    // Motores de Visión OCR y Bóveda de Retos
+    // Motores de Visión OCR, Bóveda de Retos e Historial de Récords
     this.ocr = (typeof window !== 'undefined' && window.SudokuOCR) ? new window.SudokuOCR() : null;
     this.vault = (typeof window !== 'undefined' && window.VaultStorage) ? new window.VaultStorage() : null;
+    this.history = (typeof window !== 'undefined' && window.HistoryStorage) ? new window.HistoryStorage() : null;
     this.scanBoard = Array.from({ length: 9 }, () => Array(9).fill(0));
     this.scanSelectedRow = 0;
     this.scanSelectedCol = 0;
@@ -31,6 +32,7 @@ class SudokuApp {
     this.scanConflicts = new Set();
     this.vaultFilter = 'all';
     this.vaultSearchQuery = '';
+    this.historyFilter = 'all';
 
     this.init();
   }
@@ -51,6 +53,7 @@ class SudokuApp {
     this.bindEvents();
     this.buildReviewGrid();
     this.updateVaultBadge();
+    this.updateHistoryBadge();
     this.checkUrlChallenge();
   }
 
@@ -758,6 +761,30 @@ class SudokuApp {
       });
       this.updateVaultBadge();
     }
+
+    // Registrar la partida completada en el Historial y Récords
+    let recordResult = null;
+    if (this.history) {
+      const summary = this.scoring.getSummary();
+      recordResult = this.history.addRecord({
+        difficulty: this.selectedDifficulty,
+        mode: this.isWeeklyMode ? 'weekly' : (this.gameData?.isCustom ? 'custom' : 'standard'),
+        seed: this.currentSeed,
+        score: summary.currentScore,
+        maxTheoreticalScore: summary.initialTotalPoints,
+        autonomyIndex: summary.autonomyIndex,
+        rank: summary.rank,
+        rankKey: summary.rankKey,
+        rankColor: summary.rankColor,
+        timeSeconds: this.timerSeconds,
+        peeksCount: summary.peeksCount,
+        errorsCount: summary.errorsCount,
+        fairPlayFlag: summary.fairPlayFlag,
+        customName: this.gameData?.customName || null
+      });
+      this.updateHistoryBadge();
+    }
+
     window.soundFx.playVictory();
     this.triggerHaptic([50, 100, 50, 100, 150]);
 
@@ -786,6 +813,23 @@ class SudokuApp {
     document.getElementById('verdict-penalties').textContent = `-${summary.totalPenalties} pts`;
     document.getElementById('verdict-peeks').textContent = summary.peeksCount;
     document.getElementById('verdict-errors').textContent = summary.errorsCount;
+
+    // Distintivo de Nuevo Récord Personal
+    const recordPill = document.getElementById('verdict-new-record-badge');
+    if (recordPill) {
+      if (recordResult && (recordResult.isNewBestScore || recordResult.isNewBestTime)) {
+        recordPill.classList.remove('hidden');
+        if (recordResult.isNewBestScore && recordResult.isNewBestTime) {
+          recordPill.innerHTML = `<span>🔥</span> <span>${window.i18n ? window.i18n.t('verdict_new_record') : '¡Nuevo Récord Personal!'} (${recordResult.record.score} pts · ${this.formatTime(this.timerSeconds)})</span>`;
+        } else if (recordResult.isNewBestScore) {
+          recordPill.innerHTML = `<span>🔥</span> <span>${window.i18n ? window.i18n.t('verdict_new_record') : '¡Nuevo Récord de Puntuación!'} (${recordResult.record.score} pts)</span>`;
+        } else {
+          recordPill.innerHTML = `<span>⚡</span> <span>${window.i18n ? window.i18n.t('verdict_new_record') : '¡Nuevo Récord de Tiempo!'} (${this.formatTime(this.timerSeconds)})</span>`;
+        }
+      } else {
+        recordPill.classList.add('hidden');
+      }
+    }
 
     const shareBtn = document.getElementById('btn-share-verdict');
     shareBtn.onclick = () => {
@@ -1384,6 +1428,176 @@ ${url}`;
     }
   }
 
+  updateHistoryBadge() {
+    if (!this.history) return;
+    const badge = document.getElementById('history-badge-count');
+    if (!badge) return;
+    const count = this.history.getAll().length;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+
+  openHistoryModal() {
+    this.openModal('modal-history');
+    this.renderHistoryItems();
+  }
+
+  renderHistoryItems() {
+    const container = document.getElementById('history-items-list');
+    if (!container || !this.history) return;
+
+    const stats = this.history.getStats();
+
+    // 1. Estadísticas Globales
+    const totalElem = document.getElementById('hist-stat-total');
+    if (totalElem) totalElem.textContent = stats.totalGames;
+
+    const bestScoreElem = document.getElementById('hist-stat-best-score');
+    if (bestScoreElem) bestScoreElem.textContent = stats.globalBestScore > 0 ? `${stats.globalBestScore} pts` : '0 pts';
+
+    const bestTimeElem = document.getElementById('hist-stat-best-time');
+    if (bestTimeElem) bestTimeElem.textContent = stats.globalBestTime > 0 ? this.formatTime(stats.globalBestTime) : '--:--';
+
+    const avgAutonomyElem = document.getElementById('hist-stat-avg-autonomy');
+    if (avgAutonomyElem) avgAutonomyElem.textContent = `${stats.avgAutonomy}%`;
+
+    // 2. Resumen por Dificultad
+    const diffs = ['facil', 'medio', 'dificil', 'endemoniado'];
+    diffs.forEach(d => {
+      const dStats = stats.diffStats[d];
+      const countEl = document.getElementById(`hist-diff-count-${d}`);
+      const scoreEl = document.getElementById(`hist-diff-score-${d}`);
+      const timeEl = document.getElementById(`hist-diff-time-${d}`);
+
+      if (countEl) countEl.textContent = `${dStats.count}`;
+      if (scoreEl) scoreEl.textContent = dStats.bestScore > 0 ? `${dStats.bestScore} pts` : '-- pts';
+      if (timeEl) timeEl.textContent = dStats.bestTime > 0 ? `⏱️ ${this.formatTime(dStats.bestTime)}` : '--:--';
+    });
+
+    // 3. Lista de Partidas filtrada
+    let items = this.history.getAll();
+    if (this.historyFilter && this.historyFilter !== 'all') {
+      items = items.filter(it => it.difficulty === this.historyFilter);
+    }
+
+    if (items.length === 0) {
+      const emptyTitle = window.i18n ? window.i18n.t('history_empty_title') : 'Aún no tienes partidas registradas';
+      const emptyDesc = window.i18n ? window.i18n.t('history_empty_desc') : 'Completa tu primer sudoku en cualquier nivel y quedará guardado aquí con tu puntuación, medalla y tiempo récord.';
+      const playNowText = window.i18n ? window.i18n.t('history_btn_play_now') : 'Jugar una Partida Ahora';
+
+      container.innerHTML = `
+        <div class="vault-empty-state">
+          <div class="vault-empty-icon">🏆</div>
+          <h4 class="vault-empty-title">${emptyTitle}</h4>
+          <p class="vault-empty-desc">${emptyDesc}</p>
+          <button id="btn-history-empty-play" class="modal-btn primary">
+            <span>⚡</span> ${playNowText}
+          </button>
+        </div>
+      `;
+      document.getElementById('btn-history-empty-play')?.addEventListener('click', () => {
+        this.closeModal('modal-history');
+        this.newGame(this.selectedDifficulty);
+      });
+      return;
+    }
+
+    container.innerHTML = '';
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'history-card';
+
+      const diffKey = `diff_${item.difficulty}`;
+      const diffLabel = window.i18n ? window.i18n.t(diffKey) : item.difficulty.toUpperCase();
+      const rankLabel = (window.i18n && item.rankKey && window.i18n.t(item.rankKey) !== item.rankKey) ? window.i18n.t(item.rankKey) : (item.rank || 'Gran Maestro');
+      const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString(undefined, {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      }) : '';
+
+      const rematchLabel = window.i18n ? window.i18n.t('history_btn_rematch') : 'Revancha';
+      const duelLabel = window.i18n ? window.i18n.t('vault_btn_duel') : 'Duelo';
+
+      // Icono según rango o medalla
+      let medalIcon = '🏅';
+      if (item.autonomyIndex >= 95) medalIcon = '💎';
+      else if (item.autonomyIndex >= 85) medalIcon = '🥇';
+      else if (item.autonomyIndex >= 70) medalIcon = '🥈';
+      else if (item.autonomyIndex >= 50) medalIcon = '🥉';
+
+      card.innerHTML = `
+        <div class="history-card-left">
+          <div class="history-card-rank-badge" title="${rankLabel}">
+            ${medalIcon}
+          </div>
+          <div class="history-card-info">
+            <div class="history-card-title-row">
+              <span class="history-card-diff diff-badge" style="background:${item.rankColor}22; color:${item.rankColor}; border:1px solid ${item.rankColor}55;">
+                ${diffLabel}
+              </span>
+              <strong style="color: #f8fafc; font-size: 0.88rem;">${rankLabel}</strong>
+              <span class="history-card-date">${dateStr}</span>
+            </div>
+            <div class="history-card-meta">
+              <span class="font-bold text-gold font-mono">${item.score} pts</span>
+              ${item.maxTheoreticalScore ? `<span class="text-muted font-mono" style="font-size:0.75rem;">/ ${item.maxTheoreticalScore}</span>` : ''}
+              <span>&bull;</span>
+              <span class="font-mono text-emerald font-bold">${item.autonomyIndex}% aut.</span>
+              <span>&bull;</span>
+              <span class="font-mono text-accent">⏱️ ${this.formatTime(item.timeSeconds)}</span>
+              ${(item.errorsCount > 0 || item.peeksCount > 0) ? `<span class="text-muted" style="font-size:0.75rem;">(${item.peeksCount} ay. / ${item.errorsCount} fallos)</span>` : '<span class="text-muted" style="font-size:0.75rem;">(Limpio)</span>'}
+            </div>
+          </div>
+        </div>
+        <div class="history-card-actions">
+          ${item.seed ? `
+            <button class="vault-card-btn btn-play" data-action="rematch" title="Volver a jugar con la misma semilla">
+              <span>🔄</span> ${rematchLabel}
+            </button>
+            <button class="vault-card-btn btn-duel" data-action="duel" title="Compartir desafío en WhatsApp">
+              <span>⚔️</span> ${duelLabel}
+            </button>
+          ` : ''}
+          <button class="vault-card-btn btn-del" data-action="delete" title="Eliminar de historial">
+            🗑️
+          </button>
+        </div>
+      `;
+
+      card.querySelector('[data-action="rematch"]')?.addEventListener('click', () => {
+        this.closeModal('modal-history');
+        this.newGame(item.difficulty, item.seed);
+        this.showToast(`Cargada revancha en ${diffLabel} (Semilla: ${item.seed})`, 'info');
+      });
+
+      card.querySelector('[data-action="duel"]')?.addEventListener('click', () => {
+        const code = CompetitionEngine.generateChallengeCode(item.difficulty, item.seed);
+        const url = CompetitionEngine.getChallengeUrl(code);
+        const text = `🏆 ¡He logrado ${item.score} pts (Autonomía: ${item.autonomyIndex}%) en Sudoku Arena nivel ${diffLabel}!\n⏱️ Tiempo: ${this.formatTime(item.timeSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero aquí:\n${url}`;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(() => {
+            this.showToast(window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!', 'success');
+          });
+        }
+      });
+
+      card.querySelector('[data-action="delete"]')?.addEventListener('click', () => {
+        const confirmMsg = window.i18n ? window.i18n.t('history_delete_confirm') : '¿Eliminar esta partida del historial?';
+        if (confirm(confirmMsg)) {
+          this.history.deleteRecord(item.id);
+          this.updateHistoryBadge();
+          this.renderHistoryItems();
+        }
+      });
+
+      container.appendChild(card);
+    });
+  }
+
   bindEvents() {
     // Teclado físico
     window.addEventListener('keydown', (e) => {
@@ -1714,6 +1928,75 @@ ${url}`;
     document.getElementById('btn-vault-new-btn')?.addEventListener('click', () => {
       this.closeModal('modal-vault');
       this.openScanModal('ocr');
+    });
+
+    // Botones de Historial y Récords
+    document.getElementById('btn-open-history-modal')?.addEventListener('click', () => this.openHistoryModal());
+    document.getElementById('btn-sidebar-history')?.addEventListener('click', () => this.openHistoryModal());
+    document.getElementById('btn-verdict-view-history')?.addEventListener('click', () => {
+      this.closeModal('modal-verdict');
+      this.openHistoryModal();
+    });
+
+    // Píldoras de filtro en modal de historial
+    document.querySelectorAll('#history-filter-pills .vault-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#history-filter-pills .vault-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.historyFilter = btn.dataset.filter;
+        this.renderHistoryItems();
+      });
+    });
+
+    // Exportar e Importar Historial JSON
+    document.getElementById('btn-history-export')?.addEventListener('click', () => {
+      if (!this.history) return;
+      const json = this.history.exportJson();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sudoku-arena-records-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this.showToast('Copia de seguridad del historial descargada', 'success');
+    });
+
+    const histFileInput = document.getElementById('history-file-input');
+    document.getElementById('btn-history-import')?.addEventListener('click', () => {
+      histFileInput?.click();
+    });
+
+    histFileInput?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file || !this.history) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const res = this.history.importJson(evt.target.result);
+        if (res.success) {
+          this.updateHistoryBadge();
+          this.renderHistoryItems();
+          this.showToast(window.i18n ? window.i18n.t('toast_history_imported', { count: res.count }) : `¡Importadas ${res.count} partidas!`, 'success');
+        } else {
+          this.showToast('Error al importar el archivo JSON', 'error');
+        }
+        histFileInput.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    // Limpiar historial
+    document.getElementById('btn-history-clear')?.addEventListener('click', () => {
+      if (!this.history) return;
+      const confirmMsg = window.i18n ? window.i18n.t('history_confirm_clear') : '¿Seguro que deseas borrar todo el historial?';
+      if (confirm(confirmMsg)) {
+        this.history.clearAll();
+        this.updateHistoryBadge();
+        this.renderHistoryItems();
+        this.showToast(window.i18n ? window.i18n.t('toast_history_cleared') : 'Historial borrado', 'info');
+      }
     });
 
     // Pestañas del modal de escaneo

@@ -50,6 +50,7 @@
           <span id="sound-icon">🔊</span>
         </button>
         <button id="btn-open-vault-modal" class="header-btn vault-highlight-btn" title="Bóveda de retos guardados" data-i18n-title="title_vault_btn"><span>📁</span> <span data-i18n="btn_vault">Mis Retos</span> <span id="vault-badge-count" class="vault-badge hidden">0</span></button>
+        <button id="btn-open-history-modal" class="header-btn history-highlight-btn" title="Tus Récords y Sudokus Completados" data-i18n-title="title_history_btn"><span>🏆</span> <span data-i18n="btn_history">Récords</span> <span id="history-badge-count" class="vault-badge hidden">0</span></button>
         <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad" data-i18n-title="title_duel_modal"><span>⚔️</span> <span data-i18n="btn_new_duel">Nuevo Duelo</span></button>
         <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida" data-i18n-title="title_duel_btn">
           <span>⚔️</span>
@@ -220,9 +221,15 @@
             <div id="stat-penalties" class="stat-item-val text-red">0</div>
           </div>
           <div class="stat-item">
-            <div class="stat-item-label" data-i18n="sidebar_history_label">Historial</div>
+            <div class="stat-item-label" data-i18n="sidebar_history_label">Auditoría</div>
             <button id="btn-tool-ledger" class="stat-item-val text-accent" style="background:none; border:none; cursor:pointer; font-size:0.85rem; padding:0;">
-              <span data-i18n="sidebar_view_audit">Ver Auditoría →</span>
+              <span data-i18n="sidebar_view_audit">En curso →</span>
+            </button>
+          </div>
+          <div class="stat-item" style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding-top: 0.35rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 0.15rem;">
+            <div class="stat-item-label" data-i18n="sidebar_records_label">Tus Récords</div>
+            <button id="btn-sidebar-history" class="stat-item-val text-gold" style="background:none; border:none; cursor:pointer; font-size:0.85rem; padding:0; display:flex; align-items:center; gap:0.25rem;">
+              <span>🏆</span> <span data-i18n="sidebar_view_records">Ver Récords →</span>
             </button>
           </div>
         </div>
@@ -440,6 +447,9 @@
       </div>
       <div class="modal-body">
         <div style="font-size: 3rem; margin: 0.5rem 0;">🏅</div>
+        <div id="verdict-new-record-badge" class="new-record-pill hidden">
+          <span>🔥</span> <span data-i18n="verdict_new_record">¡Nuevo Récord Personal!</span>
+        </div>
         <div id="verdict-rank" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem;">
           Gran Maestro Puro
         </div>
@@ -483,6 +493,9 @@
 
         <button id="btn-share-verdict" class="modal-btn primary" style="width: 100%; margin-bottom: 0.5rem; background: linear-gradient(135deg, #10b981, #059669);">
           <span data-i18n="verdict_share">📋 Copiar Resultado y Código de Desafío para Retar</span>
+        </button>
+        <button id="btn-verdict-view-history" class="modal-btn secondary" style="width: 100%; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+          <span>🏆</span> <span data-i18n="verdict_view_history">Ver en Mis Récords</span>
         </button>
       </div>
       <div class="modal-footer" style="justify-content: center;">
@@ -982,6 +995,117 @@
     </div>
   </div>
 
+  <!-- MODAL: MIS RÉCORDS Y SUDOKUS RESUELTOS -->
+  <div id="modal-history" class="modal-overlay">
+    <div class="modal-card modal-card-wide" style="max-width: 740px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 0.5rem; color: #fbbf24;">
+          <span>🏆</span> <span data-i18n="modal_history_title">Tus Récords y Partidas Resueltas</span>
+        </h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 1rem 1.25rem;">
+
+        <!-- 1. Cuadrícula de Métricas Globales -->
+        <div class="history-stats-grid">
+          <div class="history-stat-box">
+            <div id="hist-stat-total" class="history-stat-val text-gold">0</div>
+            <div class="history-stat-lbl" data-i18n="history_stat_total">Sudokus Ganados</div>
+          </div>
+          <div class="history-stat-box">
+            <div id="hist-stat-best-score" class="history-stat-val text-emerald">0 pts</div>
+            <div class="history-stat-lbl" data-i18n="history_stat_best_score">Mejor Puntuación</div>
+          </div>
+          <div class="history-stat-box">
+            <div id="hist-stat-best-time" class="history-stat-val text-accent">--:--</div>
+            <div class="history-stat-lbl" data-i18n="history_stat_best_time">Mejor Tiempo</div>
+          </div>
+          <div class="history-stat-box">
+            <div id="hist-stat-avg-autonomy" class="history-stat-val text-gold">100%</div>
+            <div class="history-stat-lbl" data-i18n="history_stat_avg_autonomy">Autonomía Media</div>
+          </div>
+        </div>
+
+        <!-- 2. Resumen por Dificultad (Mini-Tarjetas) -->
+        <div class="history-levels-summary">
+          <div class="history-level-card diff-facil">
+            <div class="history-level-header">
+              <span style="color:#10b981;" data-i18n="diff_facil">Fácil</span>
+              <span id="hist-diff-count-facil" class="font-mono text-muted">0</span>
+            </div>
+            <div class="history-level-metrics">
+              <span id="hist-diff-score-facil">-- pts</span>
+              <span id="hist-diff-time-facil">--:--</span>
+            </div>
+          </div>
+          <div class="history-level-card diff-medio">
+            <div class="history-level-header">
+              <span style="color:#38bdf8;" data-i18n="diff_medio">Medio</span>
+              <span id="hist-diff-count-medio" class="font-mono text-muted">0</span>
+            </div>
+            <div class="history-level-metrics">
+              <span id="hist-diff-score-medio">-- pts</span>
+              <span id="hist-diff-time-medio">--:--</span>
+            </div>
+          </div>
+          <div class="history-level-card diff-dificil">
+            <div class="history-level-header">
+              <span style="color:#f59e0b;" data-i18n="diff_dificil">Difícil</span>
+              <span id="hist-diff-count-dificil" class="font-mono text-muted">0</span>
+            </div>
+            <div class="history-level-metrics">
+              <span id="hist-diff-score-dificil">-- pts</span>
+              <span id="hist-diff-time-dificil">--:--</span>
+            </div>
+          </div>
+          <div class="history-level-card diff-endemoniado">
+            <div class="history-level-header">
+              <span style="color:#ec4899;" data-i18n="diff_endemoniado">Endemoniado</span>
+              <span id="hist-diff-count-endemoniado" class="font-mono text-muted">0</span>
+            </div>
+            <div class="history-level-metrics">
+              <span id="hist-diff-score-endemoniado">-- pts</span>
+              <span id="hist-diff-time-endemoniado">--:--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Barra de Filtros del Historial -->
+        <div class="vault-toolbar" style="margin-bottom: 0.75rem;">
+          <div class="vault-filters-pills" id="history-filter-pills">
+            <button class="vault-pill active" data-filter="all" data-i18n="history_filter_all">Todos</button>
+            <button class="vault-pill" data-filter="facil" data-i18n="diff_facil">Fácil</button>
+            <button class="vault-pill" data-filter="medio" data-i18n="diff_medio">Medio</button>
+            <button class="vault-pill" data-filter="dificil" data-i18n="diff_dificil">Difícil</button>
+            <button class="vault-pill" data-filter="endemoniado" data-i18n="diff_endemoniado">Endemoniado</button>
+          </div>
+
+          <div style="display: flex; gap: 0.4rem;">
+            <button id="btn-history-export" class="modal-btn secondary" style="font-size: 0.78rem; padding: 0.35rem 0.6rem;" title="Descargar copia de seguridad JSON">
+              <span>📥</span> <span data-i18n="history_btn_export">Exportar</span>
+            </button>
+            <button id="btn-history-import" class="modal-btn secondary" style="font-size: 0.78rem; padding: 0.35rem 0.6rem;" title="Importar copia JSON">
+              <span>📤</span> <span data-i18n="history_btn_import">Importar</span>
+            </button>
+            <input type="file" id="history-file-input" accept=".json" style="display: none;">
+          </div>
+        </div>
+
+        <!-- 4. Contenedor de Partidas -->
+        <div id="history-items-list" class="history-items-container">
+          <!-- Renderizado dinámico vía HistoryStorage -->
+        </div>
+
+      </div>
+      <div class="modal-footer" style="justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+        <button id="btn-history-clear" class="modal-btn secondary" style="font-size: 0.8rem; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" data-i18n="history_btn_clear">
+          🗑️ Borrar Historial
+        </button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Volver al Tablero</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL AVISO DE JUEGO LIMPIO (ANTI-TRAMPAS / IA) -->
   <div id="modal-fair-play" class="modal-overlay">
     <div class="modal-card" style="max-width: 480px; text-align: center; border: 2px solid var(--gold); box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);">
@@ -1038,6 +1162,7 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
   <script src="js/engine/weekly.js?v=3.8"></script>
   <script src="js/engine/sudoku-ocr.js?v=3.8"></script>
   <script src="js/engine/vault-storage.js?v=3.8"></script>
+  <script src="js/engine/history-storage.js?v=3.8"></script>
   <script src="js/ui/audio.js?v=3.8"></script>
   <script src="js/ui/board.js?v=3.8"></script>
   <script src="js/app.js?v=3.8.1"></script>

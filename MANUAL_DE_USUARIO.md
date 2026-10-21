@@ -202,7 +202,23 @@ Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo au
 
 ---
 
-## 9. Consejos Tácticos para Convertirte en Gran Maestro
+## 9. Historial de Partidas y Récords Personales (v3.9)
+
+Todas tus victorias quedan registradas en tu dispositivo sin necesidad de servidores ni registros:
+
+- **Almacenamiento Local 100% Privado (`localStorage`)**: Cada partida ganada en cualquier dificultad (Fácil, Medio, Difícil, Endemoniado) se guarda automáticamente en tu navegador.
+- **Tus Mejores Marcas**:
+  - Resumen de mejor puntuación histórica y mejor tiempo global.
+  - Tasa de autonomía media y total de sudokus ganados.
+  - Desglose por dificultad con la medalla más alta conseguida en cada nivel.
+  - Distintivo parpadeante **«🔥 ¡Nuevo Récord Personal!»** en la pantalla de victoria al superar marcas anteriores.
+- **Revancha Inmediata**: Cualquier partida del historial puede volver a jugarse con su misma semilla pulsando **«🔄 Revancha»** para intentar batir el récord anterior.
+- **Desafíos por WhatsApp**: Reta a tus amigos a superar tu puntuación exacta en ese mismo tablero.
+- **Respaldo de Datos (JSON)**: Puedes exportar e importar tu historial para guardarlo o pasarlo a otro dispositivo.
+
+---
+
+## 10. Consejos Tácticos para Convertirte en Gran Maestro
 
 1. **Aprovecha el Descarte Sistemático**: Busca primero filas, columnas o cajas 3x3 que tengan ya 6 o 7 números colocados; en ellas es mucho más fácil deducir los números restantes.
 2. **No Adivines**: Cada fallo cuesta **-15 puntos** y reduce tu índice de autonomía. Si dudas entre dos casillas, busca otra zona del tablero antes de arriesgarte.
