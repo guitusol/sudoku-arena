@@ -39,7 +39,7 @@
   <!-- CABECERA -->
   <header class="app-header">
     <div class="header-container">
-      <div class="brand-wrapper">
+      <div class="brand-wrapper" id="btn-brand-logo" title="Ver logotipo oficial" style="cursor: pointer;">
         <img src="icons/icon-192.png" alt="Sudoku Arena" class="brand-logo-img">
         <div class="brand-text-container">
           <h1 class="brand-title">SUDOKU ARENA</h1>
@@ -1107,6 +1107,37 @@
           🗑️ Borrar Historial
         </button>
         <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Volver al Tablero</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PRESENTACIÓN LOGOTIPO OFICIAL -->
+  <div id="modal-logo-preview" class="modal-overlay">
+    <div class="modal-card" style="max-width: 440px; text-align: center; border: 2px solid var(--border-thick); box-shadow: 0 0 35px rgba(56, 189, 248, 0.4); padding: 1.5rem 1.25rem;">
+      <div class="modal-header" style="justify-content: space-between; border-bottom: none; padding-bottom: 0.5rem;">
+        <h3 class="modal-title" style="color: #38bdf8; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;">
+          <span>⚡</span> <span data-i18n="logo_modal_title">Identidad Oficial Sudoku Arena</span>
+        </h3>
+        <button class="btn-close-modal" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 1rem 0;">
+        <div style="position: relative; display: inline-block; margin-bottom: 1.25rem;">
+          <img src="icons/sudoku_arena_logo.png" alt="Logotipo Oficial Sudoku Arena" style="width: 220px; height: 220px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.5); border: 2px solid rgba(56, 189, 248, 0.4); object-fit: cover;">
+        </div>
+        <p style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; line-height: 1.55; margin-bottom: 0.75rem;" data-i18n="logo_modal_message">
+          Estamos encantados con nuestro Logotipo y no nos resistimos a enseñártelo. ¿Te gusta?
+        </p>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem;" data-i18n="logo_modal_sub">
+          Emblema Cyber-Tactical diseñado para competición de alto rendimiento
+        </p>
+        <div style="display: flex; gap: 0.5rem; justify-content: center;">
+          <button id="btn-logo-like" class="modal-btn primary btn-close-modal" style="flex: 1; font-weight: 700; background: linear-gradient(135deg, #2563eb, #38bdf8); color: #ffffff;" data-i18n="logo_modal_btn_like">
+            ¡Me encanta! ❤️
+          </button>
+          <button class="modal-btn secondary btn-close-modal" style="font-weight: 600;" data-i18n="logo_modal_btn_close">
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   </div>

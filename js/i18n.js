@@ -5,48 +5,104 @@
 
 const I18N_LANGUAGES = {
   "es": {
+    "logo_modal_title": "Identidad Oficial Sudoku Arena",
+    "logo_modal_message": "Estamos encantados con nuestro Logotipo y no nos resistimos a enseñártelo. ¿Te gusta?",
+    "logo_modal_sub": "Emblema Cyber-Tactical diseñado para competición de alto rendimiento",
+    "logo_modal_btn_like": "¡Me encanta! ❤️",
+    "logo_modal_btn_close": "Cerrar",
+    "logo_modal_toast": "¡Muchas gracias! Nos alegra mucho que te guste.",
+
     "code": "es",
     "name": "Español",
     "flag": "🇪🇸",
     "native": "Español"
   },
   "en": {
+    "logo_modal_title": "Sudoku Arena Official Identity",
+    "logo_modal_message": "We are thrilled with our Logo and we couldn't resist showing it to you. Do you like it?",
+    "logo_modal_sub": "Cyber-Tactical emblem designed for high-performance competition",
+    "logo_modal_btn_like": "I love it! ❤️",
+    "logo_modal_btn_close": "Close",
+    "logo_modal_toast": "Thank you so much! We are very glad you like it.",
+
     "code": "en",
     "name": "English",
     "flag": "🇬🇧",
     "native": "English"
   },
   "fr": {
+    "logo_modal_title": "Identité Officielle Sudoku Arena",
+    "logo_modal_message": "Nous sommes ravis de notre Logo et nous n'avons pas pu résister à l'envie de vous le montrer. Vous plaît-il ?",
+    "logo_modal_sub": "Emblème Cyber-Tactique conçu pour la compétition haute performance",
+    "logo_modal_btn_like": "J'adore ! ❤️",
+    "logo_modal_btn_close": "Fermer",
+    "logo_modal_toast": "Merci beaucoup ! Nous sommes très heureux que cela vous plaise.",
+
     "code": "fr",
     "name": "Français",
     "flag": "🇫🇷",
     "native": "Français"
   },
   "de": {
+    "logo_modal_title": "Offizielle Sudoku Arena Identität",
+    "logo_modal_message": "Wir sind begeistert von unserem Logo und konnten nicht widerstehen, es dir zu zeigen. Gefällt es dir?",
+    "logo_modal_sub": "Cyber-Tactical-Emblem für Hochleistungswettkämpfe",
+    "logo_modal_btn_like": "Ich liebe es! ❤️",
+    "logo_modal_btn_close": "Schließen",
+    "logo_modal_toast": "Vielen Dank! Wir freuen uns sehr, dass es dir gefällt.",
+
     "code": "de",
     "name": "Deutsch",
     "flag": "🇩🇪",
     "native": "Deutsch"
   },
   "ca": {
+    "logo_modal_title": "Identitat Oficial Sudoku Arena",
+    "logo_modal_message": "Estem encantats amb el nostre Logotip i no ens resistim a ensenyar-te'l. T'agrada?",
+    "logo_modal_sub": "Emblema Cyber-Tactical dissenyat per a competició d'alt rendiment",
+    "logo_modal_btn_like": "M'encanta! ❤️",
+    "logo_modal_btn_close": "Tancar",
+    "logo_modal_toast": "Moltes gràcies! Ens alegra molt que t'agradi.",
+
     "code": "ca",
     "name": "Català",
     "flag": "🟡",
     "native": "Català"
   },
   "va": {
+    "logo_modal_title": "Identitat Oficial Sudoku Arena",
+    "logo_modal_message": "Estem encantats amb el nostre Logotip i no ens resistim a ensenyar-te'l. T'agrada?",
+    "logo_modal_sub": "Emblema Cyber-Tactical dissenyat per a competició d'alt rendiment",
+    "logo_modal_btn_like": "M'encanta! ❤️",
+    "logo_modal_btn_close": "Tancar",
+    "logo_modal_toast": "Moltes gràcies! Ens alegra molt que t'agrade.",
+
     "code": "va",
     "name": "Valencià",
     "flag": "🦇",
     "native": "Valencià"
   },
   "eu": {
+    "logo_modal_title": "Sudoku Arena Nortasun Ofiziala",
+    "logo_modal_message": "Gure Logotipoarekin oso pozik gaude eta ezin izan diogu eutsi zuri erakusteari. Gustuko duzu?",
+    "logo_modal_sub": "Errendimendu handiko lehiarako diseinatutako Cyber-Tactical ikurra",
+    "logo_modal_btn_like": "Asko gustatzen zait! ❤️",
+    "logo_modal_btn_close": "Itxi",
+    "logo_modal_toast": "Eskerrik asko! Asko pozten gaitu gustatzeak.",
+
     "code": "eu",
     "name": "Euskara",
     "flag": "🟢",
     "native": "Euskara"
   },
   "gl": {
+    "logo_modal_title": "Identidade Oficial Sudoku Arena",
+    "logo_modal_message": "Estamos encantados co noso Logotipo e non nos resistimos a amosárcho. Gústache?",
+    "logo_modal_sub": "Emblema Cyber-Tactical deseñado para competición de alto rendemento",
+    "logo_modal_btn_like": "Encántame! ❤️",
+    "logo_modal_btn_close": "Pechar",
+    "logo_modal_toast": "Moitas grazas! Alégranos moito que che guste.",
+
     "code": "gl",
     "name": "Galego",
     "flag": "🔵",

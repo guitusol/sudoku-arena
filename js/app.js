@@ -1930,6 +1930,16 @@ ${url}`;
       this.openScanModal('ocr');
     });
 
+    // Click en logotipo para mostrar presentación del logo
+    document.getElementById('btn-brand-logo')?.addEventListener('click', () => {
+      this.openModal('modal-logo-preview');
+    });
+
+    document.getElementById('btn-logo-like')?.addEventListener('click', () => {
+      window.soundFx?.playVictory();
+      this.showToast(window.i18n ? window.i18n.t('logo_modal_toast') : '¡Muchas gracias! Nos alegra mucho que te guste.');
+    });
+
     // Botones de Historial y Récords
     document.getElementById('btn-open-history-modal')?.addEventListener('click', () => this.openHistoryModal());
     document.getElementById('btn-sidebar-history')?.addEventListener('click', () => this.openHistoryModal());
