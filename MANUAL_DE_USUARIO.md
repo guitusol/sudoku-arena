@@ -196,7 +196,7 @@ Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo au
   Cuando un usuario resuelve un sudoku de forma natural, salta de una zona a otra del tablero deduciendo descartes y números únicos. Por el contrario, cuando alguien copia una solución externa o generada por Inteligencia Artificial, suele rellenar las casillas en orden estricto de lectura lineal (de izquierda a derecha y fila por fila).
 - **Alerta Ética en Vivo**:
   Si el sistema detecta una secuencia continua de introducción lineal mecánica sin pausas de deducción lógica, activará de inmediato el **Aviso de Juego Limpio**:
-  > *«Sea ético: resuelva este Sudoku dentro de la plataforma. No utilice recursos externos ni copie soluciones de Inteligencia Artificial.»*
+  > *«Si Vd. ha llegado hasta aquí por sus propios medios, ¡¡¡ Enhorabuena, lo está haciendo muy bien !!! Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. No utilice recursos externos ni copie soluciones de Inteligencia Artificial.»*
 - **Auditoría Forense y Validez de Récords**:
   Las partidas marcadas por barrido lineal quedan etiquetadas en el libro mayor de auditoría con la advertencia de *Sospecha de Copia Externa*, invalidando la obtención de rangos de honor superiores en competiciones.
 

@@ -423,7 +423,7 @@ class SudokuApp {
       if (this.scoring && this.scoring.fairPlayFlag && !this.scoring.fairPlayWarningTriggered) {
         this.scoring.fairPlayWarningTriggered = true;
         this.openModal('modal-fair-play');
-        window.soundFx?.playError?.();
+        window.soundFx?.playPeek?.();
         this.triggerHaptic([100, 50, 100]);
       }
 
