@@ -97,6 +97,16 @@ body {
   flex-shrink: 0;
 }
 
+.brand-logo-img {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  object-fit: cover;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  flex-shrink: 0;
+}
+
 .brand-logo-icon {
   font-size: 1.4rem;
   background: linear-gradient(135deg, #38bdf8, #2563eb);

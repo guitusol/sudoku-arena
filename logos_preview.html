@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Propuesta de Logotipos: Sudoku Arena & Top Sudoku</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #070a12;
+      color: #f8fafc;
+      font-family: 'Outfit', sans-serif;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      background: linear-gradient(90deg, #38bdf8, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: #94a3b8;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .logos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 18px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card.arena {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
+    }
+    .card.top {
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
+    }
+    .card img {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      object-fit: cover;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.4rem;
+    }
+    .card.arena h2 {
+      color: #38bdf8;
+    }
+    .card.top h2 {
+      color: #f59e0b;
+      font-family: 'Playfair Display', serif;
+    }
+    .tag {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .arena .tag {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .top .tag {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .desc {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .features {
+      margin-top: 1rem;
+      list-style: none;
+      width: 100%;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .features li {
+      padding: 0.35rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .features li:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Propuesta de Logotipos Oficiales</h1>
+  <p class="subtitle">Identidad visual concebida para Sudoku Arena y Top Sudoku</p>
+
+  <div class="logos-grid">
+    <!-- SUDOKU ARENA -->
+    <div class="card arena">
+      <img src="sudoku_arena_logo.jpg" alt="Logotipo Sudoku Arena">
+      <h2>SUDOKU ARENA</h2>
+      <span class="tag">Competición & Duelos Tácticos</span>
+      <p class="desc">Emblema estilo eSports con escudo angular, cuadrícula neón 3x3 y rayo eléctrico en fuga que simboliza velocidad cognitiva y reto mental.</p>
+      <ul class="features">
+        <li>⚡ <strong>Símbolo:</strong> Rayo activo y cuadrícula táctica</li>
+        <li>🎨 <strong>Colores:</strong> Cian (#38bdf8), Azul Real (#2563eb) y Oro (#f59e0b)</li>
+        <li>📱 <strong>Uso:</strong> Icono de app PWA, App Store, Google Play y cabecera</li>
+      </ul>
+    </div>
+
+    <!-- TOP SUDOKU -->
+    <div class="card top">
+      <img src="top_sudoku_logo.jpg" alt="Logotipo Top Sudoku">
+      <h2>TOP SUDOKU</h2>
+      <span class="tag">Escuela de Lógica & Solucionador Dual</span>
+      <p class="desc">Inspirado en la esencia pedagógica original de Visual FoxPro: doble cuadrícula en espejo (tablero de juego y candidatos) entrelazada con el reloj analógico de agujas.</p>
+      <ul class="features">
+        <li>🏛️ <strong>Símbolo:</strong> Doble tablero en espejo + Reloj analógico clásico</li>
+        <li>🎨 <strong>Colores:</strong> Oro Imperial (#f59e0b), Azul Marino (#1e3a8a) y Blanco</li>
+        <li>🎓 <strong>Uso:</strong> Icono pedagógico, escuela de deducción, PWA y marca</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
