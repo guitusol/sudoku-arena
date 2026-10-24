@@ -32,7 +32,7 @@
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
   <!-- Estilos CSS -->
-  <link rel="stylesheet" href="css/style.css?v=4.6">
+  <link rel="stylesheet" href="css/style.css?v=4.7">
 </head>
 <body>
 
@@ -43,23 +43,22 @@
         <img src="icons/icon-192.png" alt="Sudoku Arena" class="brand-logo-img">
         <div class="brand-text-container">
           <h1 class="brand-title">SUDOKU ARENA</h1>
-          <span class="brand-tag" data-i18n="brand_tag">Táctico & Auditoría</span>
         </div>
       </div>
 
-                  <nav class="header-nav-bar">
-        <!-- Fila 1: Idioma, Reto Semanal, Sonido y Manual -->
+      <nav class="header-nav-bar">
+        <!-- Fila 1: Idioma, Sonido y Manual (en móvil comparte la fila superior con el logotipo) -->
         <div class="header-nav-row header-row-1">
           <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
-          <button id="btn-open-weekly-modal" class="header-btn weekly-highlight-btn" title="Reto Semanal Oficial y Posicionamiento"><span>🏆</span> <span data-i18n="btn_weekly">Reto Semanal</span></button>
           <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
             <span id="sound-icon">🔊</span>
           </button>
           <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>
         </div>
 
-        <!-- Fila 2: Escanear / Crear, Mis Retos (Bóveda) y Récords -->
+        <!-- Fila 2: Reto Semanal, Escanear / Crear, Mis Retos y Récords -->
         <div class="header-nav-row header-row-2">
+          <button id="btn-open-weekly-modal" class="header-btn weekly-highlight-btn" title="Reto Semanal Oficial y Posicionamiento"><span>🏆</span> <span data-i18n="btn_weekly">Reto Semanal</span></button>
           <button id="btn-open-scan-modal" class="header-btn scan-highlight-btn" title="Escanear desde foto o plantear sudoku" data-i18n-title="title_scan_btn"><span>📷</span> <span data-i18n="btn_scan">Escanear / Crear</span></button>
           <button id="btn-open-vault-modal" class="header-btn vault-highlight-btn" title="Bóveda de retos guardados" data-i18n-title="title_vault_btn"><span>📁</span> <span data-i18n="btn_vault">Mis Retos</span> <span id="vault-badge-count" class="vault-badge hidden">0</span></button>
           <button id="btn-open-history-modal" class="header-btn history-highlight-btn" title="Tus Récords y Sudokus Completados" data-i18n-title="title_history_btn"><span>🏆</span> <span data-i18n="btn_history">Récords</span> <span id="history-badge-count" class="vault-badge hidden">0</span></button>
@@ -91,7 +90,7 @@
 
       <!-- BARRA DE ESTADO Y DIFICULTAD -->
       <div class="board-top-bar">
-        <!-- Selector de Dificultad -->
+        <!-- Selector de Dificultad con Dado y Hora al lado -->
         <div class="diff-selector">
           <button class="diff-btn active" data-diff="facil" data-i18n="diff_facil">Fácil</button>
           <button class="diff-btn" data-diff="medio" data-i18n="diff_medio">Medio</button>
@@ -101,12 +100,11 @@
             <span>🎲</span>
             <span class="seed-btn-text" data-i18n="btn_reroll_seed">Semilla</span>
           </button>
-        </div>
-
-        <!-- Cronómetro -->
-        <div class="timer-box">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
+          <!-- Cronómetro al lado del dado -->
+          <div class="timer-box timer-inline" id="game-timer" title="Tiempo de partida">
+            <span>⏱️</span>
+            <span id="timer-display">00:00</span>
+          </div>
         </div>
       </div>
 
