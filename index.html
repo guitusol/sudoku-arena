@@ -32,7 +32,7 @@
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
   <!-- Estilos CSS -->
-  <link rel="stylesheet" href="css/style.css?v=4.5">
+  <link rel="stylesheet" href="css/style.css?v=4.6">
 </head>
 <body>
 
@@ -47,8 +47,8 @@
         </div>
       </div>
 
-            <nav class="header-nav-bar">
-        <!-- Fila 1: Configuración, Reto Semanal, Sonido, Manual y Salir -->
+                  <nav class="header-nav-bar">
+        <!-- Fila 1: Idioma, Reto Semanal, Sonido y Manual -->
         <div class="header-nav-row header-row-1">
           <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
           <button id="btn-open-weekly-modal" class="header-btn weekly-highlight-btn" title="Reto Semanal Oficial y Posicionamiento"><span>🏆</span> <span data-i18n="btn_weekly">Reto Semanal</span></button>
@@ -56,32 +56,24 @@
             <span id="sound-icon">🔊</span>
           </button>
           <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>
-          <button id="btn-exit-game" class="header-btn exit-btn" title="Cerrar partida / Salir" data-i18n-title="title_exit">
-            <span>🚪</span> <span class="exit-btn-text" data-i18n="btn_exit">Salir</span>
-          </button>
         </div>
 
-        <!-- Fila 2: Escanear, Bóveda de Retos y Récords -->
+        <!-- Fila 2: Escanear / Crear, Mis Retos (Bóveda) y Récords -->
         <div class="header-nav-row header-row-2">
           <button id="btn-open-scan-modal" class="header-btn scan-highlight-btn" title="Escanear desde foto o plantear sudoku" data-i18n-title="title_scan_btn"><span>📷</span> <span data-i18n="btn_scan">Escanear / Crear</span></button>
           <button id="btn-open-vault-modal" class="header-btn vault-highlight-btn" title="Bóveda de retos guardados" data-i18n-title="title_vault_btn"><span>📁</span> <span data-i18n="btn_vault">Mis Retos</span> <span id="vault-badge-count" class="vault-badge hidden">0</span></button>
           <button id="btn-open-history-modal" class="header-btn history-highlight-btn" title="Tus Récords y Sudokus Completados" data-i18n-title="title_history_btn"><span>🏆</span> <span data-i18n="btn_history">Récords</span> <span id="history-badge-count" class="vault-badge hidden">0</span></button>
         </div>
 
-        <!-- Fila 3: Competición Duelo y Enlace Pedagógico a Top-Sudoku -->
+        <!-- Fila 3: Acciones de Partida y Sala de Duelo -->
         <div class="header-nav-row header-row-3">
-          <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad" data-i18n-title="title_duel_modal"><span>⚔️</span> <span data-i18n="btn_new_duel">Nuevo Duelo</span></button>
-          <a id="header-link-top-sudoku" href="https://guitusol.github.io/top-sudoku/" target="_blank" class="header-btn top-sudoku-btn link-to-top-sudoku" title="Top-Sudoku, para principiantes" data-i18n-title="btn_top_sudoku_beginners" style="text-decoration:none; background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.28)); border: 1px solid #f59e0b; color: #fde68a;"><span>🧩</span> <span data-i18n="btn_top_sudoku_beginners">Top-Sudoku, para principiantes</span></a>
-        </div>
-
-        <!-- Fila 4: Acciones directas de juego (Reiniciar, Nuevo tablero y Sala de duelo) -->
-        <div class="header-nav-row header-row-4">
           <button id="btn-restart-game" class="header-btn icon-only-btn" title="Reiniciar tablero actual">
             <span>🔄</span>
           </button>
           <button id="btn-new-game" class="header-btn primary new-game-btn" title="Nuevo tablero aleatorio">
             <span data-i18n="btn_new_game">➕ Nuevo</span>
           </button>
+          <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad" data-i18n-title="title_duel_modal"><span>⚔️</span> <span data-i18n="btn_new_duel">Nuevo Duelo</span></button>
           <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida" data-i18n-title="title_duel_btn">
             <span>⚔️</span>
             <span class="duel-btn-label"><span class="duel-text-prefix"><span data-i18n="btn_duel">Duelo</span>: </span><strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
@@ -190,6 +182,18 @@
         <button class="tactical-action-btn btn-duel-active" data-action="duel" title="Desafiar a un rival con este tablero">
           <span class="action-icon">⚔️</span>
           <span class="action-label" data-i18n="action_duel">Retar</span>
+        </button>
+      </div>
+
+      <!-- BANDA INFERIOR 3: Acciones de Salida y Escuela Top-Sudoku -->
+      <div class="bottom-play-actions">
+        <a id="bottom-link-top-sudoku" href="https://guitusol.github.io/top-sudoku/" target="_blank" class="bottom-action-btn top-sudoku-btn link-to-top-sudoku" title="Top-Sudoku, para principiantes" data-i18n-title="btn_top_sudoku_beginners">
+          <span>🧩</span>
+          <span data-i18n="btn_top_sudoku_beginners">Top-Sudoku, para principiantes</span>
+        </a>
+        <button id="btn-exit-game" class="bottom-action-btn exit-btn" title="Cerrar partida / Salir" data-i18n-title="title_exit">
+          <span>🚪</span>
+          <span class="exit-btn-text" data-i18n="btn_exit">Salir</span>
         </button>
       </div>
 
@@ -633,11 +637,6 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Cerrar</button>
-      </div>
-    </div>
-  </div>
       <div class="modal-footer">
         <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Cerrar</button>
       </div>
@@ -1244,10 +1243,7 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
     <a href="manual.html" style="color: var(--accent); text-decoration: underline;" data-i18n="footer_manual">Manual de Usuario</a>
     <span style="margin: 0 0.5rem;">•</span>
     <a href="privacidad.html" style="color: var(--text-muted); text-decoration: underline;" data-i18n="footer_privacy">Política de Privacidad</a>
-    <span style="margin: 0 0.5rem;">•</span>
-    <a id="footer-link-top-sudoku" href="https://guitusol.github.io/top-sudoku/" target="_blank" class="link-to-top-sudoku" style="color: #fbbf24; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
-      <span>🧩</span> <span data-i18n="btn_top_sudoku_beginners">Top-Sudoku, para principiantes</span> <span>↗</span>
-    </a>
+    
   </footer>
 
   <!-- Scripts -->
@@ -1261,7 +1257,7 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
   <script src="js/engine/history-storage.js?v=3.8"></script>
   <script src="js/ui/audio.js?v=3.8"></script>
   <script src="js/ui/board.js?v=3.8"></script>
-  <script src="js/app.js?v=4.1.0"></script>
+  <script src="js/app.js?v=4.2.0"></script>
 
 </body>
 </html>

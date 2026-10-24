@@ -1128,20 +1128,22 @@ body {
     padding: 0.25rem 0;
   }
 
-  /* Distribución proporcional precisa por fila en móvil */
-  .header-row-1 #btn-open-lang-modal { flex: 0.85 1 0; }
-  .header-row-1 #btn-open-weekly-modal { flex: 1.45 1 0; }
-  .header-row-1 #btn-exit-game { flex: 0.85 1 0; }
+  /* Distribución proporcional precisa para las 3 filas en móvil */
+  .header-row-1 #btn-open-lang-modal { flex: 1 1 0; }
+  .header-row-1 #btn-open-weekly-modal { flex: 2 1 0; }
 
   .header-row-2 #btn-open-scan-modal { flex: 1.25 1 0; }
   .header-row-2 #btn-open-vault-modal { flex: 1 1 0; }
   .header-row-2 #btn-open-history-modal { flex: 0.95 1 0; }
 
-  .header-row-3 #btn-open-new-duel-modal { flex: 1 1 0; }
-  .header-row-3 #header-link-top-sudoku { flex: 1.35 1 0; }
+  .header-row-3 #btn-new-game { flex: 1.1 1 0; }
+  .header-row-3 #btn-open-new-duel-modal { flex: 1.3 1 0; }
+  .header-row-3 #btn-tool-competition { flex: 1.6 1 0; }
 
-  .header-row-4 #btn-new-game { flex: 1 1 0; }
-  .header-row-4 #btn-tool-competition { flex: 1.6 1 0; }
+  .bottom-play-actions {
+    max-width: min(calc(100vw - 20px), 340px);
+    margin: 0.4rem auto 0.2rem;
+  }
 
   .header-nav-break {
     display: none;
@@ -2663,3 +2665,54 @@ body {
   }
 }
 
+
+/* --- BANDA INFERIOR 3: TOP-SUDOKU Y SALIR --- */
+.bottom-play-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 440px;
+  margin: 0.5rem auto 0.25rem;
+  box-sizing: border-box;
+}
+
+.bottom-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 38px;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.bottom-action-btn.top-sudoku-btn {
+  flex: 1.5 1 0;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.28));
+  border: 1px solid #f59e0b;
+  color: #fde68a;
+}
+.bottom-action-btn.top-sudoku-btn:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(217, 119, 6, 0.4));
+  color: #ffffff;
+}
+
+.bottom-action-btn.exit-btn {
+  flex: 0.85 1 0;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+.bottom-action-btn.exit-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ffffff;
+}
