@@ -299,8 +299,7 @@ const I18N_TRANSLATIONS = {
     "title_exit": "Cerrar partida / Salir",
     "confirm_abandon_exit": "Tienes una partida en curso. ¿Deseas abandonar la partida y salir? Se perderá el progreso actual.",
     "modal_exit_title": "Partida Cerrada",
-    "modal_exit_desc": "Has salido de la partida con éxito. Ya puedes cerrar esta pestaña en tu navegador o pulsar el botón inferior para empezar un nuevo sudoku."
-,
+    "modal_exit_desc": "Has salido de la partida con éxito. Ya puedes cerrar esta pestaña en tu navegador o pulsar el botón inferior para empezar un nuevo sudoku.",
     "title_scan_btn": "Escanear desde foto o plantear sudoku",
     "btn_scan": "Escanear / Crear",
     "btn_scan_short": "Escanear",
@@ -373,7 +372,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Tus Récords",
     "sidebar_view_records": "Ver Récords →",
     "toast_history_imported": "¡Historial importado con éxito ({count} partidas añadidas)!",
-    "toast_history_cleared": "Historial de partidas borrado."
+    "toast_history_cleared": "Historial de partidas borrado.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, para principiantes",
+    "sidebar_school_title": "Escuela y Aprendizaje",
+    "badge_school": "ESCUELA",
+    "footer_manual": "Manual de Usuario",
+    "footer_privacy": "Política de Privacidad",
+    "toast_weekly_started": "🏆 ¡Iniciado Reto Semanal {diff} ({week})!",
+    "toast_result_copied": "¡Resultado copiado para compartir!",
+    "prompt_copy_result": "Copia tu resultado para retar a tus amigos:",
+    "toast_ocr_unavailable": "Módulo OCR no disponible",
+    "toast_string_invalid": "Cadena inválida. Debe tener 81 caracteres numéricos o puntos.",
+    "toast_string_loaded": "¡Cadena cargada en la cuadrícula de verificación!",
+    "toast_vault_deleted": "Sudoku eliminado de la bóveda",
+    "toast_rematch_loaded": "Cargada revancha en {diff} (Semilla: {seed})",
+    "toast_weekly_summary_copied": "¡Resumen del reto semanal copiado al portapapeles!",
+    "prompt_copy_weekly": "Copia tus resultados semanales:",
+    "prompt_copy_duel_link": "Copia este enlace para retar a tu rival:",
+    "toast_backup_downloaded": "Copia de seguridad del historial descargada",
+    "toast_import_error": "Error al importar el archivo JSON",
+    "toast_paste_instructions": "Por favor pulsa Ctrl+V dentro de la caja de texto"
   },
   "en": {
     "practice_tag": "Practice Mode",
@@ -550,8 +568,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "A linear cell-by-cell input pattern characteristic of external copying has been detected. Sudoku Arena audits deductive patterns to ensure fair play in duels and challenges.",
     "fair_play_btn_ack": "Understood, I will continue playing ethically",
     "verdict_fair_play_title": "Integrity Alert: Suspected External Copying",
-    "verdict_fair_play_desc": "A continuous linear scan sequence was detected without logical deduction pauses."
-,
+    "verdict_fair_play_desc": "A continuous linear scan sequence was detected without logical deduction pauses.",
     "title_scan_btn": "Scan from photo or create custom sudoku",
     "btn_scan": "Scan / Create",
     "btn_scan_short": "Scan",
@@ -624,7 +641,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Your Records",
     "sidebar_view_records": "View Records →",
     "toast_history_imported": "History imported successfully ({count} games added)!",
-    "toast_history_cleared": "Game history cleared."
+    "toast_history_cleared": "Game history cleared.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, for beginners",
+    "sidebar_school_title": "School & Learning",
+    "badge_school": "SCHOOL",
+    "footer_manual": "User Manual",
+    "footer_privacy": "Privacy Policy",
+    "toast_weekly_started": "🏆 Weekly Challenge {diff} ({week}) started!",
+    "toast_result_copied": "Result copied to clipboard!",
+    "prompt_copy_result": "Copy your result to challenge your friends:",
+    "toast_ocr_unavailable": "OCR module unavailable",
+    "toast_string_invalid": "Invalid string. It must contain 81 numeric digits or dots.",
+    "toast_string_loaded": "String loaded into verification grid!",
+    "toast_vault_deleted": "Sudoku removed from vault",
+    "toast_rematch_loaded": "Rematch loaded in {diff} (Seed: {seed})",
+    "toast_weekly_summary_copied": "Weekly challenge summary copied to clipboard!",
+    "prompt_copy_weekly": "Copy your weekly results:",
+    "prompt_copy_duel_link": "Copy this link to challenge your rival:",
+    "toast_backup_downloaded": "History backup downloaded",
+    "toast_import_error": "Error importing JSON file",
+    "toast_paste_instructions": "Please press Ctrl+V inside the text box"
   },
   "fr": {
     "practice_tag": "Mode Entraînement",
@@ -801,8 +837,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "Un schéma de saisie linéaire case par case caractéristique d'une copie externe a été détecté. Sudoku Arena audite les schémas déductifs pour garantir l'égalité lors des duels et défis.",
     "fair_play_btn_ack": "Compris, je continuerai à jouer de manière éthique",
     "verdict_fair_play_title": "Alerte d'Intégrité : Suspicion de Copie Externe",
-    "verdict_fair_play_desc": "Une séquence continue de balayage linéaire sans pauses de déduction logique a été détectée."
-,
+    "verdict_fair_play_desc": "Une séquence continue de balayage linéaire sans pauses de déduction logique a été détectée.",
     "title_scan_btn": "Scanner depuis une photo ou créer un sudoku",
     "btn_scan": "Scanner / Créer",
     "btn_scan_short": "Scanner",
@@ -875,7 +910,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Vos Records",
     "sidebar_view_records": "Voir Records →",
     "toast_history_imported": "Historique importé avec succès ({count} parties ajoutées) !",
-    "toast_history_cleared": "Historique des parties effacé."
+    "toast_history_cleared": "Historique des parties effacé.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, pour débutants",
+    "sidebar_school_title": "École & Apprentissage",
+    "badge_school": "ÉCOLE",
+    "footer_manual": "Manuel de l'Utilisateur",
+    "footer_privacy": "Politique de Confidentialité",
+    "toast_weekly_started": "🏆 Défi Hebdomadaire {diff} ({week}) démarré !",
+    "toast_result_copied": "Résultat copié dans le presse-papiers !",
+    "prompt_copy_result": "Copiez votre résultat pour défier vos amis :",
+    "toast_ocr_unavailable": "Module OCR indisponible",
+    "toast_string_invalid": "Chaîne invalide. Elle doit comporter 81 chiffres ou points.",
+    "toast_string_loaded": "Chaîne chargée dans la grille de vérification !",
+    "toast_vault_deleted": "Sudoku supprimé de la réserve",
+    "toast_rematch_loaded": "Revanche chargée en {diff} (Graine : {seed})",
+    "toast_weekly_summary_copied": "Résumé du défi hebdomadaire copié dans le presse-papiers !",
+    "prompt_copy_weekly": "Copiez vos résultats hebdomadaires :",
+    "prompt_copy_duel_link": "Copiez ce lien pour défier votre rival :",
+    "toast_backup_downloaded": "Sauvegarde de l'historique téléchargée",
+    "toast_import_error": "Erreur lors de l'importation du fichier JSON",
+    "toast_paste_instructions": "Veuillez appuyer sur Ctrl+V dans la zone de texte"
   },
   "de": {
     "practice_tag": "Übungsmodus",
@@ -1052,8 +1106,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "Es wurde ein lineares Zelle-für-Zelle-Eingabemuster festgestellt, das für ein externes Kopieren typisch ist. Sudoku Arena prüft logische Denkmuster, um Chancengleichheit in Duellen und Herausforderungen zu gewährleisten.",
     "fair_play_btn_ack": "Verstanden, ich werde fair weiterspielen",
     "verdict_fair_play_title": "Integritätswarnung: Verdacht auf externes Kopieren",
-    "verdict_fair_play_desc": "Es wurde eine ununterbrochene lineare Scan-Sequenz ohne logische Denkpausen erkannt."
-,
+    "verdict_fair_play_desc": "Es wurde eine ununterbrochene lineare Scan-Sequenz ohne logische Denkpausen erkannt.",
     "title_scan_btn": "Aus Foto scannen oder Sudoku erstellen",
     "btn_scan": "Scannen / Erstellen",
     "btn_scan_short": "Scannen",
@@ -1126,7 +1179,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Ihre Rekorde",
     "sidebar_view_records": "Rekorde ansehen →",
     "toast_history_imported": "Verlauf erfolgreich importiert ({count} Spiele hinzugefügt)!",
-    "toast_history_cleared": "Spielverlauf gelöscht."
+    "toast_history_cleared": "Spielverlauf gelöscht.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, für Anfänger",
+    "sidebar_school_title": "Schule & Lernen",
+    "badge_school": "SCHULE",
+    "footer_manual": "Benutzerhandbuch",
+    "footer_privacy": "Datenschutzrichtlinie",
+    "toast_weekly_started": "🏆 Wöchentliche Herausforderung {diff} ({week}) gestartet!",
+    "toast_result_copied": "Ergebnis in die Zwischenablage kopiert!",
+    "prompt_copy_result": "Kopieren Sie Ihr Ergebnis, um Freunde herauszufordern:",
+    "toast_ocr_unavailable": "OCR-Modul nicht verfügbar",
+    "toast_string_invalid": "Ungültige Zeichenkette. Es müssen 81 Ziffern oder Punkte sein.",
+    "toast_string_loaded": "Zeichenkette in das Prüfgitter geladen!",
+    "toast_vault_deleted": "Sudoku aus dem Tresor gelöscht",
+    "toast_rematch_loaded": "Revanche geladen in {diff} (Seed: {seed})",
+    "toast_weekly_summary_copied": "Zusammenfassung der wöchentlichen Herausforderung kopiert!",
+    "prompt_copy_weekly": "Kopieren Sie Ihre wöchentlichen Ergebnisse:",
+    "prompt_copy_duel_link": "Kopieren Sie diesen Link, um Ihren Rivalen herauszufordern:",
+    "toast_backup_downloaded": "Sicherheitskopie des Verlaufs heruntergeladen",
+    "toast_import_error": "Fehler beim Importieren der JSON-Datei",
+    "toast_paste_instructions": "Bitte drücken Sie Strg+V im Textfeld"
   },
   "ca": {
     "practice_tag": "Mode Pràctica",
@@ -1303,8 +1375,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "S'ha detectat un patró d'introducció lineal cel·la a cel·la característic de còpia externa. Sudoku Arena audita els patrons deductius per garantir la igualtat en duels i reptes.",
     "fair_play_btn_ack": "Entès, continuaré jugant èticament",
     "verdict_fair_play_title": "Alerta d'Integritat: Sospita de Còpia Externa",
-    "verdict_fair_play_desc": "S'ha detectat una seqüència contínua d'introducció lineal sense pauses de deducció lògica."
-,
+    "verdict_fair_play_desc": "S'ha detectat una seqüència contínua d'introducció lineal sense pauses de deducció lògica.",
     "title_scan_btn": "Escaner des de foto o plantejar sudoku",
     "btn_scan": "Escaner / Crear",
     "btn_scan_short": "Escaner",
@@ -1377,7 +1448,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Els teus Rècords",
     "sidebar_view_records": "Veure Rècords →",
     "toast_history_imported": "Historial importat amb èxit ({count} partides afegides)!",
-    "toast_history_cleared": "Historial de partides esborrat."
+    "toast_history_cleared": "Historial de partides esborrat.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, per a principiants",
+    "sidebar_school_title": "Escola i Aprenentatge",
+    "badge_school": "ESCOLA",
+    "footer_manual": "Manual d'Usuari",
+    "footer_privacy": "Política de Privacitat",
+    "toast_weekly_started": "🏆 Iniciat Repte Setmanal {diff} ({week})!",
+    "toast_result_copied": "Resultat copiat per a compartir!",
+    "prompt_copy_result": "Copia el teu resultat per a reptar als teus amics:",
+    "toast_ocr_unavailable": "Mòdul OCR no disponible",
+    "toast_string_invalid": "Cadena invàlida. Ha de tenir 81 caràcters numèrics o punts.",
+    "toast_string_loaded": "Cadena carregada a la quadrícula de verificació!",
+    "toast_vault_deleted": "Sudoku eliminat de la volta",
+    "toast_rematch_loaded": "Carregada revenja en {diff} (Llavor: {seed})",
+    "toast_weekly_summary_copied": "Resum del repte setmanal copiat al porta-retalls!",
+    "prompt_copy_weekly": "Copia els teus resultats setmanals:",
+    "prompt_copy_duel_link": "Copia aquest enllaç per a reptar al teu rival:",
+    "toast_backup_downloaded": "Còpia de seguretat de l'historial descarregada",
+    "toast_import_error": "Error en importar el fitxer JSON",
+    "toast_paste_instructions": "Si us plau prem Ctrl+V dins del quadre de text"
   },
   "va": {
     "practice_tag": "Mode Pràctica",
@@ -1554,8 +1644,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "S'ha detectat un patró d'introducció lineal cel·la a cel·la característic de còpia externa. Sudoku Arena audita els patrons deductius per a garantir la igualtat en duels i reptes.",
     "fair_play_btn_ack": "Entés, continuaré jugant èticament",
     "verdict_fair_play_title": "Alerta d'Integritat: Sospita de Còpia Externa",
-    "verdict_fair_play_desc": "S'ha detectat una seqüència contínua d'introducció lineal sense pauses de deducció lògica."
-,
+    "verdict_fair_play_desc": "S'ha detectat una seqüència contínua d'introducció lineal sense pauses de deducció lògica.",
     "title_scan_btn": "Escanear des de foto o plantejar sudoku",
     "btn_scan": "Escanear / Crear",
     "btn_scan_short": "Escanear",
@@ -1628,7 +1717,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Els teus Rècords",
     "sidebar_view_records": "Veure Rècords →",
     "toast_history_imported": "¡Historial importat amb èxit ({count} partides afegides)!",
-    "toast_history_cleared": "Historial de partides esborrat."
+    "toast_history_cleared": "Historial de partides esborrat.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, per a principiants",
+    "sidebar_school_title": "Escola i Aprenentatge",
+    "badge_school": "ESCOLA",
+    "footer_manual": "Manual d'Usuari",
+    "footer_privacy": "Política de Privacitat",
+    "toast_weekly_started": "🏆 Iniciat Repte Setmanal {diff} ({week})!",
+    "toast_result_copied": "Resultat copiat per a compartir!",
+    "prompt_copy_result": "Copia el teu resultat per a reptar als teus amics:",
+    "toast_ocr_unavailable": "Mòdul OCR no disponible",
+    "toast_string_invalid": "Cadena invàlida. Ha de tindre 81 caràcters numèrics o punts.",
+    "toast_string_loaded": "Cadena carregada en la quadrícula de verificació!",
+    "toast_vault_deleted": "Sudoku eliminat de la volta",
+    "toast_rematch_loaded": "Carregada revenja en {diff} (Llavor: {seed})",
+    "toast_weekly_summary_copied": "Resum del repte setmanal copiat al porta-retalls!",
+    "prompt_copy_weekly": "Copia els teus resultats setmanals:",
+    "prompt_copy_duel_link": "Copia este enllaç per a reptar al teu rival:",
+    "toast_backup_downloaded": "Còpia de seguretat de l'historial descarregada",
+    "toast_import_error": "Error en importar el fitxer JSON",
+    "toast_paste_instructions": "Per favor prem Ctrl+V dins de la caixa de text"
   },
   "eu": {
     "practice_tag": "Praktika Modua",
@@ -1805,8 +1913,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "Kanpoko kopiaren bereizgarria den gelaxkaz gelaxkako sarrera linealaren eredua detektatu da. Sudoku Arenak eredu deduktiboak ikuskatzen ditu duelu eta erronketan berdintasuna bermatzeko.",
     "fair_play_btn_ack": "Ulertuta, etikoki jokatzen jarraituko dut",
     "verdict_fair_play_title": "Integritate Alerta: Kanpoko Kopiaren Susmoa",
-    "verdict_fair_play_desc": "Etengabeko ekorketa linealaren sekuentzia detektatu da, dedukzio logikoko etenik gabe."
-,
+    "verdict_fair_play_desc": "Etengabeko ekorketa linealaren sekuentzia detektatu da, dedukzio logikoko etenik gabe.",
     "title_scan_btn": "Argazkitik eskaneatu edo sudoku sortu",
     "btn_scan": "Eskaneatu / Sortu",
     "btn_scan_short": "Eskaneatu",
@@ -1879,7 +1986,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Zure Errekorrak",
     "sidebar_view_records": "Ikusi Errekorrak →",
     "toast_history_imported": "Historia ondo inportatu da ({count} partida gehitu dira)!",
-    "toast_history_cleared": "Partiden historia garbitu da."
+    "toast_history_cleared": "Partiden historia garbitu da.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, hasiberrientzat",
+    "sidebar_school_title": "Eskola eta Ikaskuntza",
+    "badge_school": "ESKOLA",
+    "footer_manual": "Erabiltzailearen Eskuliburua",
+    "footer_privacy": "Pribatutasun Politika",
+    "toast_weekly_started": "🏆 Asteko Erronka {diff} ({week}) hasita!",
+    "toast_result_copied": "Emaitza arbelean kopiatu da partekatzeko!",
+    "prompt_copy_result": "Kopiatu zure emaitza lagunei erronka botatzeko:",
+    "toast_ocr_unavailable": "OCR modulua ez dago erabilgarri",
+    "toast_string_invalid": "Kate baliogabea. 81 zenbaki edo puntu izan behar ditu.",
+    "toast_string_loaded": "Katea egiaztapen-saretan kargatu da!",
+    "toast_vault_deleted": "Sudokua gangatik ezabatu da",
+    "toast_rematch_loaded": "Berrebazpena kargatuta {diff} mailan (Hazia: {seed})",
+    "toast_weekly_summary_copied": "Asteko erronkaren laburpena arbelean kopiatu da!",
+    "prompt_copy_weekly": "Kopiatu zure asteko emaitzak:",
+    "prompt_copy_duel_link": "Kopiatu esteka hau zure aurkariari erronka botatzeko:",
+    "toast_backup_downloaded": "Historiaren babeskopia deskargatu da",
+    "toast_import_error": "Errorea JSON fitxategia inportatzean",
+    "toast_paste_instructions": "Mesedez sakatu Ctrl+V testu-koadroaren barruan"
   },
   "gl": {
     "practice_tag": "Modo Práctica",
@@ -2056,8 +2182,7 @@ const I18N_TRANSLATIONS = {
     "fair_play_alert_desc": "Detectouse un patrón de introdución lineal cela a cela característico de copia externa. Sudoku Arena audita os patróns deductivos para garantir a igualdade en duelos e retos.",
     "fair_play_btn_ack": "Comprendido, continuarei xogando eticamente",
     "verdict_fair_play_title": "Alerta de Integridade: Sospeita de Copia Externa",
-    "verdict_fair_play_desc": "Detectouse unha secuencia continua de introdución lineal sen pausas de dedución lóxica."
-,
+    "verdict_fair_play_desc": "Detectouse unha secuencia continua de introdución lineal sen pausas de dedución lóxica.",
     "title_scan_btn": "Escanear desde foto ou formular sudoku",
     "btn_scan": "Escanear / Crear",
     "btn_scan_short": "Escanear",
@@ -2130,7 +2255,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "Os teus Récords",
     "sidebar_view_records": "Ver Récords →",
     "toast_history_imported": "¡Historial importado con éxito ({count} partidas engadidas)!",
-    "toast_history_cleared": "Historial de partidas borrado."
+    "toast_history_cleared": "Historial de partidas borrado.",
+    "btn_top_sudoku_beginners": "Top-Sudoku, para principiantes",
+    "sidebar_school_title": "Escola e Aprendizaxe",
+    "badge_school": "ESCOLA",
+    "footer_manual": "Manual de Usuario",
+    "footer_privacy": "Política de Privacidade",
+    "toast_weekly_started": "🏆 Iniciado Reto Semanal {diff} ({week})!",
+    "toast_result_copied": "Resultado copiado para compartir!",
+    "prompt_copy_result": "Copia o teu resultado para retar aos teus amigos:",
+    "toast_ocr_unavailable": "Módulo OCR non dispoñible",
+    "toast_string_invalid": "Cadea inválida. Debe ter 81 caracteres numéricos ou puntos.",
+    "toast_string_loaded": "Cadea cargada na cuadrícula de verificación!",
+    "toast_vault_deleted": "Sudoku eliminado da bóveda",
+    "toast_rematch_loaded": "Cargado desquite en {diff} (Semente: {seed})",
+    "toast_weekly_summary_copied": "Resumo do reto semanal copiado no portapapeis!",
+    "prompt_copy_weekly": "Copia os teus resultados semanais:",
+    "prompt_copy_duel_link": "Copia esta ligazón para retar ao teu rival:",
+    "toast_backup_downloaded": "Copia de seguridade do historial descargada",
+    "toast_import_error": "Erro ao importar o ficheiro JSON",
+    "toast_paste_instructions": "Por favor preme Ctrl+V dentro da caixa de texto"
   },
   "ja": {
     "practice_tag": "練習モード",
@@ -2380,7 +2524,26 @@ const I18N_TRANSLATIONS = {
     "sidebar_records_label": "あなたの記録",
     "sidebar_view_records": "記録を見る →",
     "toast_history_imported": "履歴の読み込みに成功しました（{count}件追加）！",
-    "toast_history_cleared": "ゲーム履歴を消去しました。"
+    "toast_history_cleared": "ゲーム履歴を消去しました。",
+    "btn_top_sudoku_beginners": "Top-Sudoku（初心者向け）",
+    "sidebar_school_title": "数独教室・学習",
+    "badge_school": "教室",
+    "footer_manual": "ユーザーマニュアル",
+    "footer_privacy": "プライバシーポリシー",
+    "toast_weekly_started": "🏆 週間チャレンジ {diff} ({week}) を開始しました！",
+    "toast_result_copied": "対戦結果をクリップボードにコピーしました！",
+    "prompt_copy_result": "結果をコピーして友達に対戦を挑みましょう:",
+    "toast_ocr_unavailable": "OCRモジュールを利用できません",
+    "toast_string_invalid": "無効な文字列です。81文字の数字またはドットである必要があります。",
+    "toast_string_loaded": "文字列を検証グリッドに読み込みました！",
+    "toast_vault_deleted": "保管庫から数独を削除しました",
+    "toast_rematch_loaded": "再戦をロードしました: {diff} (シード: {seed})",
+    "toast_weekly_summary_copied": "週間チャレンジの概要をクリップボードにコピーしました！",
+    "prompt_copy_weekly": "週間成績をコピーしてください:",
+    "prompt_copy_duel_link": "対戦相手に挑むためのリンクをコピーしてください:",
+    "toast_backup_downloaded": "履歴のバックアップをダウンロードしました",
+    "toast_import_error": "JSONファイルのインポート中にエラーが発生しました",
+    "toast_paste_instructions": "テキストボックス内で Ctrl+V を押してください"
   }
 };
 
@@ -2461,6 +2624,18 @@ class I18nManager {
 
     // 5. Atributo lang en <html>
     document.documentElement.lang = this.currentLang;
+
+    // 6. Actualizar enlaces a Top-Sudoku con el idioma actual
+    try {
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const baseUrl = isLocal ? '/top-sudoku/' : 'https://guitusol.github.io/top-sudoku/';
+      const targetUrl = `${baseUrl}?lang=${this.currentLang}`;
+      document.querySelectorAll('.link-to-top-sudoku').forEach(el => {
+        el.href = targetUrl;
+      });
+    } catch (e) {
+      // Ignorar en entornos sin DOM completo
+    }
   }
 }
 

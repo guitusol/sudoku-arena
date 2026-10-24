@@ -43,6 +43,7 @@ class SudokuApp {
     try { this.updateDuelModalPreview(); } catch (e) { console.error('Error updating duel modal on lang change:', e); }
     try { this.render(); } catch (e) { console.error('Error rendering on lang change:', e); }
     try { this.updateCompromisedUI(); } catch (e) { console.error('Error updating compromised UI on lang change:', e); }
+    try { this.updateTopSudokuLinks(); } catch (e) { console.error('Error updating Top-Sudoku links on lang change:', e); }
   }
 
   init() {
@@ -52,6 +53,7 @@ class SudokuApp {
     window.i18n.applyTranslations();
 
     this.bindEvents();
+    this.updateTopSudokuLinks();
     this.buildReviewGrid();
     this.updateVaultBadge();
     this.updateHistoryBadge();
@@ -245,7 +247,7 @@ class SudokuApp {
       }
       this.selectedDifficulty = challenge.difficulty;
       this.newGame(challenge.difficulty, challenge.seed);
-      this.showToast(`¡Desafío cargado! Código: ${challenge.code}`, 'info');
+      this.showToast(window.i18n ? window.i18n.t('toast_challenge_loaded', { code: challenge.code }) : `¡Desafío cargado! Código: ${challenge.code}`, 'info');
     } else {
       // Sin parámetro en URL: reanudar partida activa previa si existe
       if (!this.restoreActiveGame()) {
@@ -730,7 +732,7 @@ class SudokuApp {
     this.newGame(diff, seed);
     this.saveActiveGame();
     this.closeModal('modal-weekly');
-    this.showToast(`🏆 ¡Iniciado Reto Semanal ${diff.toUpperCase()} (${info.weekId})!`, 'success');
+    this.showToast(window.i18n ? window.i18n.t('toast_weekly_started', { diff: diff.toUpperCase(), week: info.weekId }) : `🏆 ¡Iniciado Reto Semanal ${diff.toUpperCase()} (${info.weekId})!`, 'success');
   }
 
   openCompetitionModal() {
@@ -977,10 +979,10 @@ class SudokuApp {
 
           if (navigator.clipboard) {
             navigator.clipboard.writeText(text).then(() => {
-              this.showToast('¡Resultado copiado para compartir!', 'success');
+              this.showToast(window.i18n ? window.i18n.t('toast_result_copied') : '¡Resultado copiado para compartir!', 'success');
             });
           } else {
-            prompt('Copia tu resultado para retar a tus amigos:', text);
+            prompt(window.i18n ? window.i18n.t('prompt_copy_result') : 'Copia tu resultado para retar a tus amigos:', text);
           }
         };
       }
@@ -1232,7 +1234,7 @@ class SudokuApp {
 
   async handleImageFile(fileOrUrl) {
     if (!this.ocr) {
-      this.showToast('Módulo OCR no disponible', 'error');
+      this.showToast(window.i18n ? window.i18n.t('toast_ocr_unavailable') : 'Módulo OCR no disponible', 'error');
       return;
     }
 
@@ -1296,13 +1298,13 @@ class SudokuApp {
     const raw = input.value.trim();
     const parsed = SudokuEngine.parseBoardString(raw);
     if (!parsed) {
-      this.showToast('Cadena inválida. Debe tener 81 caracteres numéricos o puntos.', 'error');
+      this.showToast(window.i18n ? window.i18n.t('toast_string_invalid') : 'Cadena inválida. Debe tener 81 caracteres numéricos o puntos.', 'error');
       return;
     }
     this.scanBoard = parsed;
     this.renderReviewGrid();
     this.validateScanBoard();
-    this.showToast('¡Cadena cargada en la cuadrícula de verificación!', 'success');
+    this.showToast(window.i18n ? window.i18n.t('toast_string_loaded') : '¡Cadena cargada en la cuadrícula de verificación!', 'success');
   }
 
   validateScanBoard() {
@@ -1543,7 +1545,7 @@ ${url}`;
           this.vault.delete(item.id);
           this.renderVaultItems();
           this.updateVaultBadge();
-          this.showToast('Sudoku eliminado de la bóveda', 'info');
+          this.showToast(window.i18n ? window.i18n.t('toast_vault_deleted') : 'Sudoku eliminado de la bóveda', 'info');
         }
       });
 
@@ -1706,7 +1708,7 @@ ${url}`;
       card.querySelector('[data-action="rematch"]')?.addEventListener('click', () => {
         this.closeModal('modal-history');
         this.newGame(item.difficulty, item.seed);
-        this.showToast(`Cargada revancha en ${diffLabel} (Semilla: ${item.seed})`, 'info');
+        this.showToast(window.i18n ? window.i18n.t('toast_rematch_loaded', { diff: diffLabel, seed: item.seed }) : `Cargada revancha en ${diffLabel} (Semilla: ${item.seed})`, 'info');
       });
 
       card.querySelector('[data-action="duel"]')?.addEventListener('click', () => {
@@ -1850,10 +1852,10 @@ ${url}`;
       const text = lines.join('\n');
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
-          this.showToast('¡Resumen del reto semanal copiado al portapapeles!', 'success');
+          this.showToast(window.i18n ? window.i18n.t('toast_weekly_summary_copied') : '¡Resumen del reto semanal copiado al portapapeles!', 'success');
         });
       } else {
-        prompt('Copia tus resultados semanales:', text);
+        prompt(window.i18n ? window.i18n.t('prompt_copy_weekly') : 'Copia tus resultados semanales:', text);
       }
     });
 
@@ -1868,6 +1870,7 @@ ${url}`;
         this.closeModal('modal-language');
         window.soundFx.playClick();
         this.showToast(window.i18n.t('toast_lang_changed'), 'success');
+        this.updateTopSudokuLinks();
       });
     });
 
@@ -1919,12 +1922,12 @@ ${url}`;
 
       if (navigator.clipboard) {
         navigator.clipboard.writeText(msg).then(() => {
-          this.showToast('¡Enlace de duelo copiado al portapapeles!', 'success');
+          this.showToast(window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!', 'success');
         }).catch(() => {
-          prompt('Copia este enlace para retar a tu rival:', url);
+          prompt(window.i18n ? window.i18n.t('prompt_copy_duel_link') : 'Copia este enlace para retar a tu rival:', url);
         });
       } else {
-        prompt('Copia este enlace para retar a tu rival:', url);
+        prompt(window.i18n ? window.i18n.t('prompt_copy_duel_link') : 'Copia este enlace para retar a tu rival:', url);
       }
     });
 
@@ -2124,7 +2127,7 @@ ${url}`;
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      this.showToast('Copia de seguridad del historial descargada', 'success');
+      this.showToast(window.i18n ? window.i18n.t('toast_backup_downloaded') : 'Copia de seguridad del historial descargada', 'success');
     });
 
     const histFileInput = document.getElementById('history-file-input');
@@ -2143,7 +2146,7 @@ ${url}`;
           this.renderHistoryItems();
           this.showToast(window.i18n ? window.i18n.t('toast_history_imported', { count: res.count }) : `¡Importadas ${res.count} partidas!`, 'success');
         } else {
-          this.showToast('Error al importar el archivo JSON', 'error');
+          this.showToast(window.i18n ? window.i18n.t('toast_import_error') : 'Error al importar el archivo JSON', 'error');
         }
         histFileInput.value = '';
       };
@@ -2260,7 +2263,7 @@ ${url}`;
           this.loadStringIntoGrid();
         }
       } catch (err) {
-        this.showToast('Por favor pulsa Ctrl+V dentro de la caja de texto', 'info');
+        this.showToast(window.i18n ? window.i18n.t('toast_paste_instructions') : 'Por favor pulsa Ctrl+V dentro de la caja de texto', 'info');
       }
     });
 
@@ -2384,6 +2387,24 @@ ${url}`;
     this.toastTimeout = setTimeout(() => {
       toast.classList.remove('active');
     }, 2800);
+  }
+
+  /**
+   * Actualiza los enlaces hacia Top-Sudoku para reflejar el idioma en curso
+   * y resolver dinámicamente entre entorno local (/top-sudoku/) o producción en GitHub Pages.
+   */
+  updateTopSudokuLinks() {
+    try {
+      const lang = (window.i18n?.currentLang || localStorage.getItem('sudoku_arena_lang') || 'es').toLowerCase();
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const baseUrl = isLocal ? '/top-sudoku/' : 'https://guitusol.github.io/top-sudoku/';
+      const targetUrl = `${baseUrl}?lang=${lang}`;
+      document.querySelectorAll('.link-to-top-sudoku').forEach(el => {
+        el.href = targetUrl;
+      });
+    } catch (e) {
+      console.warn('Error al actualizar enlaces a Top-Sudoku:', e);
+    }
   }
 }
 
