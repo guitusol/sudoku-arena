@@ -1708,6 +1708,12 @@ body {
   padding: 1.25rem;
 }
 
+/* Utilidad global de ocultación reactiva */
+.hidden,
+.ethical-notice-box.hidden,
+.vault-badge.hidden,
+.new-record-pill.hidden,
+.ocr-progress-card.hidden,
 .exit-screen-wrapper.hidden {
   display: none !important;
 }
