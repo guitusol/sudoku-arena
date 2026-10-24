@@ -103,7 +103,7 @@ CARACTERÍSTICAS PRINCIPALES:
 🎯 Motor de Puntuación Cognitiva: Cada acierto suma según su complejidad lógica.
 🔍 Inspección Quirúrgica (Lupa): Consulta las posibilidades de una casilla activa con coste de oportunidad en tu techo de puntos.
 ⚡ Rayos X Globales: Escanea todos los candidatos del tablero con penalización matemática escalonada.
-🧠 Índice de Autonomía Mental: Descubre tu rango real (Gran Maestro Puro, Lógico Quirúrgico, Resolutor Pragmático o Con Ruedines).
+🧠 Índice de Autonomía Mental: Descubre tu rango real (Gran Maestro Puro, Lógico Quirúrgico, Resolutor Pragmático o Nivel Muy Bajo).
 📋 Libro Mayor de Auditoría: Revisa la trazabilidad de cada acierto, fallo y deducción.
 ⚔️ Modo Duelo / Códigos Compartibles: Reta a tus amigos a resolver exactamente el mismo tablero con un código de partida único.
 

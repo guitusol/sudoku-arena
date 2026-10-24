@@ -566,6 +566,7 @@ class SudokuApp {
 
     const confirmBtn = document.getElementById('btn-confirm-autosolve');
     confirmBtn.onclick = () => {
+      this.markCurrentPuzzleCompromised();
       this.scoring.registerAutoSolve();
       for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
@@ -577,8 +578,9 @@ class SudokuApp {
       this.closeModal('modal-autosolve');
       window.soundFx.playError();
       this.render();
+      this.updateCompromisedUI();
       this.checkVictoryCondition();
-      this.showToast(window.i18n.t('toast_autosolve_done'), 'warning');
+      this.showToast(window.i18n ? window.i18n.t('toast_autosolve_done') : 'Partida resuelta por la máquina', 'warning');
     };
 
     this.openModal('modal-autosolve');
@@ -733,6 +735,60 @@ class SudokuApp {
     this.openNewDuelModal(this.selectedDifficulty);
   }
 
+  getPuzzleFingerprint() {
+    if (!this.gameData) return null;
+    if (this.gameData.isCustom) {
+      return `custom_${this.gameData.boardString || this.gameData.vaultId || 'puzzle'}`;
+    }
+    const diff = this.selectedDifficulty || 'medio';
+    const seed = this.currentSeed || 0;
+    return `standard_${diff}_${seed}`;
+  }
+
+  getCompromisedPuzzles() {
+    try {
+      const data = localStorage.getItem('sudoku_arena_compromised_puzzles_v1');
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  markCurrentPuzzleCompromised() {
+    const key = this.getPuzzleFingerprint();
+    if (!key) return;
+    try {
+      const list = this.getCompromisedPuzzles();
+      if (!list.includes(key)) {
+        list.push(key);
+        if (list.length > 250) list.shift();
+        localStorage.setItem('sudoku_arena_compromised_puzzles_v1', JSON.stringify(list));
+      }
+    } catch (e) {}
+  }
+
+  isCurrentPuzzleCompromised() {
+    const key = this.getPuzzleFingerprint();
+    if (!key) return false;
+    const list = this.getCompromisedPuzzles();
+    return list.includes(key);
+  }
+
+  updateCompromisedUI() {
+    const banner = document.getElementById('board-compromised-banner');
+    if (!banner) return;
+    const isComp = this.isCurrentPuzzleCompromised() || Boolean(this.scoring?.isAutoSolved);
+    if (isComp) {
+      banner.classList.remove('hidden');
+      const textElem = document.getElementById('board-compromised-banner-text');
+      if (textElem && window.i18n) {
+        textElem.textContent = window.i18n.t('banner_practice_revealed');
+      }
+    } else {
+      banner.classList.add('hidden');
+    }
+  }
+
   /**
    * Comprueba si el tablero está 100% completado y correcto
    */
@@ -748,50 +804,61 @@ class SudokuApp {
     this.isGameOver = true;
     this.stopTimer();
     this.clearActiveGame();
-    if (this.isWeeklyMode && window.weeklyEngine) {
-      window.weeklyEngine.saveWeeklyResult(this.weeklyDiff, this.scoring.currentScore, this.scoring.initialTotalPoints, Math.round((this.scoring.currentScore / this.scoring.initialTotalPoints) * 100), this.timerSeconds);
-    }
-    // Si era un reto de la Bóveda, registrar récord personal
-    if (this.gameData && this.gameData.isCustom && this.vault && this.gameData.vaultId) {
-      const summary = this.scoring.getSummary();
-      this.vault.updateStats(this.gameData.vaultId, {
-        score: summary.currentScore,
-        timeSeconds: this.timerSeconds,
-        rank: summary.rank
-      });
-      this.updateVaultBadge();
-    }
 
-    // Registrar la partida completada en el Historial y Récords
+    const isSystemSolved = Boolean(this.scoring?.isAutoSolved);
+    const isCompromised = this.isCurrentPuzzleCompromised();
+
     let recordResult = null;
-    if (this.history) {
-      const summary = this.scoring.getSummary();
-      recordResult = this.history.addRecord({
-        difficulty: this.selectedDifficulty,
-        mode: this.isWeeklyMode ? 'weekly' : (this.gameData?.isCustom ? 'custom' : 'standard'),
-        seed: this.currentSeed,
-        score: summary.currentScore,
-        maxTheoreticalScore: summary.initialTotalPoints,
-        autonomyIndex: summary.autonomyIndex,
-        rank: summary.rank,
-        rankKey: summary.rankKey,
-        rankColor: summary.rankColor,
-        timeSeconds: this.timerSeconds,
-        peeksCount: summary.peeksCount,
-        errorsCount: summary.errorsCount,
-        fairPlayFlag: summary.fairPlayFlag,
-        customName: this.gameData?.customName || null
-      });
-      this.updateHistoryBadge();
-    }
 
-    window.soundFx.playVictory();
-    this.triggerHaptic([50, 100, 50, 100, 150]);
+    if (!isSystemSolved && !isCompromised) {
+      if (this.isWeeklyMode && window.weeklyEngine) {
+        window.weeklyEngine.saveWeeklyResult(this.weeklyDiff, this.scoring.currentScore, this.scoring.initialTotalPoints, Math.round((this.scoring.currentScore / this.scoring.initialTotalPoints) * 100), this.timerSeconds);
+      }
+      // Si era un reto de la Bóveda, registrar récord personal
+      if (this.gameData && this.gameData.isCustom && this.vault && this.gameData.vaultId) {
+        const summary = this.scoring.getSummary();
+        this.vault.updateStats(this.gameData.vaultId, {
+          score: summary.currentScore,
+          timeSeconds: this.timerSeconds,
+          rank: summary.rank
+        });
+        this.updateVaultBadge();
+      }
+
+      // Registrar la partida completada en el Historial y Récords
+      if (this.history) {
+        const summary = this.scoring.getSummary();
+        recordResult = this.history.addRecord({
+          difficulty: this.selectedDifficulty,
+          mode: this.isWeeklyMode ? 'weekly' : (this.gameData?.isCustom ? 'custom' : 'standard'),
+          seed: this.currentSeed,
+          score: summary.currentScore,
+          maxTheoreticalScore: summary.initialTotalPoints,
+          autonomyIndex: summary.autonomyIndex,
+          rank: summary.rank,
+          rankKey: summary.rankKey,
+          rankColor: summary.rankColor,
+          timeSeconds: this.timerSeconds,
+          peeksCount: summary.peeksCount,
+          errorsCount: summary.errorsCount,
+          fairPlayFlag: summary.fairPlayFlag,
+          customName: this.gameData?.customName || null
+        });
+        this.updateHistoryBadge();
+      }
+
+      window.soundFx.playVictory();
+      this.triggerHaptic([50, 100, 50, 100, 150]);
+    } else {
+      // Rendición o solución copiada tras haber sido desvelada previamente por el sistema
+      window.soundFx.playError();
+      this.triggerHaptic([100, 100]);
+    }
 
     const summary = this.scoring.getSummary();
 
-    // Evento analítico de finalización de partida
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    // Evento analítico de finalización de partida (solo legítimas)
+    if (!isSystemSolved && !isCompromised && typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', 'game_complete', {
         difficulty: this.selectedDifficulty,
         score: summary.currentScore,
@@ -803,21 +870,66 @@ class SudokuApp {
       });
     }
 
-    document.getElementById('verdict-rank').textContent = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
-    document.getElementById('verdict-rank').style.color = summary.rankColor;
+    const titleElem = document.getElementById('verdict-title');
+    const iconElem = document.querySelector('#modal-gameover .modal-body > div:first-child');
+    const rankElem = document.getElementById('verdict-rank');
+    const compBanner = document.getElementById('verdict-compromised-banner');
+    const compTitle = document.getElementById('verdict-compromised-title');
+    const compDesc = document.getElementById('verdict-compromised-desc');
+    const compIcon = document.getElementById('verdict-compromised-icon');
+    const historyBtn = document.getElementById('btn-verdict-view-history');
+    const shareBtn = document.getElementById('btn-share-verdict');
+
+    if (isSystemSolved) {
+      if (titleElem) titleElem.textContent = window.i18n ? window.i18n.t('verdict_autosolve_title') : 'Partida Resuelta por el Sistema';
+      if (iconElem) iconElem.textContent = '🤖';
+      if (rankElem) {
+        rankElem.textContent = window.i18n ? window.i18n.t('verdict_autosolve_rank') : 'Sin Rango (Resolución Automática)';
+        rankElem.style.color = '#94a3b8';
+      }
+      if (compBanner) {
+        compBanner.classList.remove('hidden');
+        if (compIcon) compIcon.textContent = '🤖';
+        if (compTitle) compTitle.textContent = window.i18n ? window.i18n.t('verdict_compromised_banner_title') : 'Solución Desvelada por el Sistema';
+        if (compDesc) compDesc.textContent = window.i18n ? window.i18n.t('verdict_compromised_banner_desc') : 'La máquina completó el tablero. No computa para Récords ni Duelos.';
+      }
+    } else if (isCompromised) {
+      if (titleElem) titleElem.textContent = window.i18n ? window.i18n.t('verdict_practice_title') : '¡Tablero Completado (Modo Práctica)!';
+      if (iconElem) iconElem.textContent = '⚠️';
+      if (rankElem) {
+        const baseRank = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
+        rankElem.textContent = `${baseRank} [Modo Práctica]`;
+        rankElem.style.color = '#f59e0b';
+      }
+      if (compBanner) {
+        compBanner.classList.remove('hidden');
+        if (compIcon) compIcon.textContent = '⚠️';
+        if (compTitle) compTitle.textContent = window.i18n ? window.i18n.t('verdict_compromised_banner_title') : 'Solución Previamente Desvelada';
+        if (compDesc) compDesc.textContent = window.i18n ? window.i18n.t('verdict_compromised_banner_desc') : 'Este tablero fue resuelto por la máquina anteriormente. No computa para Récords ni Duelos.';
+      }
+    } else {
+      if (titleElem) titleElem.textContent = window.i18n ? window.i18n.t('verdict_title') : '¡Sudoku Completado!';
+      if (iconElem) iconElem.textContent = '🏅';
+      if (rankElem) {
+        rankElem.textContent = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
+        rankElem.style.color = summary.rankColor;
+      }
+      if (compBanner) compBanner.classList.add('hidden');
+    }
+
     document.getElementById('verdict-score').textContent = `${summary.currentScore} pts`;
     document.getElementById('verdict-max-theoretical').textContent = `${summary.initialTotalPoints} pts`;
     document.getElementById('verdict-autonomy').textContent = `${summary.autonomyIndex}%`;
-    document.getElementById('verdict-autonomy').style.color = summary.rankColor;
+    document.getElementById('verdict-autonomy').style.color = isSystemSolved ? '#94a3b8' : summary.rankColor;
     document.getElementById('verdict-time').textContent = this.formatTime(this.timerSeconds);
     document.getElementById('verdict-penalties').textContent = `-${summary.totalPenalties} pts`;
     document.getElementById('verdict-peeks').textContent = summary.peeksCount;
     document.getElementById('verdict-errors').textContent = summary.errorsCount;
 
-    // Distintivo de Nuevo Récord Personal
+    // Distintivo de Nuevo Récord Personal (solo legítimas)
     const recordPill = document.getElementById('verdict-new-record-badge');
     if (recordPill) {
-      if (recordResult && (recordResult.isNewBestScore || recordResult.isNewBestTime)) {
+      if (!isSystemSolved && !isCompromised && recordResult && (recordResult.isNewBestScore || recordResult.isNewBestTime)) {
         recordPill.classList.remove('hidden');
         if (recordResult.isNewBestScore && recordResult.isNewBestTime) {
           recordPill.innerHTML = `<span>🔥</span> <span>${window.i18n ? window.i18n.t('verdict_new_record') : '¡Nuevo Récord Personal!'} (${recordResult.record.score} pts · ${this.formatTime(this.timerSeconds)})</span>`;
@@ -831,25 +943,45 @@ class SudokuApp {
       }
     }
 
-    const shareBtn = document.getElementById('btn-share-verdict');
-    shareBtn.onclick = () => {
-      let text = '';
-      if (this.gameData && this.gameData.isCustom) {
-        const url = CompetitionEngine.generateCustomChallengeUrl(this.gameData.boardString, this.gameData.customName || 'Reto Personalizado');
-        text = `🏆 ¡He resuelto este Sudoku personalizado en Sudoku Arena!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme en este reto? Juega aquí:\n${url}`;
-      } else {
-        const code = CompetitionEngine.generateChallengeCode(this.selectedDifficulty, this.currentSeed);
-        text = `🏆 ¡He resuelto Sudoku Arena en nivel ${this.selectedDifficulty.toUpperCase()}!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero con este enlace:\n${CompetitionEngine.getChallengeUrl(code)}`;
-      }
+    if (historyBtn) {
+      historyBtn.style.display = (isSystemSolved || isCompromised) ? 'none' : 'flex';
+    }
 
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          this.showToast('¡Resultado copiado para compartir!', 'success');
-        });
+    if (shareBtn) {
+      if (isSystemSolved || isCompromised) {
+        shareBtn.disabled = true;
+        shareBtn.style.opacity = '0.5';
+        shareBtn.style.cursor = 'not-allowed';
+        const msgKey = isSystemSolved ? 'verdict_duel_blocked_autosolve' : 'verdict_duel_blocked_compromised';
+        shareBtn.innerHTML = `<span>${window.i18n ? window.i18n.t(msgKey) : '⚠️ Duelo Deshabilitado (Solución Revelada)'}</span>`;
+        shareBtn.onclick = () => {
+          this.showToast(window.i18n ? window.i18n.t('toast_duel_blocked_revealed') : 'No se puede crear un duelo de un tablero cuya solución ya fue visualizada', 'warning');
+        };
       } else {
-        prompt('Copia tu resultado para retar a tus amigos:', text);
+        shareBtn.disabled = false;
+        shareBtn.style.opacity = '1';
+        shareBtn.style.cursor = 'pointer';
+        shareBtn.innerHTML = `<span>${window.i18n ? window.i18n.t('verdict_share') : '📋 Copiar Resultado y Código de Desafío para Retar'}</span>`;
+        shareBtn.onclick = () => {
+          let text = '';
+          if (this.gameData && this.gameData.isCustom) {
+            const url = CompetitionEngine.generateCustomChallengeUrl(this.gameData.boardString, this.gameData.customName || 'Reto Personalizado');
+            text = `🏆 ¡He resuelto este Sudoku personalizado en Sudoku Arena!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme en este reto? Juega aquí:\n${url}`;
+          } else {
+            const code = CompetitionEngine.generateChallengeCode(this.selectedDifficulty, this.currentSeed);
+            text = `🏆 ¡He resuelto Sudoku Arena en nivel ${this.selectedDifficulty.toUpperCase()}!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero con este enlace:\n${CompetitionEngine.getChallengeUrl(code)}`;
+          }
+
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+              this.showToast('¡Resultado copiado para compartir!', 'success');
+            });
+          } else {
+            prompt('Copia tu resultado para retar a tus amigos:', text);
+          }
+        };
       }
-    };
+    }
 
     setTimeout(() => {
       this.openModal('modal-gameover');
@@ -863,14 +995,15 @@ class SudokuApp {
    */
   
   getRankBadge(autonomy) {
-    if (!window.i18n) return 'Gran Maestro';
-    if (autonomy >= 95) return window.i18n.t('rank_grandmaster');
-    if (autonomy >= 80) return window.i18n.t('rank_tactical_master');
-    if (autonomy >= 50) return window.i18n.t('rank_assisted_strategist');
-    return window.i18n.t('rank_casual');
+    if (!window.i18n) return 'Gran Maestro Puro';
+    if (autonomy >= 100) return window.i18n.t('rank_grandmaster');
+    if (autonomy >= 80) return window.i18n.t('rank_surgical_logician');
+    if (autonomy >= 50) return window.i18n.t('rank_pragmatic_solver');
+    return window.i18n.t('rank_training_wheels');
   }
 
   updateStatsUI() {
+    this.updateCompromisedUI();
     const summary = this.scoring.getSummary();
 
     // Desktop elements
@@ -1522,12 +1655,11 @@ ${url}`;
       const rematchLabel = window.i18n ? window.i18n.t('history_btn_rematch') : 'Revancha';
       const duelLabel = window.i18n ? window.i18n.t('vault_btn_duel') : 'Duelo';
 
-      // Icono según rango o medalla
-      let medalIcon = '🏅';
-      if (item.autonomyIndex >= 95) medalIcon = '💎';
-      else if (item.autonomyIndex >= 85) medalIcon = '🥇';
-      else if (item.autonomyIndex >= 70) medalIcon = '🥈';
-      else if (item.autonomyIndex >= 50) medalIcon = '🥉';
+      // Icono según rango de honor oficial (100 / 80 / 50)
+      let medalIcon = '🚸';
+      if (item.rankKey === 'rank_grandmaster' || item.autonomyIndex >= 100) medalIcon = '🥇';
+      else if (item.rankKey === 'rank_surgical_logician' || item.autonomyIndex >= 80) medalIcon = '🥈';
+      else if (item.rankKey === 'rank_pragmatic_solver' || item.autonomyIndex >= 50) medalIcon = '🥉';
 
       card.innerHTML = `
         <div class="history-card-left">
@@ -1575,6 +1707,12 @@ ${url}`;
       });
 
       card.querySelector('[data-action="duel"]')?.addEventListener('click', () => {
+        const itemKey = `standard_${item.difficulty}_${item.seed}`;
+        const list = this.getCompromisedPuzzles();
+        if (list.includes(itemKey)) {
+          this.showToast(window.i18n ? window.i18n.t('toast_duel_blocked_revealed') : 'No se puede crear un duelo de un tablero cuya solución ya fue visualizada', 'warning');
+          return;
+        }
         const code = CompetitionEngine.generateChallengeCode(item.difficulty, item.seed);
         const url = CompetitionEngine.getChallengeUrl(code);
         const text = `🏆 ¡He logrado ${item.score} pts (Autonomía: ${item.autonomyIndex}%) en Sudoku Arena nivel ${diffLabel}!\n⏱️ Tiempo: ${this.formatTime(item.timeSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero aquí:\n${url}`;
@@ -1653,7 +1791,13 @@ ${url}`;
         else if (action === 'peek') this.openCellPeekModal();
         else if (action === 'rayosx') this.openGlobalRayosXModal();
         else if (action === 'autosolve') this.openAutoSolveModal();
-        else if (action === 'duel') this.openCompetitionModal();
+        else if (action === 'duel') {
+          if (this.isCurrentPuzzleCompromised() || Boolean(this.scoring?.isAutoSolved)) {
+            this.showToast(window.i18n ? window.i18n.t('toast_duel_blocked_revealed') : 'No se puede crear un duelo de un tablero cuya solución ya fue visualizada', 'warning');
+            return;
+          }
+          this.openCompetitionModal();
+        }
       });
     });
 
@@ -1756,6 +1900,12 @@ ${url}`;
 
     // Botón Copiar Enlace para Rivales
     document.getElementById('btn-duel-copy-link')?.addEventListener('click', () => {
+      const itemKey = `standard_${this.duelSelectedDiff}_${this.duelSelectedSeed}`;
+      const list = this.getCompromisedPuzzles();
+      if (list.includes(itemKey)) {
+        this.showToast(window.i18n ? window.i18n.t('toast_duel_blocked_revealed') : 'No se puede crear un duelo de un tablero cuya solución ya fue visualizada', 'warning');
+        return;
+      }
       const code = CompetitionEngine.generateChallengeCode(this.duelSelectedDiff, this.duelSelectedSeed);
       const url = CompetitionEngine.getChallengeUrl(code);
       const msg = window.i18n.t('duel_share_msg', {

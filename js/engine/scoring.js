@@ -20,6 +20,7 @@ class ScoringEngine {
     this.errorsCount = 0;
     this.peeksCellCount = 0;
     this.peeksAllCount = 0;
+    this.isAutoSolved = false;
     this.ledger = [];
 
     // Centinela de Juego Limpio (Detección Anti-Copia / Anti-IA)
@@ -253,6 +254,7 @@ class ScoringEngine {
    * La máquina rellena lo que queda. Se anulan todos los puntos de las casillas restantes.
    */
   registerAutoSolve() {
+    this.isAutoSolved = true;
     let lostPoints = 0;
     let remainingCells = 0;
 
@@ -293,15 +295,19 @@ class ScoringEngine {
     let rankBadge = 'badge-starter';
     let rankColor = '#ef4444';
 
-    if (autonomyIndex >= 90) {
+    if (this.isAutoSolved) {
+      rankKey = 'rank_system_solved';
+      rankBadge = 'badge-starter';
+      rankColor = '#64748b';
+    } else if (autonomyIndex >= 100 && this.errorsCount === 0 && this.peeksCellCount === 0 && this.peeksAllCount === 0) {
       rankKey = 'rank_grandmaster';
       rankBadge = 'badge-master';
       rankColor = '#10b981';
-    } else if (autonomyIndex >= 70) {
+    } else if (autonomyIndex >= 80) {
       rankKey = 'rank_surgical_logician';
       rankBadge = 'badge-expert';
       rankColor = '#06b6d4';
-    } else if (autonomyIndex >= 45) {
+    } else if (autonomyIndex >= 50) {
       rankKey = 'rank_pragmatic_solver';
       rankBadge = 'badge-pragmatic';
       rankColor = '#f59e0b';
@@ -325,6 +331,7 @@ class ScoringEngine {
       peeksCellCount: this.peeksCellCount,
       peeksAllCount: this.peeksAllCount,
       ledger: this.ledger,
+      isAutoSolved: this.isAutoSolved,
       fairPlayFlag: this.fairPlayFlag,
       fairPlayReason: this.fairPlayReason
     };
@@ -355,7 +362,8 @@ class ScoringEngine {
       reverseScanStreak: this.reverseScanStreak,
       fairPlayFlag: this.fairPlayFlag,
       fairPlayReason: this.fairPlayReason,
-      fairPlayWarningTriggered: this.fairPlayWarningTriggered
+      fairPlayWarningTriggered: this.fairPlayWarningTriggered,
+      isAutoSolved: this.isAutoSolved
     };
   }
 
@@ -414,6 +422,7 @@ class ScoringEngine {
     engine.fairPlayFlag = Boolean(data.fairPlayFlag);
     engine.fairPlayReason = data.fairPlayReason || null;
     engine.fairPlayWarningTriggered = Boolean(data.fairPlayWarningTriggered);
+    engine.isAutoSolved = Boolean(data.isAutoSolved);
 
     return engine;
   }

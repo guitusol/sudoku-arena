@@ -16,8 +16,10 @@ Bienvenido a **Sudoku Arena**. Este manual describe detalladamente el funcionami
    - [C. Resolución por el Sistema (Rendición)](#c-resolución-por-el-sistema-rendición)
 6. [Índice de Autonomía Mental y Rangos Cognitivos](#6-índice-de-autonomía-mental-y-rangos-cognitivos)
 7. [El Libro Mayor de Auditoría de Puntos](#7-el-libro-mayor-de-auditoría-de-puntos)
-8. [Modo Duelo: Cómo Competir con Amigos](#8-modo-duelo-cómo-competir-con-amigos)
-9. [Consejos Tácticos para Convertirte en Gran Maestro](#9-consejos-tácticos-para-convertirte-en-gran-maestro)
+8. [Modo Duelo: Cómo Crear un Nuevo Planteamiento y Competir](#8-modo-duelo-cómo-crear-un-nuevo-planteamiento-y-competir)
+9. [Centinela de Juego Limpio y Detección Forense](#9-centinela-de-juego-limpio-y-detección-forense-anti-trampas--ia)
+10. [Historial de Partidas y Récords Personales](#10-historial-de-partidas-y-récords-personales-v39)
+11. [Consejos Tácticos para Convertirte en Gran Maestro](#11-consejos-tácticos-para-convertirte-en-gran-maestro)
 
 ---
 
@@ -101,7 +103,10 @@ Sudoku Arena permite solicitar ayuda pedagógica, pero penaliza el techo de punt
 
 ### C. Resolución por el Sistema (Rendición 🏳️)
 - **¿Qué hace?**: La máquina completa instantáneamente todas las casillas vacías pendientes.
-- **Consecuencia**: Todas las casillas autocompletadas por el motor reciben **0 puntos**. Solo conservarás los puntos netos de las casillas que colocaste tú mismo correctamente.
+- **Consecuencia de Puntuación**: Todas las casillas autocompletadas por el motor reciben **0 puntos**. Solo conservarás los puntos netos de las casillas que colocaste tú mismo correctamente.
+- **Pérdida de Condición de Victoria**: Esta acción constituye una rendición técnica. La partida **no se computa como victoria ni como resuelta**, no se añade al Historial de Récords Personales ni a la Bóveda, y en el veredicto final se clasifica con el distintivo *«Sin Rango (Resolución Automática)»*.
+- **Bloqueo Permanente de Duelo (Protección Anti-Copia)**: En el instante en que el motor desvela la solución completa, **queda inhabilitada permanentemente la opción de establecer, retar o compartir un duelo** con ese tablero.
+- **Detección Persistente y Modo Práctica**: Si un jugador intenta reiniciar esa misma partida o reproducir su semilla para copiar las soluciones que vio en pantalla, el sistema detecta que el tablero ya fue desvelado previamente. La partida arranca automáticamente en **«Modo Práctica»** con un aviso visible sobre el tablero; al finalizarla no se registrará como récord ni permitirá retar a ningún rival.
 
 ---
 
@@ -188,7 +193,7 @@ Al finalizar el tablero, el sistema muestra la tarjeta oficial de auditoría:
 
 ---
 
-## 8. Centinela de Juego Limpio y Detección Forense (Anti-Trampas / IA)
+## 9. Centinela de Juego Limpio y Detección Forense (Anti-Trampas / IA)
 
 Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo auténtico. Para garantizar la máxima justicia en el **Reto Semanal** y en los **Duelos Multijugador**, el motor incorpora un **Centinela de Integridad (Fair Play Sentinel)** capaz de auditar la deducción en tiempo real:
 
@@ -199,10 +204,15 @@ Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo au
   > *«Si Vd. ha llegado hasta aquí por sus propios medios, ¡¡¡ Enhorabuena, lo está haciendo muy bien !!! Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. No utilice recursos externos ni copie soluciones de Inteligencia Artificial.»*
 - **Auditoría Forense y Validez de Récords**:
   Las partidas marcadas por barrido lineal quedan etiquetadas en el libro mayor de auditoría con la advertencia de *Sospecha de Copia Externa*, invalidando la obtención de rangos de honor superiores en competiciones.
+- **Protección Forense de Tableros Desvelados por el Sistema**:
+  Para evitar que un jugador solicite la resolución automática a la máquina, anote o memorice los números y después reinicie el sudoku para fingir una resolución brillante o retar a otros usuarios con ventaja ilegítima:
+  1. **Registro Inviolable de Huella Digital**: En el instante en que se confirma *«Resolver por la máquina»*, la huella matemática de ese tablero queda registrada de forma persistente.
+  2. **Bloqueo Total de Duelos**: El sistema impide la generación, copia y compartición de códigos o enlaces de duelo con ese tablero revelado.
+  3. **Activación de «Modo Práctica»**: Si el jugador recarga o vuelve a iniciar esa misma partida, se despliega una advertencia en la cabecera del tablero (*Modo Práctica*). Al completarse, no se registrará como victoria ni computará para Récords Personales ni Retos Semanales.
 
 ---
 
-## 9. Historial de Partidas y Récords Personales (v3.9)
+## 10. Historial de Partidas y Récords Personales (v3.9)
 
 Todas tus victorias quedan registradas en tu dispositivo sin necesidad de servidores ni registros:
 
@@ -218,7 +228,7 @@ Todas tus victorias quedan registradas en tu dispositivo sin necesidad de servid
 
 ---
 
-## 10. Consejos Tácticos para Convertirte en Gran Maestro
+## 11. Consejos Tácticos para Convertirte en Gran Maestro
 
 1. **Aprovecha el Descarte Sistemático**: Busca primero filas, columnas o cajas 3x3 que tengan ya 6 o 7 números colocados; en ellas es mucho más fácil deducir los números restantes.
 2. **No Adivines**: Cada fallo cuesta **-15 puntos** y reduce tu índice de autonomía. Si dudas entre dos casillas, busca otra zona del tablero antes de arriesgarte.

@@ -127,6 +127,11 @@
       </div>
 
       <!-- CUADRÍCULA 9x9 TÁCTICA -->
+      <!-- AVISO DE TABLERO EN MODO PRÁCTICA (SOLUCIÓN PREVIAMENTE DESVELADA) -->
+      <div id="board-compromised-banner" class="ethical-notice-box hidden" style="border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); color: #fde68a; margin: 0 0 0.5rem 0; font-size: 0.8rem; padding: 0.4rem 0.75rem; border-radius: 8px;">
+        <span>⚠️</span>
+        <span id="board-compromised-banner-text">Modo Práctica: Solución desvelada previamente por el sistema (Sin cómputo para Récords ni Duelos).</span>
+      </div>
       <div class="sudoku-grid-wrapper">
         <div id="board-container"></div>
       </div>
@@ -496,6 +501,15 @@
           </div>
         </div>
 
+        <!-- Alerta de Tablero Resuelto por Máquina o Previamente Desvelado -->
+        <div id="verdict-compromised-banner" class="ethical-notice-box hidden" style="border-color: #f59e0b; background: rgba(245, 158, 11, 0.12); color: #fde68a; margin: 0.75rem 0;">
+          <span style="font-size: 1.4rem;" id="verdict-compromised-icon">🤖</span>
+          <div>
+            <strong style="color: #f59e0b; display: block; font-size: 0.85rem;" id="verdict-compromised-title">Solución desvelada por el sistema</strong>
+            <span style="font-size: 0.78rem; line-height: 1.4;" id="verdict-compromised-desc">Este tablero no computa para récords de victoria ni permite crear duelos competitivos.</span>
+          </div>
+        </div>
+
         <button id="btn-share-verdict" class="modal-btn primary" style="width: 100%; margin-bottom: 0.5rem; background: linear-gradient(135deg, #10b981, #059669);">
           <span data-i18n="verdict_share">📋 Copiar Resultado y Código de Desafío para Retar</span>
         </button>
@@ -810,6 +824,13 @@
             <div class="lang-info">
               <strong class="lang-name">Galego</strong>
               <span class="lang-sub">Galicia</span>
+            </div>
+          </div>
+          <div class="lang-card" data-lang="ja">
+            <span class="lang-flag">🇯🇵</span>
+            <div class="lang-info">
+              <strong class="lang-name">日本語</strong>
+              <span class="lang-sub">日本 (Japan)</span>
             </div>
           </div>
         </div>
@@ -1191,7 +1212,7 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
   <div id="toast-notification" class="toast-box"></div>
 
   <!-- Scripts -->
-  <script src="js/i18n.js?v=3.9"></script>
+  <script src="js/i18n.js?v=4.0"></script>
   <script src="js/engine/sudoku.js?v=3.8"></script>
   <script src="js/engine/scoring.js?v=3.8"></script>
   <script src="js/engine/competition.js?v=3.8"></script>
