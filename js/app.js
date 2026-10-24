@@ -218,28 +218,49 @@ class SudokuApp {
    * Comprueba si se ha recibido un código de desafío en la URL (?desafio=ARENA-DIFI-12345 o ?duel=...)
    */
   checkUrlChallenge() {
+    const params = (typeof window !== 'undefined') ? new URLSearchParams(window.location.search) : null;
+    const origen = params ? params.get('origen') : null;
+    const seedParam = params ? (params.get('semilla') || params.get('seed')) : null;
+    const diffParam = params ? (params.get('nivel') || params.get('diff') || params.get('level')) : null;
+
     // 1. Comprobar si es un duelo con tablero personalizado (?tablero=... o ?custom=...)
     if (typeof CompetitionEngine !== 'undefined' && CompetitionEngine.getCustomChallengeFromUrl) {
       const customChallenge = CompetitionEngine.getCustomChallengeFromUrl();
       if (customChallenge) {
         const boardToPlay = customChallenge.board || (customChallenge.boardString ? SudokuEngine.parseBoardString(customChallenge.boardString) : null);
         if (boardToPlay) {
-          this.startCustomGame(boardToPlay, customChallenge.name);
-          const toastMsg = window.i18n ? window.i18n.t('toast_duel_loaded', { name: customChallenge.name }) : `¡Duelo cargado: ${customChallenge.name}!`;
-          this.showToast(toastMsg, 'info');
+          const customSeed = customChallenge.seed || (seedParam ? parseInt(seedParam, 10) : null);
+          this.startCustomGame(boardToPlay, customChallenge.name, null, customSeed);
+          if (diffParam && ['facil', 'medio', 'dificil', 'endemoniado'].includes(diffParam.toLowerCase())) {
+            this.selectedDifficulty = diffParam.toLowerCase();
+            this.gameData.difficulty = this.selectedDifficulty;
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+              btn.classList.toggle('active', btn.dataset.diff === this.selectedDifficulty);
+            });
+          }
+          if (origen === 'top-sudoku' || (customChallenge.name && customChallenge.name.includes('Top-Sudoku'))) {
+            const toastMsg = window.i18n ? window.i18n.t('toast_transferred_from_top_sudoku', { seed: this.currentSeed || '' }) : `¡Partida transferida desde Top-Sudoku! Semilla: ${this.currentSeed || ''}`;
+            this.showToast(toastMsg, 'success');
+          } else {
+            const toastMsg = window.i18n ? window.i18n.t('toast_duel_loaded', { name: customChallenge.name }) : `¡Duelo cargado: ${customChallenge.name}!`;
+            this.showToast(toastMsg, 'info');
+          }
+          this.updateTopSudokuLinks();
           return;
         }
       }
     }
+
+    // 2. Comprobar si la URL trae código de desafío (?desafio=ARENA-...)
     const challenge = CompetitionEngine.getChallengeFromUrl();
     if (challenge) {
-      // Si la URL trae un desafío específico, comprobar si ya teníamos progreso en esa semilla
       const raw = localStorage.getItem('sudoku_arena_active_game_v1');
       if (raw) {
         try {
           const saved = JSON.parse(raw);
           if (saved && saved.difficulty === challenge.difficulty && saved.seed === challenge.seed && !saved.isGameOver) {
             if (this.restoreActiveGame()) {
+              this.updateTopSudokuLinks();
               return;
             }
           }
@@ -247,19 +268,47 @@ class SudokuApp {
       }
       this.selectedDifficulty = challenge.difficulty;
       this.newGame(challenge.difficulty, challenge.seed);
-      this.showToast(window.i18n ? window.i18n.t('toast_challenge_loaded', { code: challenge.code }) : `¡Desafío cargado! Código: ${challenge.code}`, 'info');
-    } else {
-      // Sin parámetro en URL: reanudar partida activa previa si existe
-      if (!this.restoreActiveGame()) {
-        this.newGame('medio');
+      if (origen === 'top-sudoku') {
+        const toastMsg = window.i18n ? window.i18n.t('toast_transferred_from_top_sudoku', { seed: challenge.seed }) : `¡Partida transferida desde Top-Sudoku! Semilla: ${challenge.seed}`;
+        this.showToast(toastMsg, 'success');
+      } else {
+        this.showToast(window.i18n ? window.i18n.t('toast_challenge_loaded', { code: challenge.code }) : `¡Desafío cargado! Código: ${challenge.code}`, 'info');
+      }
+      this.updateTopSudokuLinks();
+      return;
+    }
+
+    // 3. Comprobar si la URL trae semilla directa (?semilla=... o ?seed=...) sin tablero ni desafio
+    if (seedParam) {
+      const parsedSeed = parseInt(seedParam, 10);
+      if (!isNaN(parsedSeed)) {
+        const diff = (diffParam && ['facil', 'medio', 'dificil', 'endemoniado'].includes(diffParam.toLowerCase()))
+          ? diffParam.toLowerCase()
+          : this.selectedDifficulty;
+        this.selectedDifficulty = diff;
+        this.newGame(diff, parsedSeed);
+        if (origen === 'top-sudoku') {
+          const toastMsg = window.i18n ? window.i18n.t('toast_transferred_from_top_sudoku', { seed: parsedSeed }) : `¡Partida transferida desde Top-Sudoku! Semilla: ${parsedSeed}`;
+          this.showToast(toastMsg, 'success');
+        } else {
+          this.showToast(window.i18n ? window.i18n.t('toast_seed_loaded', { seed: parsedSeed }) : `¡Semilla cargada: ${parsedSeed}!`, 'info');
+        }
+        this.updateTopSudokuLinks();
+        return;
       }
     }
+
+    // 4. Sin parámetro en URL: reanudar partida activa previa si existe
+    if (!this.restoreActiveGame()) {
+      this.newGame('medio');
+    }
+    this.updateTopSudokuLinks();
   }
 
   /**
    * Inicia una partida basada en un tablero personalizado (OCR, planteado a mano o bóveda)
    */
-  startCustomGame(board, name = 'Reto Personalizado', vaultId = null) {
+  startCustomGame(board, name = 'Reto Personalizado', vaultId = null, customSeed = null) {
     this.stopTimer();
     this.isGameOver = false;
     this.isWeeklyMode = false;
@@ -267,7 +316,7 @@ class SudokuApp {
     this.timerSeconds = 0;
 
     // Generar puzle y auditoría cognitiva humana desde el tablero personalizado
-    this.gameData = SudokuEngine.createGameFromCustomBoard(board, name);
+    this.gameData = SudokuEngine.createGameFromCustomBoard(board, name, customSeed);
     this.gameData.vaultId = vaultId;
     this.selectedDifficulty = this.gameData.difficulty;
     this.currentSeed = this.gameData.seed;
@@ -295,9 +344,18 @@ class SudokuApp {
 
     // Actualizar etiqueta del desafío
     const codeElem = document.getElementById('challenge-code-display');
-    if (codeElem) codeElem.textContent = 'CUSTOM';
+    if (codeElem) {
+      if (this.currentSeed) {
+        const diffPrefixMap = { facil: 'FACI', medio: 'MEDI', dificil: 'DIFI', endemoniado: 'ENDE' };
+        const diffCode = diffPrefixMap[this.selectedDifficulty] || 'MEDI';
+        codeElem.textContent = `ARENA-${diffCode}-${this.currentSeed}`;
+      } else {
+        codeElem.textContent = 'CUSTOM';
+      }
+    }
 
     this.saveActiveGame();
+    this.updateTopSudokuLinks();
     window.soundFx.playClick();
     this.closeAllModals();
   }
@@ -351,6 +409,7 @@ class SudokuApp {
 
     // Persistir estado inicial de inmediato
     this.saveActiveGame();
+    this.updateTopSudokuLinks();
 
     // Evento analítico de inicio de partida
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
@@ -1742,6 +1801,16 @@ ${url}`;
   }
 
   bindEvents() {
+    const updateTsLink = (e) => {
+      const link = e.target.closest('.link-to-top-sudoku');
+      if (link) {
+        this.updateTopSudokuLinks();
+      }
+    };
+    document.addEventListener('pointerdown', updateTsLink, true);
+    document.addEventListener('mousedown', updateTsLink, true);
+    document.addEventListener('click', updateTsLink, true);
+
     // Teclado físico
     window.addEventListener('keydown', (e) => {
       if (document.querySelector('.modal-overlay.active')) {
@@ -2398,7 +2467,22 @@ ${url}`;
       const lang = (window.i18n?.currentLang || localStorage.getItem('sudoku_arena_lang') || 'es').toLowerCase();
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const baseUrl = isLocal ? '/top-sudoku/' : 'https://guitusol.github.io/top-sudoku/';
-      const targetUrl = `${baseUrl}?lang=${lang}`;
+
+      const seed = this.currentSeed || '';
+      const diff = this.selectedDifficulty || 'medio';
+      let boardStr = '';
+      if (this.gameData && this.gameData.board && typeof SudokuEngine !== 'undefined') {
+        boardStr = SudokuEngine.boardToString(this.gameData.board);
+      }
+
+      const params = new URLSearchParams();
+      params.set('lang', lang);
+      if (seed) params.set('semilla', seed);
+      if (diff) params.set('nivel', diff);
+      if (boardStr && boardStr.length === 81) params.set('tablero', boardStr);
+      params.set('origen', 'sudoku-arena');
+
+      const targetUrl = `${baseUrl}?${params.toString()}`;
       document.querySelectorAll('.link-to-top-sudoku').forEach(el => {
         el.href = targetUrl;
       });

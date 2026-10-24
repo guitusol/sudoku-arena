@@ -95,13 +95,18 @@ class CompetitionEngine {
         name = rawName;
       }
     }
+    const rawSeed = params.get('semilla') || params.get('seed');
+    const parsedSeed = rawSeed ? parseInt(rawSeed, 10) : null;
+    const rawDiff = params.get('nivel') || params.get('diff') || params.get('level');
     const parsedBoard = (typeof SudokuEngine !== 'undefined' && SudokuEngine.parseBoardString)
       ? SudokuEngine.parseBoardString(boardStr)
       : null;
     return {
       boardString: boardStr,
       board: parsedBoard,
-      name
+      name,
+      seed: parsedSeed,
+      difficulty: rawDiff
     };
   }
 
