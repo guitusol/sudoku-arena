@@ -125,6 +125,7 @@ const I18N_LANGUAGES = {
 
 const I18N_TRANSLATIONS = {
   "es": {
+    "practice_tag": "Modo Práctica",
     "brand_tag": "Táctico & Auditoría",
     "btn_new_duel": "Nuevo Duelo",
     "btn_duel": "Duelo",
@@ -375,6 +376,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Historial de partidas borrado."
   },
   "en": {
+    "practice_tag": "Practice Mode",
     "brand_tag": "Tactical & Audit",
     "btn_new_duel": "New Duel",
     "btn_duel": "Duel",
@@ -625,6 +627,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Game history cleared."
   },
   "fr": {
+    "practice_tag": "Mode Entraînement",
     "brand_tag": "Tactique & Audit",
     "btn_new_duel": "Nouveau Duel",
     "btn_duel": "Duel",
@@ -875,6 +878,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Historique des parties effacé."
   },
   "de": {
+    "practice_tag": "Übungsmodus",
     "brand_tag": "Taktik & Audit",
     "btn_new_duel": "Neues Duell",
     "btn_duel": "Duell",
@@ -1125,6 +1129,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Spielverlauf gelöscht."
   },
   "ca": {
+    "practice_tag": "Mode Pràctica",
     "brand_tag": "Tàctic & Auditoria",
     "btn_new_duel": "Nou Duel",
     "btn_duel": "Duel",
@@ -1375,6 +1380,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Historial de partides esborrat."
   },
   "va": {
+    "practice_tag": "Mode Pràctica",
     "brand_tag": "Tàctic & Auditoria",
     "btn_new_duel": "Nou Duel",
     "btn_duel": "Duel",
@@ -1625,6 +1631,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Historial de partides esborrat."
   },
   "eu": {
+    "practice_tag": "Praktika Modua",
     "brand_tag": "Taktikoa eta Ikuskaritza",
     "btn_new_duel": "Duelu Berria",
     "btn_duel": "Duelua",
@@ -1875,6 +1882,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Partiden historia garbitu da."
   },
   "gl": {
+    "practice_tag": "Modo Práctica",
     "brand_tag": "Táctico & Auditoría",
     "btn_new_duel": "Novo Duelo",
     "btn_duel": "Duelo",
@@ -2125,6 +2133,7 @@ const I18N_TRANSLATIONS = {
     "toast_history_cleared": "Historial de partidas borrado."
   },
   "ja": {
+    "practice_tag": "練習モード",
     "brand_tag": "タクティカル＆監査",
     "btn_new_duel": "新規対戦",
     "btn_duel": "対戦",

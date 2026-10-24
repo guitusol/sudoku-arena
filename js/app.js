@@ -42,6 +42,7 @@ class SudokuApp {
     try { this.updateStatsUI(); } catch (e) { console.error('Error updating stats UI on lang change:', e); }
     try { this.updateDuelModalPreview(); } catch (e) { console.error('Error updating duel modal on lang change:', e); }
     try { this.render(); } catch (e) { console.error('Error rendering on lang change:', e); }
+    try { this.updateCompromisedUI(); } catch (e) { console.error('Error updating compromised UI on lang change:', e); }
   }
 
   init() {
@@ -55,6 +56,7 @@ class SudokuApp {
     this.updateVaultBadge();
     this.updateHistoryBadge();
     this.checkUrlChallenge();
+    this.updateCompromisedUI();
   }
 
   /**
@@ -898,7 +900,8 @@ class SudokuApp {
       if (iconElem) iconElem.textContent = '⚠️';
       if (rankElem) {
         const baseRank = (window.i18n && summary.rankKey) ? window.i18n.t(summary.rankKey) : summary.rank;
-        rankElem.textContent = `${baseRank} [Modo Práctica]`;
+        const pTag = window.i18n ? window.i18n.t("practice_tag") : "Modo Práctica";
+        rankElem.textContent = `${baseRank} [${pTag}]`;
         rankElem.style.color = '#f59e0b';
       }
       if (compBanner) {
