@@ -54,6 +54,9 @@
             <span id="sound-icon">🔊</span>
           </button>
           <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>
+          <button id="btn-open-hall-of-fame" class="header-btn hall-of-fame-highlight-btn" title="Salón de la Fama Global y Cuadro de Honor de Maestros" data-i18n-title="title_hall_of_fame">
+            <span>🏛️</span> <span class="hof-btn-label" data-i18n="btn_hall_of_fame">Salón Fama</span>
+          </button>
         </div>
 
         <!-- Fila 2: Reto Semanal, Escanear / Crear, Mis Retos y Récords -->
@@ -255,6 +258,12 @@
             <div class="stat-item-label" data-i18n="sidebar_records_label">Tus Récords</div>
             <button id="btn-sidebar-history" class="stat-item-val text-gold" style="background:none; border:none; cursor:pointer; font-size:0.85rem; padding:0; display:flex; align-items:center; gap:0.25rem;">
               <span>🏆</span> <span data-i18n="sidebar_view_records">Ver Récords →</span>
+            </button>
+          </div>
+          <div class="stat-item" style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding-top: 0.35rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 0.15rem;">
+            <div class="stat-item-label" data-i18n="btn_hall_of_fame">Salón Fama</div>
+            <button id="btn-sidebar-hof" class="stat-item-val text-gold" style="background:none; border:none; cursor:pointer; font-size:0.85rem; padding:0; display:flex; align-items:center; gap:0.25rem;" title="Ver Salón de la Fama Global">
+              <span>🏛️</span> <span data-i18n="hof_banner_btn">⚔️ Cuadro Honor →</span>
             </button>
           </div>
         </div>
@@ -1055,6 +1064,20 @@
       </div>
       <div class="modal-body" style="padding: 1rem 1.25rem;">
 
+        <!-- Banner de Honor hacia el Salón de la Fama -->
+        <div class="hof-entry-banner" id="btn-history-open-hof">
+          <div class="hof-entry-banner-left">
+            <span class="hof-entry-banner-icon">🏛️👑</span>
+            <div>
+              <div class="hof-entry-banner-title" data-i18n="hof_banner_title">Salón de la Fama Global de Maestros</div>
+              <div class="hof-entry-banner-sub" data-i18n="hof_banner_sub">Consulta las marcas mundiales, compite por países y reta a los Maestros</div>
+            </div>
+          </div>
+          <button type="button" class="modal-btn primary hof-entry-banner-btn" data-i18n="hof_banner_btn">
+            ⚔️ Ver Cuadro de Honor
+          </button>
+        </div>
+
         <!-- 1. Cuadrícula de Métricas Globales -->
         <div class="history-stats-grid">
           <div class="history-stat-box">
@@ -1150,6 +1173,67 @@
         <button id="btn-history-clear" class="modal-btn secondary" style="font-size: 0.8rem; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" data-i18n="history_btn_clear">
           🗑️ Borrar Historial
         </button>
+        <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Volver al Tablero</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- MODAL: SALÓN DE LA FAMA GLOBAL Y REGISTRO DE MAESTROS -->
+  <div id="modal-hall-of-fame" class="modal-overlay">
+    <div class="modal-card modal-card-wide" style="max-width: 740px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 0.5rem; color: #fbbf24;">
+          <span>🏛️</span> <span data-i18n="hof_modal_title">Salón de la Fama Global de Maestros</span>
+        </h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 1rem 1.25rem;">
+        
+        <!-- Tarjeta de Estado de Maestría del Jugador Actual (Consistencia Anti-Suerte) -->
+        <div class="hof-status-banner">
+          <div class="hof-status-header">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <span class="hof-status-icon">🎖️</span>
+              <div>
+                <strong data-i18n="hof_status_title" style="color: #fbbf24;">Tu Progresión hacia el Cuadro de Honor</strong>
+                <div id="hof-status-progress-text" class="hof-status-desc" data-i18n="hof_status_desc">
+                  Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas) en Medio, Difícil o Endemoniado.
+                </div>
+              </div>
+            </div>
+            <span id="hof-master-count-badge" class="hof-badge-counter font-mono">0 / 3</span>
+          </div>
+          <div class="hof-progress-bar-bg">
+            <div id="hof-progress-bar-fill" class="hof-progress-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Barra de Pestañas / Filtros de Segmentación -->
+        <div class="hof-tabs-bar" id="hof-tabs-bar">
+          <button class="hof-tab-btn active" data-tab="all" data-i18n="hof_tab_all">🏆 Todos los Maestros</button>
+          <button class="hof-tab-btn" data-tab="nations" data-i18n="hof_tab_nations">🌍 Copa de Naciones</button>
+          <button class="hof-tab-btn" data-tab="cities" data-i18n="hof_tab_cities">🏙️ Orgullo Local</button>
+          <button class="hof-tab-btn" data-tab="generations" data-i18n="hof_tab_generations">🎂 Generaciones</button>
+        </div>
+
+        <!-- Filtro secundario de Dificultad -->
+        <div class="vault-filters-pills" id="hof-diff-pills" style="margin-bottom: 0.75rem;">
+          <button class="vault-pill active" data-diff="all" data-i18n="hof_diff_all">Todos los Niveles</button>
+          <button class="vault-pill" data-diff="medio" data-i18n="diff_medio">🟡 Medio</button>
+          <button class="vault-pill" data-diff="dificil" data-i18n="diff_dificil">🔴 Difícil</button>
+          <button class="vault-pill" data-diff="endemoniado" data-i18n="diff_endemoniado">🟣 Endemoniado</button>
+        </div>
+
+        <!-- Lista / Rejilla de Maestros -->
+        <div id="hof-masters-list" class="hof-masters-container">
+          <!-- Renderizado dinámico de tarjetas de maestros -->
+        </div>
+
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <span style="font-size: 0.76rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.35rem;">
+          <span>🔒</span> <span data-i18n="hof_zero_login_notice">Registro Zero-Login • Certificado con Hash Anti-Trampas</span>
+        </span>
         <button class="modal-btn secondary btn-close-modal" data-i18n="btn_close">Volver al Tablero</button>
       </div>
     </div>
@@ -1253,6 +1337,7 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
   <script src="js/engine/sudoku-ocr.js?v=3.8"></script>
   <script src="js/engine/vault-storage.js?v=3.8"></script>
   <script src="js/engine/history-storage.js?v=3.8"></script>
+  <script src="js/engine/hall-of-fame.js?v=4.0"></script>
   <script src="js/ui/audio.js?v=3.8"></script>
   <script src="js/ui/board.js?v=3.8"></script>
   <script src="js/app.js?v=4.2.0"></script>
