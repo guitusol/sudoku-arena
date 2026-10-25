@@ -13,8 +13,13 @@ En lugar de forzar al jugador a crearse una cuenta con correo electrónico, cont
    * El jugador elige un **Alias / Nickname** y opcionalmente sus datos demográficos para los rankings.
    * Cero contraseñas que recordar o recuperar.
 
-2. **Garantía Anti-Trampas (Proof of Victory):**
-   * El registro solo se activa al lograr la victoria con **Rango Gran Maestro Puro (≥ 90% Autonomía Mental (sin ayudas))** en dificultades competitivas (*Medio*, *Difícil*, *Endemoniado*).
+2. **Criterio de Consistencia y Trayectoria Probada (Anti-Suerte / Anti-Casualidad):**
+   * **No basta con una sola partida afortunada**: Un único sudoku resuelto como Gran Maestro puede deberse a la suerte, a un tanteo fortuito o a una ayuda puntual. La maestría real exige **consistencia y solidez demostrada**.
+   * **Umbral de Consistencia**: Para desbloquear el acceso al Salón de la Fama y obtener la ficha oficial de Maestro, el jugador debe haber completado un **mínimo de partidas certificadas como Gran Maestro** (por ejemplo, al menos **3 victorias** con ≥ 90% de autonomía y 0 ayudas en nivel *Medio*, *Difícil* o *Endemoniado*).
+   * **Indicador de Progresión en la App**: La pantalla de récords e historial mostrará la barra de mérito: *"Maestría demostrada: 2 de 3 partidas requeridas para ingresar en el Salón de la Fama"*.
+
+3. **Garantía Anti-Trampas y Auditoría Forense (Proof of Victory):**
+   * El sistema empaqueta la semilla, la secuencia de movimientos, el libro mayor y la marca de tiempo de cada una de las victorias requeridas.
    * La app empaqueta:
      * Semilla exacta del tablero (`seed`).
      * Tiempo empleado y puntuación neta.
