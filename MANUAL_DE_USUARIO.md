@@ -19,7 +19,8 @@ Bienvenido a **Sudoku Arena**. Este manual describe detalladamente el funcionami
 8. [Modo Duelo: Cómo Crear un Nuevo Planteamiento y Competir](#8-modo-duelo-cómo-crear-un-nuevo-planteamiento-y-competir)
 9. [Centinela de Juego Limpio y Detección Forense](#9-centinela-de-juego-limpio-y-detección-forense-anti-trampas--ia)
 10. [Historial de Partidas y Récords Personales](#10-historial-de-partidas-y-récords-personales-v39)
-11. [Consejos Tácticos para Convertirte en Gran Maestro](#11-consejos-tácticos-para-convertirte-en-gran-maestro)
+11. [Salón de la Fama Global y Registro de Maestros (Zero-Login)](#11-salón-de-la-fama-global-y-registro-de-maestros-zero-login)
+12. [Consejos Tácticos para Convertirte en Gran Maestro](#12-consejos-tácticos-para-convertirte-en-gran-maestro)
 
 ---
 
@@ -120,8 +121,8 @@ Según tu porcentaje de autonomía, obtendrás uno de los 4 rangos de honor:
 
 | Rango | Medalla | Autonomía | Descripción |
 | :--- | :---: | :---: | :--- |
-| **Gran Maestro Puro** | 🥇 | **100%** | Resolución impecable sin un solo fallo, sin consultar la lupa y sin activar rayos X. Máxima maestría lógica. |
-| **Lógico Quirúrgico** | 🥈 | **80% – 99%** | Resolución brillante con mínimas consultas puntuales de lupa o fallos aislados rápidamente corregidos. |
+| **Gran Maestro Puro** | 🥇 | **≥ 90%** | Resolución impecable con cero ayudas externas (0 ay.), deducción 100% propia y ≥ 90% de puntuación neta. Los fallos mecánicos leves no quitan la maestría. |
+| **Lógico Quirúrgico** | 🥈 | **80% – 89%** | Deducción brillante con consultas mínimas o fallos moderados. |
 | **Resolutor Pragmático**| 🥉 | **50% – 79%** | Juego con uso moderado de asistencias o activación de rayos X para desatascar fases complejas. |
 | **Nivel Muy Bajo** | 🚸 | **< 50%** | Partida con alta dependencia de la máquina o resolución automática asistida. ¡Toca seguir entrenando! |
 
@@ -195,13 +196,21 @@ Al finalizar el tablero, el sistema muestra la tarjeta oficial de auditoría:
 
 ## 9. Centinela de Juego Limpio y Detección Forense (Anti-Trampas / IA)
 
-Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo auténtico. Para garantizar la máxima justicia en el **Reto Semanal** y en los **Duelos Multijugador**, el motor incorpora un **Centinela de Integridad (Fair Play Sentinel)** capaz de auditar la deducción en tiempo real:
+Sudoku Arena está concebido como una plataforma de honor y mérito cognitivo auténtico. Para garantizar la máxima justicia en el **Salón de la Fama**, en el **Reto Semanal** y en los **Duelos Multijugador**, el motor incorpora un **Centinela de Integridad (Fair Play Sentinel)** capaz de auditar la deducción en tiempo real:
 
-- **Detección de Barrido Lineal Mecánico (ChatGPT / Solvers externos)**:
-  Cuando un usuario resuelve un sudoku de forma natural, salta de una zona a otra del tablero deduciendo descartes y números únicos. Por el contrario, cuando alguien copia una solución externa o generada por Inteligencia Artificial, suele rellenar las casillas en orden estricto de lectura lineal (de izquierda a derecha y fila por fila).
+- **Calibrado Adaptativo por Dificultad e Inmunidad en Fácil**:
+  - En nivel **Fácil** el centinela no interviene en ningún momento (inmunidad total): un maestro o resolutor ágil puede introducir números a toda velocidad sin recibir avisos intrusivos.
+  - En **Medio, Difícil y Endemoniado**, la sensibilidad del centinela se ajusta estrictamente a la dificultad real (exigiendo rachas lineales de 12 celdas en Medio, 8 en Difícil y 7 en Endemoniado introducidas en lapsos inverosímiles para la deducción humana sin pausas).
+  - Toda pausa reflexiva superior a 3.0s – 4.0s resetea de forma inmediata el contador de racha acumulada.
+- **Inmunidad Total en Cascada Final (Fase de Desencadenamiento)**:
+  Cuando restan **≤ 28 casillas vacías** en el tablero, la partida entra en la fase de resolución encadenada (efecto dominó). Durante esta etapa final, el Centinela desactiva automáticamente cualquier aviso de racha, permitiendo a los maestros completar los descartes obvios a máxima cadencia con total libertad.
 - **Alerta Ética en Vivo**:
   Si el sistema detecta una secuencia continua de introducción lineal mecánica sin pausas de deducción lógica, activará de inmediato el **Aviso de Juego Limpio**:
   > *«Si Vd. ha llegado hasta aquí por sus propios medios, ¡¡¡ Enhorabuena, lo está haciendo muy bien !!! Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. No utilice recursos externos ni copie soluciones de Inteligencia Artificial.»*
+- **Blindaje Anti-Pantalla Chivata (Top-Sudoku / Solvers en Paralelo)**:
+  Para impedir que un jugador resuelva un sudoku difícil abriendo Top-Sudoku en otra ventana o pantalla para desvelar la solución e ir copiándola en Arena:
+  1. Si un usuario transfiere una partida viva de Arena a Top-Sudoku con el botón integrado, la partida queda instantáneamente marcada como *Comprometida / Modo Práctica*, invalidándola para el Salón de la Fama y el Registro de Maestros.
+  2. El motor vigila pérdidas reiteradas de foco de pantalla (`window.onblur` / `visibilitychange`) intercaladas con entradas en racha, anulando la certificación oficial para evitar la copia externa disimulada.
 - **Auditoría Forense y Validez de Récords**:
   Las partidas marcadas por barrido lineal quedan etiquetadas en el libro mayor de auditoría con la advertencia de *Sospecha de Copia Externa*, invalidando la obtención de rangos de honor superiores en competiciones.
 - **Protección Forense de Tableros Desvelados por el Sistema**:
@@ -228,7 +237,26 @@ Todas tus victorias quedan registradas en tu dispositivo sin necesidad de servid
 
 ---
 
-## 11. Consejos Tácticos para Convertirte en Gran Maestro
+## 11. Salón de la Fama Global y Registro de Maestros (Zero-Login)
+
+Sudoku Arena premia el mérito intelectual con un Cuadro de Honor mundial público, clasificación segmentada y máxima transparencia:
+
+- **Acceso 100% Público y Abierto a Todos**:
+  El Salón de la Fama no es un club privado. Cualquier jugador, con independencia de su nivel o de si acaba de conocer la aplicación, puede acceder libremente a consultar los récords globales, descubrir a los mejores resolutores de cada región y aprender de sus tiempos y técnicas.
+- **Función «Desafiar al Maestro» (⚔️)**:
+  Cada récord exhibido en el Salón de la Fama dispone de un botón directo de reto `[⚔️ Desafiar]`. Al pulsarlo, el sistema carga de forma inmediata la semilla matemática exacta y el tablero que resolvió el Maestro. De este modo, cualquier jugador puede retar su marca en igualdad absoluta de condiciones para intentar superar su tiempo o puntuación.
+- **Clasificaciones Segmentadas y Comunidad**:
+  - **Copa de Naciones (🌍)**: Podios filtrados por país para incentivar la competición sana e internacional.
+  - **Orgullo Local y Ciudades (🏙️)**: Duelos de honor entre resolutores de una misma localidad o provincia.
+  - **Clasificación Generacional (🎂)**: Tramos de edad justos para competir entre pares (Júnior <18 años, Adultos 18-49 años, Senior 50-64 años, Leyendas 65+ años).
+- **Requisito de Entrada al Cuadro de Honor: Consistencia Anti-Suerte**:
+  Para garantizar que la distinción de Maestro refleje auténtica destreza y no una partida afortunada por azar:
+  - **Mínimo de Partidas Certificadas**: Es obligatorio acumular al menos **3 victorias de Gran Maestro Puro**.
+  - **Baremos Oficiales**: Obtenidas en dificultad **Medio, Difícil o Endemoniado** con **≥ 90% de autonomía mental** y **0 ayudas del sistema (0 ay.)**.
+
+---
+
+## 12. Consejos Tácticos para Convertirte en Gran Maestro
 
 1. **Aprovecha el Descarte Sistemático**: Busca primero filas, columnas o cajas 3x3 que tengan ya 6 o 7 números colocados; en ellas es mucho más fácil deducir los números restantes.
 2. **No Adivines**: Cada fallo cuesta **-15 puntos** y reduce tu índice de autonomía. Si dudas entre dos casillas, busca otra zona del tablero antes de arriesgarte.
