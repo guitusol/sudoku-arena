@@ -232,8 +232,11 @@ Todas tus victorias quedan registradas en tu dispositivo sin necesidad de servid
   - Desglose por dificultad con la medalla más alta conseguida en cada nivel.
   - Distintivo parpadeante **«🔥 ¡Nuevo Récord Personal!»** en la pantalla de victoria al superar marcas anteriores.
 - **Revancha Inmediata**: Cualquier partida del historial puede volver a jugarse con su misma semilla pulsando **«🔄 Revancha»** para intentar batir el récord anterior.
-- **Desafíos por WhatsApp**: Reta a tus amigos a superar tu puntuación exacta en ese mismo tablero.
-- **Respaldo de Datos (JSON)**: Puedes exportar e importar tu historial para guardarlo o pasarlo a otro dispositivo.
+- **Respaldo de Datos y Sincronización Móvil ↔ PC (JSON)**:
+  - **Copia Integral Unificada**: Desde el menú **`[⚙️ Otras opciones] -> 💾 Copia de Seguridad`**, puedes empaquetar toda tu base de datos completa (Historial de Récords, Bóveda de Sudokus escaneados, Retos Semanales y Perfil del Salón de la Fama) en un único archivo JSON.
+  - **Fácil Traspaso Móvil ↔ Ordenador**: En smartphones, el botón **«📲 Compartir»** abre directamente WhatsApp (para enviártelo a tu propio chat), Telegram, correo o Google Drive, permitiéndote abrirlo e importarlo en tu PC en segundos sin cables.
+  - **Fusión Inteligente (Smart Merge)**: Al importar datos en cualquier dispositivo, el sistema suma las partidas y retos nuevos sin duplicar ni borrar nada de lo que ya tuvieras guardado.
+  - **Exportación Individual**: Si lo prefieres, también puedes exportar o importar de forma aislada tu Historial (desde *Tus Récords*) o tu colección de sudokus (desde la *Bóveda de Retos*).
 
 ---
 

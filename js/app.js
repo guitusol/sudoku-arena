@@ -25,6 +25,12 @@ class SudokuApp {
     this.ocr = (typeof window !== 'undefined' && window.SudokuOCR) ? new window.SudokuOCR() : null;
     this.vault = (typeof window !== 'undefined' && window.VaultStorage) ? new window.VaultStorage() : null;
     this.history = (typeof window !== 'undefined' && window.HistoryStorage) ? new window.HistoryStorage() : null;
+    this.backupEngine = (typeof window !== 'undefined' && window.BackupEngine) ? new window.BackupEngine({
+      historyStorage: this.history,
+      vaultStorage: this.vault,
+      hallOfFame: (typeof window !== 'undefined' ? window.hallOfFameEngine : null),
+      weeklyEngine: (typeof window !== 'undefined' ? window.weeklyEngine : null)
+    }) : null;
     this.scanBoard = Array.from({ length: 9 }, () => Array(9).fill(0));
     this.scanSelectedRow = 0;
     this.scanSelectedCol = 0;
@@ -1842,6 +1848,90 @@ ${url}`;
     this.showToast(toastMsg, 'info');
   }
 
+  /**
+   * Abre el modal de Copia de Seguridad y Traspaso Integral
+   */
+  openBackupModal() {
+    this.openModal('modal-backup');
+    this.updateBackupModalUI();
+  }
+
+  /**
+   * Actualiza el resumen en vivo de la base de datos en el modal de backup
+   */
+  updateBackupModalUI() {
+    if (!this.backupEngine) {
+      this.backupEngine = (typeof window !== 'undefined' && window.BackupEngine) ? new window.BackupEngine({
+        historyStorage: this.history,
+        vaultStorage: this.vault,
+        hallOfFame: window.hallOfFameEngine,
+        weeklyEngine: window.weeklyEngine
+      }) : null;
+    }
+    if (!this.backupEngine) return;
+
+    const summary = this.backupEngine.getStatsSummary();
+
+    const histEl = document.getElementById('backup-stat-history');
+    if (histEl) histEl.textContent = summary.historyCount;
+
+    const vaultEl = document.getElementById('backup-stat-vault');
+    if (vaultEl) vaultEl.textContent = summary.vaultCount;
+
+    const weeklyEl = document.getElementById('backup-stat-weekly');
+    if (weeklyEl) weeklyEl.textContent = summary.weeklyCount;
+
+    const profileEl = document.getElementById('backup-stat-profile');
+    if (profileEl) {
+      if (summary.hasMasterProfile) {
+        profileEl.textContent = summary.profileName;
+        profileEl.title = `${summary.profileName} (${summary.profileCountry}, ${summary.profileCity})`;
+      } else {
+        profileEl.textContent = '—';
+        profileEl.title = '';
+      }
+    }
+
+    const shareBtn = document.getElementById('btn-backup-share');
+    if (shareBtn) {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        shareBtn.style.display = 'inline-flex';
+      } else {
+        shareBtn.style.display = 'none';
+      }
+    }
+  }
+
+  /**
+   * Ejecuta la exportación completa (descarga directa o menú de compartir nativo en móvil)
+   */
+  async handleBackupExport(useShare = false) {
+    if (!this.backupEngine) {
+      this.updateBackupModalUI();
+    }
+    if (!this.backupEngine) return;
+
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const filename = `sudoku-arena-backup-${dateStr}.json`;
+    const jsonStr = this.backupEngine.exportUnifiedJson();
+
+    if (useShare && typeof navigator !== 'undefined' && navigator.share) {
+      const res = await this.backupEngine.shareOrDownload(jsonStr, filename);
+      if (res.success && res.method === 'share') {
+        const msg = window.i18n ? window.i18n.t('toast_backup_exported') : 'Copia de seguridad lista para compartir';
+        this.showToast(msg, 'success');
+        return;
+      }
+      if (res.cancelled) {
+        return;
+      }
+    }
+
+    this.backupEngine.downloadFile(jsonStr, filename);
+    const msg = window.i18n ? window.i18n.t('toast_backup_exported') : 'Copia de seguridad descargada';
+    this.showToast(msg, 'success');
+  }
+
   openHistoryModal() {
 
     this.openModal('modal-history');
@@ -2121,6 +2211,11 @@ ${url}`;
     document.getElementById('more-opt-hall-of-fame')?.addEventListener('click', () => {
       this.closeModal('modal-more-options');
       this.openHallOfFameModal();
+    });
+
+    document.getElementById('more-opt-backup')?.addEventListener('click', () => {
+      this.closeModal('modal-more-options');
+      this.openBackupModal();
     });
 
     document.getElementById('btn-open-weekly-modal')?.addEventListener('click', () => {
@@ -2565,6 +2660,104 @@ ${url}`;
         this.renderHistoryItems();
         this.showToast(window.i18n ? window.i18n.t('toast_history_cleared') : 'Historial borrado', 'info');
       }
+    });
+
+    // -------------------------------------------------------------
+    // EXPORTACIÓN E IMPORTACIÓN INTEGRAL DE BASE DE DATOS (MÓVIL ↔ PC)
+    // -------------------------------------------------------------
+    document.getElementById('btn-backup-export')?.addEventListener('click', () => {
+      this.handleBackupExport(false);
+    });
+
+    document.getElementById('btn-backup-share')?.addEventListener('click', () => {
+      this.handleBackupExport(true);
+    });
+
+    const backupFileInput = document.getElementById('backup-file-input');
+    document.getElementById('btn-backup-import')?.addEventListener('click', () => {
+      backupFileInput?.click();
+    });
+
+    backupFileInput?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (!this.backupEngine) {
+        this.updateBackupModalUI();
+      }
+      if (!this.backupEngine) return;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const res = this.backupEngine.importUnifiedJson(evt.target.result);
+          if (res.success) {
+            this.updateHistoryBadge();
+            this.updateVaultBadge();
+            this.updateBackupModalUI();
+            if (this.renderHistoryItems) {
+              try { this.renderHistoryItems(); } catch (err) {}
+            }
+            if (this.renderVaultItems) {
+              try { this.renderVaultItems(); } catch (err) {}
+            }
+            const msg = window.i18n 
+              ? window.i18n.t('toast_backup_imported', { history: res.historyAdded, vault: res.vaultAdded })
+              : `¡Base de datos importada con éxito! (+${res.historyAdded} partidas, +${res.vaultAdded} retos)`;
+            this.showToast(msg, 'success');
+          } else {
+            const errMsg = res.error || (window.i18n ? window.i18n.t('toast_backup_error') : 'Error al importar archivo');
+            this.showToast(errMsg, 'error');
+          }
+        } catch (err) {
+          console.error('Error importando copia de seguridad:', err);
+          this.showToast(window.i18n ? window.i18n.t('toast_backup_error') : 'Error al procesar archivo', 'error');
+        }
+        backupFileInput.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    // -------------------------------------------------------------
+    // EXPORTACIÓN E IMPORTACIÓN INDIVIDUAL DE BÓVEDA DE RETOS
+    // -------------------------------------------------------------
+    document.getElementById('btn-vault-export')?.addEventListener('click', () => {
+      if (!this.vault) return;
+      const json = this.vault.exportJson();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sudoku-arena-vault-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      const msg = window.i18n ? window.i18n.t('toast_vault_exported') : 'Copia de la Bóveda descargada';
+      this.showToast(msg, 'success');
+    });
+
+    const vaultFileInput = document.getElementById('vault-file-input');
+    document.getElementById('btn-vault-import')?.addEventListener('click', () => {
+      vaultFileInput?.click();
+    });
+
+    vaultFileInput?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file || !this.vault) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const count = this.vault.importJson(evt.target.result);
+        if (count > 0) {
+          this.updateVaultBadge();
+          this.renderVaultItems();
+          const msg = window.i18n ? window.i18n.t('toast_vault_imported', { count }) : `¡Importados ${count} sudokus a la Bóveda!`;
+          this.showToast(msg, 'success');
+        } else {
+          this.showToast(window.i18n ? window.i18n.t('toast_import_error') : 'No se importaron nuevos sudokus o archivo inválido', 'info');
+        }
+        vaultFileInput.value = '';
+      };
+      reader.readAsText(file);
     });
 
     // Pestañas del modal de escaneo

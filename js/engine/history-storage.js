@@ -185,7 +185,14 @@ class HistoryStorage {
   importJson(jsonString) {
     try {
       const data = JSON.parse(jsonString);
-      const items = Array.isArray(data) ? data : (data.history && Array.isArray(data.history) ? data.history : null);
+      let items = null;
+      if (Array.isArray(data)) {
+        items = data;
+      } else if (data && data.history && Array.isArray(data.history)) {
+        items = data.history;
+      } else if (data && data.data && data.data.history && Array.isArray(data.data.history)) {
+        items = data.data.history;
+      }
       if (!items) throw new Error('Formato inválido');
 
       const current = this.getAll();

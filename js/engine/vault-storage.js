@@ -125,11 +125,26 @@ class VaultStorage {
 
   importJson(jsonString) {
     try {
-      const items = JSON.parse(jsonString);
-      if (!Array.isArray(items)) throw new Error('Formato inválido');
+      const data = JSON.parse(jsonString);
+      let items = null;
+      if (Array.isArray(data)) {
+        items = data;
+      } else if (data && data.vault && Array.isArray(data.vault)) {
+        items = data.vault;
+      } else if (data && data.data && data.data.vault && Array.isArray(data.data.vault)) {
+        items = data.data.vault;
+      }
+      if (!items) throw new Error('Formato inválido');
       const current = this.getAll();
       const currentIds = new Set(current.map(i => i.id));
-      const newItems = items.filter(i => i && i.board && !currentIds.has(i.id));
+      const currentBoards = new Set(current.map(i => i.boardString || this.boardToString(i.board)).filter(Boolean));
+      const newItems = items.filter(i => {
+        if (!i || !i.board) return false;
+        if (i.id && currentIds.has(i.id)) return false;
+        const bStr = i.boardString || this.boardToString(i.board);
+        if (bStr && currentBoards.has(bStr)) return false;
+        return true;
+      });
       const merged = [...newItems, ...current];
       this.saveAll(merged);
       return newItems.length;
