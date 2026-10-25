@@ -1311,8 +1311,8 @@ body {
   .mobile-tactical-toolbar {
     max-width: min(calc(100vw - 18px), 440px);
     gap: 4px;
-    margin-top: 0.65rem;
-    margin-bottom: calc(5.5rem + env(safe-area-inset-bottom, 32px)); /* Eleva las bandas por encima de los botones de Android */
+    margin-top: 0.35rem;
+    margin-bottom: 4px; /* Pegado inmediatamente a la fila de salir */
   }
 
   .tactical-action-btn {
@@ -2734,15 +2734,15 @@ body {
 }
 
 
-/* --- BANDA INFERIOR 3: TOP-SUDOKU Y SALIR --- */
+
+/* --- BANDA INFERIOR 3: TOP-SUDOKU Y SALIR (ALINEADO A LA REJILLA DE 5 COLUMNAS) --- */
 .bottom-play-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
   width: 100%;
-  max-width: 440px;
-  margin: 0.5rem auto 0.25rem;
+  max-width: min(calc(100vw - 18px), 440px);
+  margin: 4px auto 0.5rem auto;
   box-sizing: border-box;
 }
 
@@ -2750,24 +2750,27 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.75rem;
+  gap: 0.35rem;
   border-radius: 8px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 38px;
+  min-height: 42px;
   box-sizing: border-box;
-  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .bottom-action-btn.top-sudoku-btn {
-  flex: 1.5 1 0;
+  grid-column: 1 / 5; /* Ocupa las columnas 1, 2, 3 y 4 */
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.28));
   border: 1px solid #f59e0b;
   color: #fde68a;
+  padding: 0.4rem 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .bottom-action-btn.top-sudoku-btn:hover {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(217, 119, 6, 0.4));
@@ -2775,13 +2778,19 @@ body {
 }
 
 .bottom-action-btn.exit-btn {
-  flex: 0.85 1 0;
-  background: rgba(239, 68, 68, 0.14);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  grid-column: 5 / 6; /* Ocupa exactamente la columna 5, INMEDIATAMENTE DEBAJO DE RETAR */
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.45);
   color: #f87171;
+  padding: 0.4rem 0.2rem;
+  font-size: 0.76rem;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 .bottom-action-btn.exit-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
   color: #ffffff;
 }
 
@@ -3468,5 +3477,14 @@ body {
     font-size: 0.74rem !important;
     font-weight: 700 !important;
     padding: 0.3rem 0.5rem !important;
+  }
+}
+
+
+@media (max-width: 860px) {
+  .app-footer {
+    padding: 0.4rem 0.5rem !important;
+    margin-top: 0.35rem !important;
+    font-size: 0.72rem !important;
   }
 }
