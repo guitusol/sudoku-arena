@@ -544,6 +544,9 @@
         <button id="btn-verdict-view-history" class="modal-btn secondary" style="width: 100%; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
           <span>🏆</span> <span data-i18n="verdict_view_history">Ver en Mis Récords</span>
         </button>
+        <button id="btn-verdict-hof-unlock" class="modal-btn hidden" style="width: 100%; margin-bottom: 0.5rem; display: none; align-items: center; justify-content: center; gap: 0.4rem; background: linear-gradient(135deg, #d97706, #b45309); color: #fff; font-weight: 700; border: 1px solid #fbbf24; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);">
+          <span>👑</span> <span data-i18n="verdict_hof_unlock_btn">¡Inscribirme en el Salón de la Fama!</span>
+        </button>
       </div>
       <div class="modal-footer" style="justify-content: center;">
         <button class="modal-btn secondary btn-close-modal" data-i18n="verdict_close">Cerrar y Ver Tablero</button>
@@ -1351,11 +1354,16 @@
               <div>
                 <strong data-i18n="hof_status_title" style="color: #fbbf24;">Tu Progresión hacia el Cuadro de Honor</strong>
                 <div id="hof-status-progress-text" class="hof-status-desc" data-i18n="hof_status_desc">
-                  Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas) en Difícil o Endemoniado.
+                  Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas).
                 </div>
               </div>
             </div>
-            <span id="hof-master-count-badge" class="hof-badge-counter font-mono">0 / 3</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button type="button" id="btn-hof-reopen-register" class="modal-btn primary hidden" style="font-size: 0.75rem; padding: 0.3rem 0.65rem; white-space: nowrap; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 700;">
+                <span data-i18n="hof_reopen_register_btn">✍️ Inscribirme</span>
+              </button>
+              <span id="hof-master-count-badge" class="hof-badge-counter font-mono">0 / 3</span>
+            </div>
           </div>
           <div class="hof-progress-bar-bg">
             <div id="hof-progress-bar-fill" class="hof-progress-bar-fill" style="width: 0%;"></div>
@@ -1447,6 +1455,8 @@
         <!-- Filtro secundario de Dificultad -->
         <div class="vault-filters-pills" id="hof-diff-pills" style="margin-bottom: 0.75rem;">
           <button class="vault-pill active" data-diff="all" data-i18n="hof_diff_all">Todos los Niveles</button>
+          <button class="vault-pill" data-diff="facil" data-i18n="diff_facil">🟢 Fácil</button>
+          <button class="vault-pill" data-diff="medio" data-i18n="diff_medio">🟡 Medio</button>
           <button class="vault-pill" data-diff="dificil" data-i18n="diff_dificil">🔴 Difícil</button>
           <button class="vault-pill" data-diff="endemoniado" data-i18n="diff_endemoniado">🟣 Endemoniado</button>
         </div>

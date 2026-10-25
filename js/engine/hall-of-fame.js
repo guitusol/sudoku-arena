@@ -182,17 +182,33 @@ class HallOfFameEngine {
   }
 
   /**
-   * Obtiene la lista de victorias certificadas como Gran Maestro Puro del jugador local
-   * (Nivel Medio, Difícil o Endemoniado con autonomía >= 90%, 0 ayudas y sin advertencias)
+   * Obtiene la lista de victorias certificadas como Gran Maestro del jugador local
+   * (Cualquier sudoku resuelto legítimamente como Maestro con autonomía >= 90%, 0 ayudas y sin trampas)
    */
   getCertifiedVictories(historyList = []) {
     if (!Array.isArray(historyList)) return [];
-    return historyList.filter(r => 
-      ['dificil', 'endemoniado'].includes(r.difficulty) &&
-      (Number(r.autonomyIndex) >= 90) &&
-      (Number(r.peeksCount) === 0) &&
-      !r.fairPlayFlag
-    );
+    return historyList.filter(r => {
+      if (!r) return false;
+      if (r.fairPlayFlag) return false;
+
+      // Calcular ayudas totales de forma segura
+      const peeks = (r.peeksCount !== undefined && r.peeksCount !== null && !isNaN(Number(r.peeksCount)))
+        ? Number(r.peeksCount)
+        : ((Number(r.peeksCellCount) || 0) + (Number(r.peeksAllCount) || 0));
+
+      if (peeks > 0) return false;
+
+      const autonomy = Number(r.autonomyIndex) || 0;
+      const rankKey = r.rankKey || '';
+      const rankStr = typeof r.rank === 'string' ? r.rank.toLowerCase() : '';
+
+      const isGM = (rankKey === 'rank_grandmaster') ||
+                   rankStr.includes('maestro') ||
+                   rankStr.includes('master') ||
+                   (autonomy >= 90);
+
+      return isGM;
+    });
   }
 
   /**
@@ -247,7 +263,7 @@ class HallOfFameEngine {
           age: Number(profile.age) || 35,
           ageGroup: this.getAgeGroup(Number(profile.age) || 35),
           difficulty: best.difficulty,
-          diffLabel: best.difficulty === 'medio' ? 'Medio' : (best.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado'),
+          diffLabel: best.difficulty === 'facil' ? 'Fácil' : (best.difficulty === 'medio' ? 'Medio' : (best.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado')),
           score: best.score,
           timeSeconds: best.timeSeconds,
           autonomyIndex: best.autonomyIndex,

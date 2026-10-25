@@ -359,6 +359,7 @@ class ScoringEngine {
       rankBadge,
       rankColor,
       errorsCount: this.errorsCount,
+      peeksCount: this.peeksCellCount + this.peeksAllCount,
       peeksCellCount: this.peeksCellCount,
       peeksAllCount: this.peeksAllCount,
       ledger: this.ledger,

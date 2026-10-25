@@ -910,7 +910,9 @@ class SudokuApp {
           rankKey: summary.rankKey,
           rankColor: summary.rankColor,
           timeSeconds: this.timerSeconds,
-          peeksCount: summary.peeksCount,
+          peeksCount: (summary.peeksCount !== undefined ? summary.peeksCount : ((summary.peeksCellCount || 0) + (summary.peeksAllCount || 0))),
+          peeksCellCount: summary.peeksCellCount || 0,
+          peeksAllCount: summary.peeksAllCount || 0,
           errorsCount: summary.errorsCount,
           fairPlayFlag: summary.fairPlayFlag,
           customName: this.gameData?.customName || null
@@ -1052,6 +1054,22 @@ class SudokuApp {
             prompt(window.i18n ? window.i18n.t('prompt_copy_result') : 'Copia tu resultado para retar a tus amigos:', text);
           }
         };
+      }
+    }
+
+    // Distintivo o invitación de desbloqueo del Salón de la Fama si cumple requisitos (3+ victorias GM y sin registrar)
+    const hofUnlockBtn = document.getElementById('btn-verdict-hof-unlock');
+    if (hofUnlockBtn) {
+      const historyList = this.history ? this.history.getAll() : [];
+      const certified = window.hallOfFameEngine ? window.hallOfFameEngine.getCertifiedVictories(historyList) : [];
+      const profile = window.hallOfFameEngine ? window.hallOfFameEngine.getPlayerProfile() : null;
+
+      if (!isSystemSolved && !isCompromised && certified.length >= 3 && (!profile || !profile.name)) {
+        hofUnlockBtn.classList.remove('hidden');
+        hofUnlockBtn.style.display = 'flex';
+      } else {
+        hofUnlockBtn.classList.add('hidden');
+        hofUnlockBtn.style.display = 'none';
       }
     }
 
@@ -1659,6 +1677,30 @@ ${url}`;
   openHallOfFameModal() {
     this.openModal('modal-hall-of-fame');
     this.renderHallOfFame();
+
+    // Si el jugador cumple los requisitos (>= 3 victorias de Maestro) y aún no está registrado,
+    // proponer activamente la inscripción destacando la tarjeta y mostrando aviso
+    const historyList = this.history ? this.history.getAll() : [];
+    const certified = window.hallOfFameEngine ? window.hallOfFameEngine.getCertifiedVictories(historyList) : [];
+    const profile = window.hallOfFameEngine ? window.hallOfFameEngine.getPlayerProfile() : null;
+
+    if (certified.length >= 3 && (!profile || !profile.name)) {
+      setTimeout(() => {
+        const regCard = document.getElementById('hof-registration-card');
+        if (regCard) {
+          regCard.classList.remove('hidden');
+          regCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          const nameInput = document.getElementById('hof-input-name');
+          if (nameInput) {
+            nameInput.focus();
+          }
+        }
+        this.showToast(
+          window.i18n ? window.i18n.t('hof_reg_welcome_toast') : '🎖️ ¡Cumples los requisitos para inscribirte en el Salón de la Fama! Completa tu ficha a continuación.',
+          'info'
+        );
+      }, 250);
+    }
   }
 
   renderHallOfFame() {
@@ -1693,7 +1735,7 @@ ${url}`;
         const remaining = 3 - count;
         progressText.textContent = window.i18n ? 
           (window.i18n.t('hof_status_desc') + ' (Te faltan ' + remaining + ' partida' + (remaining > 1 ? 's' : '') + ').') : 
-          ('Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas) en Difícil o Endemoniado. (Te faltan ' + remaining + ' partida' + (remaining > 1 ? 's' : '') + ').');
+          ('Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas). (Te faltan ' + remaining + ' partida' + (remaining > 1 ? 's' : '') + ').');
         progressText.style.color = 'var(--text-muted)';
       }
     }
@@ -1702,6 +1744,7 @@ ${url}`;
     const profile = window.hallOfFameEngine.getPlayerProfile();
     const regCard = document.getElementById('hof-registration-card');
     const enrolledCard = document.getElementById('hof-enrolled-card');
+    const reopenBtn = document.getElementById('btn-hof-reopen-register');
 
     if (count >= 3) {
       if (!profile || !profile.name) {
@@ -1715,10 +1758,12 @@ ${url}`;
               ('Cumples con mérito propio los requisitos oficiales (' + count + ' victorias de Gran Maestro Puro). ¿Deseas inscribirte en el Salón de la Fama?');
           }
         }
+        if (reopenBtn) reopenBtn.classList.add('hidden');
         if (enrolledCard) enrolledCard.classList.add('hidden');
       } else {
         // Ya está inscrito
         if (regCard) regCard.classList.add('hidden');
+        if (reopenBtn) reopenBtn.classList.add('hidden');
         if (enrolledCard) {
           enrolledCard.classList.remove('hidden');
           const detailsEl = document.getElementById('hof-enrolled-details');
@@ -1732,6 +1777,7 @@ ${url}`;
       }
     } else {
       if (regCard) regCard.classList.add('hidden');
+      if (reopenBtn) reopenBtn.classList.add('hidden');
       if (enrolledCard) enrolledCard.classList.add('hidden');
     }
 
@@ -2574,6 +2620,23 @@ ${url}`;
 
     document.getElementById('btn-hof-dismiss-profile')?.addEventListener('click', () => {
       document.getElementById('hof-registration-card')?.classList.add('hidden');
+      const reopenBtn = document.getElementById('btn-hof-reopen-register');
+      if (reopenBtn) reopenBtn.classList.remove('hidden');
+    });
+
+    document.getElementById('btn-hof-reopen-register')?.addEventListener('click', () => {
+      const regCard = document.getElementById('hof-registration-card');
+      if (regCard) {
+        regCard.classList.remove('hidden');
+        regCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        document.getElementById('hof-input-name')?.focus();
+      }
+      document.getElementById('btn-hof-reopen-register')?.classList.add('hidden');
+    });
+
+    document.getElementById('btn-verdict-hof-unlock')?.addEventListener('click', () => {
+      this.closeModal('modal-gameover');
+      this.openHallOfFameModal();
     });
 
     document.getElementById('btn-hof-edit-profile')?.addEventListener('click', () => {
@@ -2597,7 +2660,7 @@ ${url}`;
     document.getElementById('btn-open-history-modal')?.addEventListener('click', () => this.openHistoryModal());
     document.getElementById('btn-sidebar-history')?.addEventListener('click', () => this.openHistoryModal());
     document.getElementById('btn-verdict-view-history')?.addEventListener('click', () => {
-      this.closeModal('modal-verdict');
+      this.closeModal('modal-gameover');
       this.openHistoryModal();
     });
 
