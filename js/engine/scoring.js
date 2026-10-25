@@ -330,7 +330,7 @@ class ScoringEngine {
       rankKey = 'rank_system_solved';
       rankBadge = 'badge-starter';
       rankColor = '#64748b';
-    } else if (autonomyIndex >= 100 && this.errorsCount === 0 && this.peeksCellCount === 0 && this.peeksAllCount === 0) {
+    } else if (autonomyIndex >= 90 && this.peeksCellCount === 0 && this.peeksAllCount === 0) {
       rankKey = 'rank_grandmaster';
       rankBadge = 'badge-master';
       rankColor = '#10b981';

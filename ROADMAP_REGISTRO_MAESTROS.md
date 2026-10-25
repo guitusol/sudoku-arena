@@ -14,7 +14,7 @@ En lugar de forzar al jugador a crearse una cuenta con correo electrónico, cont
    * Cero contraseñas que recordar o recuperar.
 
 2. **Garantía Anti-Trampas (Proof of Victory):**
-   * El registro solo se activa al lograr la victoria con **Rango Gran Maestro Puro (100% Autonomía Mental)** en dificultades competitivas (*Medio*, *Difícil*, *Endemoniado*).
+   * El registro solo se activa al lograr la victoria con **Rango Gran Maestro Puro (≥ 90% Autonomía Mental (sin ayudas))** en dificultades competitivas (*Medio*, *Difícil*, *Endemoniado*).
    * La app empaqueta:
      * Semilla exacta del tablero (`seed`).
      * Tiempo empleado y puntuación neta.

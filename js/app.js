@@ -1060,7 +1060,7 @@ class SudokuApp {
   
   getRankBadge(autonomy) {
     if (!window.i18n) return 'Gran Maestro Puro';
-    if (autonomy >= 100) return window.i18n.t('rank_grandmaster');
+    if (autonomy >= 90) return window.i18n.t('rank_grandmaster');
     if (autonomy >= 80) return window.i18n.t('rank_surgical_logician');
     if (autonomy >= 50) return window.i18n.t('rank_pragmatic_solver');
     return window.i18n.t('rank_training_wheels');
@@ -1721,7 +1721,7 @@ ${url}`;
 
       // Icono según rango de honor oficial (100 / 80 / 50)
       let medalIcon = '🚸';
-      if (item.rankKey === 'rank_grandmaster' || item.autonomyIndex >= 100) medalIcon = '🥇';
+      if (item.rankKey === 'rank_grandmaster' || item.autonomyIndex >= 90) medalIcon = '🥇';
       else if (item.rankKey === 'rank_surgical_logician' || item.autonomyIndex >= 80) medalIcon = '🥈';
       else if (item.rankKey === 'rank_pragmatic_solver' || item.autonomyIndex >= 50) medalIcon = '🥉';
 
