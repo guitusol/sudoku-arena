@@ -409,7 +409,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Todos los Niveles",
     "hof_btn_challenge": "⚔️ Desafiar",
     "hof_zero_login_notice": "Registro Zero-Login • Certificado con Hash Anti-Trampas",
-    "toast_master_challenge_loaded": "⚔️ ¡Desafío a Maestro cargado! Tablero de {name} ({city}, {country}). Récord a batir: {score} pts en {time}."
+    "toast_master_challenge_loaded": "⚔️ ¡Desafío a Maestro cargado! Tablero de {name} ({city}, {country}). Récord a batir: {score} pts en {time}.",
+    "hof_group_junior": "🐣 Júnior (< 18 años)",
+    "hof_group_adult": "⚡ Adultos (18 – 49 años)",
+    "hof_group_senior": "🧠 Senior / Veteranos (50 – 64 años)",
+    "hof_group_legend": "👑 Leyendas / Master (65+ años)"
   },
   "en": {
     "practice_tag": "Practice Mode",
@@ -696,7 +700,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "All Levels",
     "hof_btn_challenge": "⚔️ Challenge",
     "hof_zero_login_notice": "Zero-Login Registry • Certified with Anti-Cheat Hash",
-    "toast_master_challenge_loaded": "⚔️ Master Challenge loaded! {name}'s board ({city}, {country}). Record to beat: {score} pts in {time}."
+    "toast_master_challenge_loaded": "⚔️ Master Challenge loaded! {name}'s board ({city}, {country}). Record to beat: {score} pts in {time}.",
+    "hof_group_junior": "🐣 Junior (< 18 yrs)",
+    "hof_group_adult": "⚡ Adults (18 – 49 yrs)",
+    "hof_group_senior": "🧠 Senior / Veterans (50 – 64 yrs)",
+    "hof_group_legend": "👑 Legends / Masters (65+ yrs)"
   },
   "fr": {
     "practice_tag": "Mode Entraînement",
@@ -983,7 +991,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Tous les Niveaux",
     "hof_btn_challenge": "⚔️ Défier",
     "hof_zero_login_notice": "Registre Zero-Login • Certifié avec Hash Anti-Triche",
-    "toast_master_challenge_loaded": "⚔️ Défi de Maître chargé ! Plateau de {name} ({city}, {country}). Record à battre : {score} pts en {time}."
+    "toast_master_challenge_loaded": "⚔️ Défi de Maître chargé ! Plateau de {name} ({city}, {country}). Record à battre : {score} pts en {time}.",
+    "hof_group_junior": "🐣 Junior (< 18 ans)",
+    "hof_group_adult": "⚡ Adultes (18 – 49 ans)",
+    "hof_group_senior": "🧠 Senior / Vétérans (50 – 64 ans)",
+    "hof_group_legend": "👑 Légendes / Masters (65+ ans)"
   },
   "de": {
     "practice_tag": "Übungsmodus",
@@ -1270,7 +1282,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Alle Stufen",
     "hof_btn_challenge": "⚔️ Herausfordern",
     "hof_zero_login_notice": "Zero-Login-Register • Zertifiziert mit Anti-Cheat-Hash",
-    "toast_master_challenge_loaded": "⚔️ Meister-Herausforderung geladen! Brett von {name} ({city}, {country}). Zu schlagender Rekord: {score} Pkt. in {time}."
+    "toast_master_challenge_loaded": "⚔️ Meister-Herausforderung geladen! Brett von {name} ({city}, {country}). Zu schlagender Rekord: {score} Pkt. in {time}.",
+    "hof_group_junior": "🐣 Junior (< 18 J.)",
+    "hof_group_adult": "⚡ Erwachsene (18 – 49 J.)",
+    "hof_group_senior": "🧠 Senioren / Veteranen (50 – 64 J.)",
+    "hof_group_legend": "👑 Legenden / Masters (65+ J.)"
   },
   "ca": {
     "practice_tag": "Mode Pràctica",
@@ -1557,7 +1573,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Tots els Nivells",
     "hof_btn_challenge": "⚔️ Reptar",
     "hof_zero_login_notice": "Registre Zero-Login • Certificat amb Hash Anti-Trampes",
-    "toast_master_challenge_loaded": "⚔️ Desafiament a Mestre carregat! Tauler de {name} ({city}, {country}). Rècord a batre: {score} pts en {time}."
+    "toast_master_challenge_loaded": "⚔️ Desafiament a Mestre carregat! Tauler de {name} ({city}, {country}). Rècord a batre: {score} pts en {time}.",
+    "hof_group_junior": "🐣 Júnior (< 18 anys)",
+    "hof_group_adult": "⚡ Adults (18 – 49 anys)",
+    "hof_group_senior": "🧠 Sènior / Veterans (50 – 64 anys)",
+    "hof_group_legend": "👑 Llegendes / Màster (65+ anys)"
   },
   "va": {
     "practice_tag": "Mode Pràctica",
@@ -1844,7 +1864,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Tots els Nivells",
     "hof_btn_challenge": "⚔️ Reptar",
     "hof_zero_login_notice": "Registre Zero-Login • Certificat amb Hash Anti-Trampes",
-    "toast_master_challenge_loaded": "⚔️ Desafiament a Mestre carregat! Tauler de {name} ({city}, {country}). Rècord a batre: {score} pts en {time}."
+    "toast_master_challenge_loaded": "⚔️ Desafiament a Mestre carregat! Tauler de {name} ({city}, {country}). Rècord a batre: {score} pts en {time}.",
+    "hof_group_junior": "🐣 Júnior (< 18 anys)",
+    "hof_group_adult": "⚡ Adults (18 – 49 anys)",
+    "hof_group_senior": "🧠 Sènior / Veterans (50 – 64 anys)",
+    "hof_group_legend": "👑 Llegendes / Màster (65+ anys)"
   },
   "eu": {
     "practice_tag": "Praktika Modua",
@@ -2131,7 +2155,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Maila Guztiak",
     "hof_btn_challenge": "⚔️ Desafiatu",
     "hof_zero_login_notice": "Zero-Login Erregistroa • Iruzurren Aurkako Hash-arekin Ziurtatua",
-    "toast_master_challenge_loaded": "⚔️ Maisuaren Erronka kargatuta! {name}(r)en taula ({city}, {country}). Gainditzeko errekorra: {score} pt {time}(e)an."
+    "toast_master_challenge_loaded": "⚔️ Maisuaren Erronka kargatuta! {name}(r)en taula ({city}, {country}). Gainditzeko errekorra: {score} pt {time}(e)an.",
+    "hof_group_junior": "🐣 Juniorrak (< 18 urte)",
+    "hof_group_adult": "⚡ Helduak (18 – 49 urte)",
+    "hof_group_senior": "🧠 Seniorrak / Beteranoak (50 – 64 urte)",
+    "hof_group_legend": "👑 Kondairak / Masterrak (65+ urte)"
   },
   "gl": {
     "practice_tag": "Modo Práctica",
@@ -2418,7 +2446,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "Todos os Niveis",
     "hof_btn_challenge": "⚔️ Desafiar",
     "hof_zero_login_notice": "Rexistro Zero-Login • Certificado con Hash Anti-Trampas",
-    "toast_master_challenge_loaded": "⚔️ Desafío a Mestre cargado! Taboleiro de {name} ({city}, {country}). Récord a bater: {score} pts en {time}."
+    "toast_master_challenge_loaded": "⚔️ Desafío a Mestre cargado! Taboleiro de {name} ({city}, {country}). Récord a bater: {score} pts en {time}.",
+    "hof_group_junior": "🐣 Júnior (< 18 anos)",
+    "hof_group_adult": "⚡ Adultos (18 – 49 anos)",
+    "hof_group_senior": "🧠 Sénior / Veteráns (50 – 64 anos)",
+    "hof_group_legend": "👑 Lendas / Máster (65+ anos)"
   },
   "ja": {
     "practice_tag": "練習モード",
@@ -2705,7 +2737,11 @@ const I18N_TRANSLATIONS = {
     "hof_diff_all": "全難易度",
     "hof_btn_challenge": "⚔️ 挑戦する",
     "hof_zero_login_notice": "ログイン不要（Zero-Login）• 不正防止ハッシュ認定済み",
-    "toast_master_challenge_loaded": "⚔️ 達人への挑戦を読み込みました！{name} の盤面（{city}、{country}）。目標記録: {time} で {score} 点。"
+    "toast_master_challenge_loaded": "⚔️ 達人への挑戦を読み込みました！{name} の盤面（{city}、{country}）。目標記録: {time} で {score} 点。",
+    "hof_group_junior": "🐣 ジュニア部門（18歳未満）",
+    "hof_group_adult": "⚡ 一般・オープン部門（18〜49歳）",
+    "hof_group_senior": "🧠 シニア・ベテラン部門（50〜64歳）",
+    "hof_group_legend": "👑 レジェンド・マスターズ部門（65歳以上）"
   }
 };
 

@@ -279,6 +279,89 @@ class HallOfFameEngine {
   /**
    * Obtiene la lista filtrada de maestros según la pestaña activa y dificultad seleccionada
    */
+
+  /**
+   * Obtiene los maestros agrupados por categorías (Generaciones, Países, Ciudades o General)
+   */
+  getGroupedMasters({ tab = 'all', diff = 'all', historyList = [] } = {}) {
+    let list = this.getAllMasters(historyList);
+
+    if (diff && diff !== 'all') {
+      list = list.filter(m => m.difficulty === diff);
+    }
+
+    if (tab === 'generations') {
+      const groups = [
+        { key: 'junior', titleKey: 'hof_group_junior', title: '🐣 Júnior (< 18 años)', masters: [] },
+        { key: 'adult', titleKey: 'hof_group_adult', title: '⚡ Adultos (18 – 49 años)', masters: [] },
+        { key: 'senior', titleKey: 'hof_group_senior', title: '🧠 Senior / Veteranos (50 – 64 años)', masters: [] },
+        { key: 'legend', titleKey: 'hof_group_legend', title: '👑 Leyendas / Master (65+ años)', masters: [] }
+      ];
+
+      list.forEach(m => {
+        const g = groups.find(grp => grp.key === m.ageGroup);
+        if (g) g.masters.push(m);
+      });
+
+      // Ordenar maestros dentro de cada grupo por puntuación y tiempo
+      groups.forEach(g => {
+        g.masters.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      });
+
+      return groups.filter(g => g.masters.length > 0);
+    }
+
+    if (tab === 'nations') {
+      const countryMap = new Map();
+      list.forEach(m => {
+        const cKey = m.country || 'ES';
+        if (!countryMap.has(cKey)) {
+          countryMap.set(cKey, {
+            key: cKey,
+            title: (m.flag || '🌍') + ' ' + (m.countryName || m.country),
+            masters: []
+          });
+        }
+        countryMap.get(cKey).masters.push(m);
+      });
+
+      const groups = Array.from(countryMap.values());
+      groups.forEach(g => {
+        g.masters.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      });
+      groups.sort((a, b) => a.title.localeCompare(b.title));
+      return groups;
+    }
+
+    if (tab === 'cities') {
+      const cityMap = new Map();
+      list.forEach(m => {
+        const cKey = m.city || 'Desconocida';
+        if (!cityMap.has(cKey)) {
+          cityMap.set(cKey, {
+            key: cKey,
+            title: '🏙️ ' + m.city + ' (' + (m.countryName || m.country) + ' ' + (m.flag || '') + ')',
+            masters: []
+          });
+        }
+        cityMap.get(cKey).masters.push(m);
+      });
+
+      const groups = Array.from(cityMap.values());
+      groups.forEach(g => {
+        g.masters.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      });
+      groups.sort((a, b) => a.title.localeCompare(b.title));
+      return groups;
+    }
+
+    // Para 'all' (Todos los Maestros)
+    list.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+    return [
+      { key: 'all', title: null, masters: list }
+    ];
+  }
+
   getFilteredMasters({ tab = 'all', diff = 'all', historyList = [] } = {}) {
     let list = this.getAllMasters(historyList);
 

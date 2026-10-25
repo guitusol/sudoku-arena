@@ -1682,8 +1682,8 @@ ${url}`;
       }
     }
 
-    // Filtrar y ordenar maestros
-    const masters = window.hallOfFameEngine.getFilteredMasters({
+    // Obtener maestros agrupados por categoría (Generaciones, Países, Ciudades o General)
+    const groups = window.hallOfFameEngine.getGroupedMasters({
       tab: this.hofActiveTab || 'all',
       diff: this.hofActiveDiff || 'all',
       historyList
@@ -1692,64 +1692,81 @@ ${url}`;
     const container = document.getElementById('hof-masters-list');
     if (!container) return;
 
-    if (masters.length === 0) {
+    const totalMasters = groups.reduce((acc, g) => acc + g.masters.length, 0);
+
+    if (totalMasters === 0) {
       container.innerHTML = '<div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div><div>No hay marcas de maestros registradas para este filtro.</div></div>';
       return;
     }
 
-    container.innerHTML = masters.map((m, idx) => {
-      let rankBadge = '#' + (idx + 1);
-      let podiumClass = '';
-      if (idx === 0) { rankBadge = '🥇'; podiumClass = 'podium-1'; }
-      else if (idx === 1) { rankBadge = '🥈'; podiumClass = 'podium-2'; }
-      else if (idx === 2) { rankBadge = '🥉'; podiumClass = 'podium-3'; }
+    let html = '';
+    groups.forEach(group => {
+      if (group.title) {
+        const titleText = (group.titleKey && window.i18n) ? window.i18n.t(group.titleKey) : group.title;
+        const countText = group.masters.length === 1 ? '1 Maestro' : (group.masters.length + ' Maestros');
+        html += '<div class="hof-group-header">' +
+          '<span class="hof-group-title">' + titleText + '</span>' +
+          '<span class="hof-group-count">' + countText + '</span>' +
+        '</div>';
+      }
 
-      const diffBadgeClass = m.difficulty === 'facil' ? 'badge-emerald' : 
-                             (m.difficulty === 'medio' ? 'badge-amber' : 
-                             (m.difficulty === 'dificil' ? 'badge-rose' : 'badge-purple'));
+      group.masters.forEach((m, idx) => {
+        let rankBadge = '#' + (idx + 1);
+        let podiumClass = '';
+        if (idx === 0) { rankBadge = '🥇'; podiumClass = 'podium-1'; }
+        else if (idx === 1) { rankBadge = '🥈'; podiumClass = 'podium-2'; }
+        else if (idx === 2) { rankBadge = '🥉'; podiumClass = 'podium-3'; }
 
-      const diffLabel = m.difficulty === 'facil' ? (window.i18n ? window.i18n.t('diff_facil') : 'Fácil') :
-                        (m.difficulty === 'medio' ? (window.i18n ? window.i18n.t('diff_medio') : 'Medio') :
-                        (m.difficulty === 'dificil' ? (window.i18n ? window.i18n.t('diff_dificil') : 'Difícil') :
-                        (window.i18n ? window.i18n.t('diff_endemoniado') : 'Endemoniado')));
+        const diffBadgeClass = m.difficulty === 'facil' ? 'badge-emerald' : 
+                               (m.difficulty === 'medio' ? 'badge-amber' : 
+                               (m.difficulty === 'dificil' ? 'badge-rose' : 'badge-purple'));
 
-      const challengeBtnLabel = window.i18n ? window.i18n.t('hof_btn_challenge') : '⚔️ Desafiar';
+        const diffLabel = m.difficulty === 'facil' ? (window.i18n ? window.i18n.t('diff_facil') : 'Fácil') :
+                          (m.difficulty === 'medio' ? (window.i18n ? window.i18n.t('diff_medio') : 'Medio') :
+                          (m.difficulty === 'dificil' ? (window.i18n ? window.i18n.t('diff_dificil') : 'Difícil') :
+                          (window.i18n ? window.i18n.t('diff_endemoniado') : 'Endemoniado')));
 
-      return '<div class="hof-master-card ' + podiumClass + ' ' + (m.isCurrentPlayer ? 'is-player' : '') + '">' +
-        '<div class="hof-master-left">' +
-          '<div class="hof-master-rank">' + rankBadge + '</div>' +
-          '<div class="hof-master-meta">' +
-            '<div class="hof-master-name">' +
-              '<span>' + (m.flag || '🌍') + '</span>' +
-              '<strong>' + m.name + '</strong>' +
-              (m.isCurrentPlayer ? '<span style="font-size: 0.68rem; background: #10b981; color: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; margin-left: 0.3rem;">¡TÚ!</span>' : '') +
-            '</div>' +
-            '<div class="hof-master-demog">' +
-              '<span>' + m.city + ', ' + (m.countryName || m.country) + '</span>' +
-              '<span>•</span>' +
-              '<span>' + m.age + ' años</span>' +
-              '<span>•</span>' +
-              '<span class="badge ' + diffBadgeClass + '" style="font-size: 0.68rem; padding: 0.05rem 0.35rem;">' + diffLabel + '</span>' +
+        const challengeBtnLabel = window.i18n ? window.i18n.t('hof_btn_challenge') : '⚔️ Desafiar';
+
+        html += '<div class="hof-master-card ' + podiumClass + ' ' + (m.isCurrentPlayer ? 'is-player' : '') + '">' +
+          '<div class="hof-master-left">' +
+            '<div class="hof-master-rank">' + rankBadge + '</div>' +
+            '<div class="hof-master-meta">' +
+              '<div class="hof-master-name">' +
+                '<span>' + (m.flag || '🌍') + '</span>' +
+                '<strong>' + m.name + '</strong>' +
+                (m.isCurrentPlayer ? '<span style="font-size: 0.68rem; background: #10b981; color: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; margin-left: 0.3rem;">¡TÚ!</span>' : '') +
+              '</div>' +
+              '<div class="hof-master-demog">' +
+                '<span>' + m.city + ', ' + (m.countryName || m.country) + '</span>' +
+                '<span>•</span>' +
+                '<span>' + m.age + ' años</span>' +
+                '<span>•</span>' +
+                '<span class="badge ' + diffBadgeClass + '" style="font-size: 0.68rem; padding: 0.05rem 0.35rem;">' + diffLabel + '</span>' +
+              '</div>' +
             '</div>' +
           '</div>' +
-        '</div>' +
-        '<div class="hof-master-right">' +
-          '<div class="hof-master-stats">' +
-            '<div class="hof-master-score">' + m.score + ' pts</div>' +
-            '<div class="hof-master-time">⏱️ ' + this.formatTime(m.timeSeconds) + ' • ' + m.autonomyIndex + '% aut.</div>' +
+          '<div class="hof-master-right">' +
+            '<div class="hof-master-stats">' +
+              '<div class="hof-master-score">' + m.score + ' pts</div>' +
+              '<div class="hof-master-time">⏱️ ' + this.formatTime(m.timeSeconds) + ' • ' + m.autonomyIndex + '% aut.</div>' +
+            '</div>' +
+            '<button type="button" class="hof-btn-duel" data-master-id="' + m.id + '" title="Cargar mismo tablero y semilla del maestro">' +
+              challengeBtnLabel +
+            '</button>' +
           '</div>' +
-          '<button type="button" class="hof-btn-duel" data-master-id="' + m.id + '" title="Cargar mismo tablero y semilla del maestro">' +
-            challengeBtnLabel +
-          '</button>' +
-        '</div>' +
-      '</div>';
-    }).join('');
+        '</div>';
+      });
+    });
+
+    container.innerHTML = html;
 
     // Conectar botones de Desafiar
+    const allMasters = groups.flatMap(g => g.masters);
     container.querySelectorAll('.hof-btn-duel').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const masterId = e.currentTarget.getAttribute('data-master-id');
-        const master = masters.find(item => item.id === masterId);
+        const master = allMasters.find(item => item.id === masterId);
         if (master) {
           this.challengeMaster(master);
         }
@@ -1757,7 +1774,8 @@ ${url}`;
     });
   }
 
-  challengeMaster(master) {
+
+    challengeMaster(master) {
     this.closeModal('modal-hall-of-fame');
     this.closeModal('modal-history');
 
