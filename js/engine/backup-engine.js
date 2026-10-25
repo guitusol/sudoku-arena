@@ -303,8 +303,8 @@ class BackupEngine {
             : JSON.parse(localStorage.getItem('sudoku_arena_player_master_profile_v1') || 'null');
         } catch (e) {}
 
-        if (!currentProfile || !currentProfile.name) {
-          // No tenía perfil configurado, adoptamos el importado
+        if (!currentProfile || !currentProfile.name || (profileIncoming.registeredAt && (!currentProfile.registeredAt || profileIncoming.registeredAt >= currentProfile.registeredAt))) {
+          // No tenía perfil configurado o el entrante es más reciente, adoptamos el importado
           if (this.hallOfFame) {
             this.hallOfFame.savePlayerProfile(profileIncoming);
           } else {

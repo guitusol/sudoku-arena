@@ -2763,6 +2763,9 @@ ${url}`;
             if (this.renderVaultItems) {
               try { this.renderVaultItems(); } catch (err) {}
             }
+            if (this.renderHallOfFame) {
+              try { this.renderHallOfFame(); } catch (err) {}
+            }
             const msg = window.i18n 
               ? window.i18n.t('toast_backup_imported', { history: res.historyAdded, vault: res.vaultAdded })
               : `¡Base de datos importada con éxito! (+${res.historyAdded} partidas, +${res.vaultAdded} retos)`;
