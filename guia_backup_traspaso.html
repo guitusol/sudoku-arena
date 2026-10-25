@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Guía Oficial de Respaldo y Sincronización - Sudoku Arena</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm 10mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      color: #1e293b;
+      background: #ffffff;
+      font-size: 8.8pt;
+      line-height: 1.38;
+    }
+
+    .doc-container {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Cabecera del Documento */
+    .doc-header {
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-title-group h1 {
+      font-size: 16pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .doc-title-group h1 span.logo-badge {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      font-size: 9.5pt;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .doc-subtitle {
+      font-size: 9pt;
+      color: #475569;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .doc-meta {
+      text-align: right;
+      font-size: 7.8pt;
+      color: #64748b;
+      line-height: 1.3;
+    }
+
+    .doc-meta strong {
+      color: #0f172a;
+    }
+
+    /* Bloques y Secciones */
+    .section-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-left: 4px solid #0284c7;
+      padding-left: 7px;
+      margin: 10px 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .section-title.emerald {
+      border-left-color: #059669;
+    }
+
+    .section-title.amber {
+      border-left-color: #d97706;
+    }
+
+    p {
+      margin-bottom: 6px;
+      color: #334155;
+    }
+
+    /* Caja de Resumen Destacada */
+    .hero-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 7px;
+      padding: 7px 11px;
+      margin-bottom: 9px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-icon {
+      font-size: 20pt;
+      line-height: 1;
+    }
+
+    .hero-text h3 {
+      font-size: 9.5pt;
+      color: #166534;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .hero-text p {
+      font-size: 8.2pt;
+      color: #15803d;
+      margin-bottom: 0;
+      line-height: 1.3;
+    }
+
+    /* Tabla de Componentes */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0 9px 0;
+      font-size: 8.2pt;
+    }
+
+    table.data-table th {
+      background: #0f172a;
+      color: #f8fafc;
+      text-align: left;
+      padding: 5px 8px;
+      font-weight: 600;
+      font-size: 7.8pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    table.data-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    table.data-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 7.5pt;
+      font-weight: 600;
+    }
+
+    .badge-blue { background: #e0f2fe; color: #0369a1; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-amber { background: #fef3c7; color: #b45309; }
+    .badge-purple { background: #f3e8ff; color: #7e22ce; }
+
+    /* Flujo Paso a Paso */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .step-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 5px 9px;
+      background: #ffffff;
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 8pt;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-num.green {
+      background: #059669;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content h4 {
+      font-size: 8.8pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .step-content p {
+      font-size: 8pt;
+      color: #475569;
+      margin-bottom: 0;
+      line-height: 1.25;
+    }
+
+    /* Alertas y Consejos */
+    .alert-box {
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 8pt;
+      margin: 6px 0;
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+
+    .alert-success {
+      background: #f0fdf4;
+      border-left: 3px solid #10b981;
+      color: #065f46;
+    }
+
+    .alert-tip {
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+      color: #92400e;
+    }
+
+    .page-break {
+      page-break-before: always;
+      height: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Pie del Documento */
+    .doc-footer {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 5px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 7.5pt;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<div class="doc-container">
+
+  <!-- ==================== PÁGINA 1 ==================== -->
+
+  <!-- CABECERA -->
+  <header class="doc-header">
+    <div class="doc-title-group">
+      <h1>
+        <span>SUDOKU ARENA</span>
+        <span class="logo-badge">v4.9</span>
+      </h1>
+      <div class="doc-subtitle">Manual Operativo: Respaldo Integral y Sincronización Móvil ↔ PC ↔ Tablet</div>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Documento Oficial</strong></div>
+      <div>Arquitectura Zero-Server</div>
+      <div>Fecha: Octubre 2026</div>
+    </div>
+  </header>
+
+  <!-- BLOQUE HERO -->
+  <div class="hero-box">
+    <div class="hero-icon">💾</div>
+    <div class="hero-text">
+      <h3>Copia de Seguridad Integral y Traspaso Inmediato</h3>
+      <p>Sudoku Arena no almacena tus datos en servidores externos ni requiere cuentas ni correos: toda la información reside exclusivamente en tu dispositivo. Este sistema te permite <strong>empaquetar el 100% de tus datos</strong> en un único archivo <code>.json</code> y transferirlo cómodamente entre smartphone, tablet y PC con <strong>Fusión Inteligente sin pérdida de datos</strong>.</p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1: QUÉ CONTIENE -->
+  <h2 class="section-title">1. Contenido de la Base de Datos Unificada</h2>
+  <p style="font-size: 8.3pt;">Al exportar la base de datos completa desde el menú de opciones, el archivo generado (<code>sudoku-arena-backup-AAAA-MM-DD.json</code>) consolida cuatro áreas clave:</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 24%;">Módulo</th>
+        <th style="width: 22%;">Motor de Datos</th>
+        <th style="width: 54%;">Datos y Contenido Incluido</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>🏆 Historial y Récords</strong></td>
+        <td><span class="badge badge-amber">HistoryStorage</span></td>
+        <td>Todas las partidas ganadas, mejores tiempos, puntuación neta, % de autonomía mental y récord por nivel (Fácil, Medio, Difícil, Endemoniado).</td>
+      </tr>
+      <tr>
+        <td><strong>📁 Bóveda de Retos</strong></td>
+        <td><span class="badge badge-purple">VaultStorage</span></td>
+        <td>Biblioteca personal de sudokus escaneados por OCR (cámara/foto) o planteados a mano, con diagnóstico de unicidad y récord por puzle.</td>
+      </tr>
+      <tr>
+        <td><strong>👑 Salón de la Fama</strong></td>
+        <td><span class="badge badge-blue">HallOfFameEngine</span></td>
+        <td>Ficha oficial de Gran Maestro (alias, bandera/país, ciudad y grupo etario) desbloqueada tras 3 victorias certificadas (≥90% auto, 0 ayudas).</td>
+      </tr>
+      <tr>
+        <td><strong>📅 Retos Semanales</strong></td>
+        <td><span class="badge badge-green">WeeklyEngine</span></td>
+        <td>Historial de plantillas universales resueltas cada lunes, con posición de honor por nivel (Diamante, Oro, Plata, Bronce).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 2: SMART MERGE -->
+  <h2 class="section-title emerald">2. ¿Qué es la Fusión Inteligente (Smart Merge)?</h2>
+  <div class="alert-box alert-success">
+    <div>
+      <strong>✨ Seguridad Absoluta contra Sobreescrituras:</strong>
+      Al importar una copia en un ordenador o móvil de destino, el sistema <strong>NO borra ni sustituye</strong> lo que ya tengas en ese dispositivo. Analiza identificadores y cuadrículas matemáticas para:
+      <ul style="margin: 2px 0 0 14px; font-size: 7.9pt; line-height: 1.25;">
+        <li>Añadir únicamente las partidas ganadas que no estuviesen ya registradas.</li>
+        <li>Incorporar a la Bóveda los sudokus nuevos sin duplicar tableros idénticos.</li>
+        <li>Conservar la mayor puntuación conseguida en cada dificultad de los Retos Semanales.</li>
+        <li>Preservar tu perfil de jugador activo si ya estaba configurado en el destino.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: MÓVIL A PC -->
+  <h2 class="section-title">3. Procedimiento A: Desde el Móvil / Tablet hacia el PC (Móvil ➔ PC)</h2>
+  <p style="font-size: 8.3pt;">Flujo recomendado cuando juegas a diario en tu smartphone y quieres volcar tus avances al ordenador:</p>
+
+  <div class="flow-container">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Abrir Menú de Opciones en el Móvil</h4>
+        <p>En la cabecera superior de Sudoku Arena, pulsa sobre el botón <strong><code>[⚙️ Otras opciones]</code></strong> y selecciona la tarjeta verde <strong><code>[💾 Copia de Seguridad]</code></strong>.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Pulsar «Compartir» (o «Descargar Copia»)</h4>
+        <p>Pulsa el botón azul <strong><code>[📲 Compartir]</code></strong>. Se abrirá el menú nativo del teléfono (WhatsApp, Telegram, Gmail o Drive). Si tu navegador móvil no soporta menú nativo, pulsa <strong><code>[📥 Descargar Copia]</code></strong> para guardarlo en la carpeta Descargas.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Enviarte el archivo a ti mismo</h4>
+        <p>En WhatsApp, selecciona tu propio chat (chat personal con tu propio número) y envíate el archivo <code>sudoku-arena-backup-...json</code>. También puedes enviártelo por correo o a Telegram ("Mensajes guardados").</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>En tu Ordenador: Descargar el Archivo</h4>
+        <p>Abre <strong>WhatsApp Web</strong> o tu correo en el navegador del ordenador, haz clic sobre el archivo adjunto y descárgalo a tu carpeta <em>Descargas</em> o al <em>Escritorio</em>.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>En tu Ordenador: Volcar / Importar en Sudoku Arena</h4>
+        <p>Abre Sudoku Arena en el PC. Ve a <strong><code>[⚙️ Otras opciones] -> [💾 Copia de Seguridad]</code></strong> y pulsa el botón <strong><code>[📤 Importar y Fusionar Datos (JSON)]</code></strong>. Selecciona el archivo descargado en el Paso 4.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num green">✓</div>
+      <div class="step-content">
+        <h4>¡Listo! Sincronización Completada</h4>
+        <p>Aparecerá un toast verde: <em>«¡Base de datos importada con éxito! (+X partidas, +Y retos)»</em>. Tus contadores y medallas en el PC quedarán actualizados al instante.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <div>Sudoku Arena — Manual de Respaldo y Sincronización (v4.9)</div>
+    <div>Página 1 de 2 • Privacidad Absoluta y Zero-Server</div>
+  </footer>
+
+  <!-- ==================== SALTO A PÁGINA 2 ==================== -->
+  <div class="page-break"></div>
+
+  <!-- CABECERA PÁGINA 2 -->
+  <header class="doc-header" style="margin-top: 4px;">
+    <div class="doc-title-group">
+      <h1 style="font-size: 13pt;">
+        <span>SUDOKU ARENA</span>
+        <span class="logo-badge" style="font-size: 8.5pt;">v4.9</span>
+      </h1>
+      <div class="doc-subtitle" style="font-size: 8.3pt;">Manual Operativo: Traspaso Inverso y Copias Parciales</div>
+    </div>
+    <div class="doc-meta" style="font-size: 7.5pt;">
+      <div>Página 2 de 2</div>
+    </div>
+  </header>
+
+  <!-- SECCIÓN 4: PC A MÓVIL -->
+  <h2 class="section-title">4. Procedimiento B: Desde el PC hacia el Móvil / Tablet (PC ➔ Móvil)</h2>
+  <p style="font-size: 8.3pt;">Utiliza este flujo cuando hayas creado puzles o resuelto partidas en el ordenador y desees trasladar todas tus marcas a tu smartphone:</p>
+
+  <div class="flow-container">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Exportar desde el Ordenador</h4>
+        <p>En Sudoku Arena en el PC, haz clic en <strong><code>[⚙️ Otras opciones]</code></strong> y después en <strong><code>[💾 Copia de Seguridad]</code></strong>. Pulsa el botón verde <strong><code>[📥 Descargar Copia Completa (JSON)]</code></strong>. El archivo se guardará en tu carpeta de <em>Descargas</em>.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Enviarte el archivo al Smartphone</h4>
+        <p>Abre WhatsApp Web en tu PC y arrastra el archivo <code>.json</code> descargado a tu chat personal (o adjúntalo en un correo electrónico enviado a la cuenta de tu teléfono móvil).</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Guardar el archivo en el Teléfono</h4>
+        <p>En el smartphone, abre WhatsApp o la app de correo, pulsa sobre el archivo recibido y selecciona <em>«Guardar en Archivos»</em> o <em>«Descargar»</em>.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Importar en el Teléfono</h4>
+        <p>Abre Sudoku Arena en tu teléfono. Pulsa <strong><code>[⚙️ Otras opciones] -> [💾 Copia de Seguridad] -> [📤 Importar y Fusionar Datos (JSON)]</code></strong>. Se abrirá el selector de archivos del móvil: elige el archivo descargado en el Paso 3.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num green">✓</div>
+      <div class="step-content">
+        <h4>Fusión Confirmada</h4>
+        <p>Tus avances del ordenador quedarán integrados en el teléfono sin alterar las partidas que ya estuviesen iniciadas ni sobrescribir tus mejores tiempos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5: COPIAS INDIVIDUALES -->
+  <h2 class="section-title amber">5. Copias de Seguridad Individuales (Por Módulos)</h2>
+  <p style="font-size: 8.3pt;">Si solo quieres compartir un lote de sudokus con un amigo o respaldar únicamente tu historial sin mezclar el resto, cuentas con botones directos:</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+    <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px; background: #fafafa;">
+      <h4 style="font-size: 8.8pt; color: #7e22ce; margin-bottom: 2px; display: flex; align-items: center; gap: 4px;">
+        <span>📁</span> Bóveda de Retos («Mis Retos»)
+      </h4>
+      <p style="font-size: 7.9pt; color: #475569; margin-bottom: 3px;">
+        En la barra superior de la Bóveda encontrarás los botones <strong><code>[📥 Exportar]</code></strong> y <strong><code>[📤 Importar]</code></strong>.
+      </p>
+      <p style="font-size: 7.7pt; color: #64748b; margin-bottom: 0;">
+        Genera un archivo <code>sudoku-arena-vault-...json</code> exclusivamente con tus puzles y soluciones para que otros jugadores los jueguen en sus dispositivos.
+      </p>
+    </div>
+
+    <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px; background: #fafafa;">
+      <h4 style="font-size: 8.8pt; color: #b45309; margin-bottom: 2px; display: flex; align-items: center; gap: 4px;">
+        <span>🏆</span> Récords e Historial de Partidas
+      </h4>
+      <p style="font-size: 7.9pt; color: #475569; margin-bottom: 3px;">
+        En el modal de Tus Récords cuentas con los botones dedicados <strong><code>[📥 Exportar]</code></strong> y <strong><code>[📤 Importar]</code></strong>.
+      </p>
+      <p style="font-size: 7.7pt; color: #64748b; margin-bottom: 0;">
+        Genera un archivo <code>sudoku-arena-records-...json</code> únicamente con tus partidas resueltas, tiempos de resolución y auditoría de puntos.
+      </p>
+    </div>
+  </div>
+
+  <div class="alert-box alert-tip" style="margin: 6px 0 8px 0;">
+    <div>
+      <strong>💡 Tolerancia Inteligente de Formatos:</strong>
+      El importador general es universal: si cargas accidentalmente un archivo individual (de solo bóveda o solo historial) en la opción de Copia de Seguridad completa, el sistema lo detectará automáticamente y lo volcará en su módulo correspondiente sin errores.
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6: PREGUNTAS FRECUENTES -->
+  <h2 class="section-title">6. Preguntas Frecuentes y Buenas Prácticas</h2>
+  
+  <div style="margin-bottom: 6px;">
+    <strong style="color: #0f172a; font-size: 8.5pt;">¿Qué ocurre si juego en el móvil y en el PC al mismo tiempo durante varios días?</strong>
+    <p style="font-size: 8pt; color: #475569; margin-top: 1px;">
+      Al aplicar la <strong>Fusión Inteligente</strong>, cuando hagas el traspaso del móvil al PC (o viceversa), ambas bases de datos se combinarán de forma acumulativa: ninguna partida jugada en un dispositivo borrará las del otro.
+    </p>
+  </div>
+
+  <div style="margin-bottom: 6px;">
+    <strong style="color: #0f172a; font-size: 8.5pt;">¿Caduca el archivo JSON o necesita conexión a Internet?</strong>
+    <p style="font-size: 8pt; color: #475569; margin-top: 1px;">
+      No caduca jamás. Es un archivo de texto abierto y estándar que puedes guardar en una memoria USB, disco duro o nube personal. Sudoku Arena puede importarlo y exportarlo 100% sin conexión a Internet (*offline*).
+    </p>
+  </div>
+
+  <div style="margin-bottom: 6px;">
+    <strong style="color: #0f172a; font-size: 8.5pt;">¿Se conservan los idiomas y el volumen al importar?</strong>
+    <p style="font-size: 8pt; color: #475569; margin-top: 1px;">
+      El idioma seleccionado y el sonido son preferencias ergonómicas de cada pantalla y no se alteran al importar los datos lógicos de tus partidas.
+    </p>
+  </div>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="doc-footer">
+    <div>Sudoku Arena — Manual Técnico y Operativo de Respaldo de Datos (v4.9)</div>
+    <div>Página 2 de 2 • Arquitectura Zero-Server y Privacidad Total</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
