@@ -39,6 +39,7 @@
   <!-- CABECERA -->
   <header class="app-header">
     <div class="header-container">
+      <!-- LÍNEA 1: Logotipo y Nombre de la APP -->
       <div class="brand-wrapper" id="btn-brand-logo" data-i18n-title="logo_modal_header_tooltip" title="Ver logotipo oficial en alta resolución" style="cursor: pointer;">
         <img src="icons/icon-192.png" alt="Sudoku Arena" class="brand-logo-img">
         <div class="brand-text-container">
@@ -46,9 +47,9 @@
         </div>
       </div>
 
+      <!-- LÍNEA 2: Los cuatro primeros botones y botón 'Otras opciones' -->
       <nav class="header-nav-bar">
-        <!-- Fila 1: Idioma, Sonido, Reiniciar, Manual y Salón de la Fama -->
-        <div class="header-nav-row header-row-1">
+        <div class="header-nav-row header-row-controls">
           <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
           <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
             <span id="sound-icon">🔊</span>
@@ -57,17 +58,9 @@
             <span>🔄</span>
           </button>
           <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>
-          <button id="btn-open-hall-of-fame" class="header-btn hall-of-fame-highlight-btn" title="Salón de la Fama Global y Cuadro de Honor de Maestros" data-i18n-title="title_hall_of_fame">
-            <span>🏛️</span> <span class="hof-btn-label" data-i18n="btn_hall_of_fame">Salón Fama</span>
+          <button id="btn-open-more-options" class="header-btn more-options-btn" title="Otras opciones: Reto semanal, Escanear, Mis Retos, Récords y Salón de la Fama" data-i18n-title="title_more_options">
+            <span>⚙️</span> <span data-i18n="btn_more_options">Otras opciones</span>
           </button>
-        </div>
-
-        <!-- Fila 2: Reto Semanal, Escanear / Crear, Mis Retos y Récords -->
-        <div class="header-nav-row header-row-2">
-          <button id="btn-open-weekly-modal" class="header-btn weekly-highlight-btn" title="Reto Semanal Oficial y Posicionamiento"><span>🏆</span> <span data-i18n="btn_weekly">Reto Semanal</span></button>
-          <button id="btn-open-scan-modal" class="header-btn scan-highlight-btn" title="Escanear desde foto o plantear sudoku" data-i18n-title="title_scan_btn"><span>📷</span> <span data-i18n="btn_scan">Escanear / Crear</span></button>
-          <button id="btn-open-vault-modal" class="header-btn vault-highlight-btn" title="Bóveda de retos guardados" data-i18n-title="title_vault_btn"><span>📁</span> <span data-i18n="btn_vault">Mis Retos</span> <span id="vault-badge-count" class="vault-badge hidden">0</span></button>
-          <button id="btn-open-history-modal" class="header-btn history-highlight-btn" title="Tus Récords y Sudokus Completados" data-i18n-title="title_history_btn"><span>🏆</span> <span data-i18n="btn_history">Récords</span> <span id="history-badge-count" class="vault-badge hidden">0</span></button>
         </div>
       </nav>
     </div>
@@ -80,8 +73,8 @@
     <section class="board-card">
 
       <!-- BARRA DE ESTADO Y DIFICULTAD -->
+      <!-- LÍNEA 3: Selector del Nivel de dificultad y a su lado el botón de semilla -->
       <div class="board-top-bar">
-        <!-- Selector de Dificultad con Dado y Hora al lado -->
         <div class="diff-selector">
           <button class="diff-btn active" data-diff="facil" data-i18n="diff_facil">Fácil</button>
           <button class="diff-btn" data-diff="medio" data-i18n="diff_medio">Medio</button>
@@ -91,15 +84,24 @@
             <span>🎲</span>
             <span class="seed-btn-text" data-i18n="btn_reroll_seed">Semilla</span>
           </button>
-          <!-- Cronómetro al lado del dado -->
-          <div class="timer-box timer-inline" id="game-timer" title="Tiempo de partida">
-            <span>⏱️</span>
-            <span id="timer-display">00:00</span>
-          </div>
         </div>
       </div>
 
-      <!-- HUD MÓVIL: MARCADOR COGNITIVO EN VIVO (Visible en pantallas móviles) -->
+      <!-- LÍNEA 4: Nombre de la semilla y a su lado el cronómetro -->
+      <div class="seed-timer-bar">
+        <div class="seed-display-chip" title="Semilla matemática y código del tablero">
+          <span class="seed-chip-icon">🌱</span>
+          <span class="seed-chip-label" data-i18n="label_seed">Semilla:</span>
+          <strong id="challenge-code-display" class="font-mono text-accent">...</strong>
+        </div>
+
+        <div class="timer-box timer-inline" id="game-timer" title="Tiempo de partida">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- LÍNEA 5: Puntos, Autonomía y botón de Auditoría (sin descripción del nivel) -->
       <div class="mobile-score-hud">
         <div class="mobile-hud-row">
           <div class="mobile-hud-score-chip">
@@ -111,7 +113,6 @@
           <div class="mobile-hud-autonomy-chip">
             <span class="mobile-hud-label" data-i18n="hud_autonomy">Autonomía:</span>
             <strong id="mobile-stat-autonomy" class="text-emerald font-mono">100%</strong>
-            <span id="mobile-stat-rank" class="mobile-rank-badge">Gran Maestro</span>
           </div>
 
           <button id="btn-mobile-ledger" class="mobile-hud-ledger-btn" title="Abrir libro mayor de auditoría">
@@ -641,7 +642,72 @@
   
   
   <!-- Modal 8: Reto Semanal por Niveles y Posicionamiento -->
-  <div id="modal-weekly" class="modal-overlay">
+  <!-- Modal: Otras Opciones -->
+    <div id="modal-more-options" class="modal-overlay">
+      <div class="modal-card" style="max-width: 460px;">
+        <div class="modal-header">
+          <h3 style="display: flex; align-items: center; gap: 0.5rem; color: #38bdf8;">
+            <span>⚙️</span> <span data-i18n="modal_more_options_title">Otras Opciones</span>
+          </h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 1rem 1.25rem;">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.85rem;" data-i18n="modal_more_options_subtitle">
+            Modalidades especiales, retos y estadísticas de Sudoku Arena:
+          </p>
+
+          <div class="more-options-grid">
+            <button id="more-opt-weekly" class="more-opt-btn more-opt-weekly">
+              <span class="more-opt-icon">🏆</span>
+              <div class="more-opt-content">
+                <strong data-i18n="more_opt_title_weekly">Reto Semanal</strong>
+                <small data-i18n="more_opt_desc_weekly">Puzle oficial de cada lunes con posicionamiento global</small>
+              </div>
+            </button>
+
+            <button id="more-opt-scan" class="more-opt-btn more-opt-scan">
+              <span class="more-opt-icon">📷</span>
+              <div class="more-opt-content">
+                <strong data-i18n="btn_scan">Escanear / Crear</strong>
+                <small data-i18n="more_opt_desc_scan">Digitaliza sudokus desde fotos o plantea tus tableros</small>
+              </div>
+            </button>
+
+            <button id="more-opt-vault" class="more-opt-btn more-opt-vault">
+              <span class="more-opt-icon">📁</span>
+              <div class="more-opt-content">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <strong data-i18n="btn_vault">Mis Retos</strong>
+                  <span id="more-vault-badge-count" class="vault-badge hidden">0</span>
+                </div>
+                <small data-i18n="more_opt_desc_vault">Tu biblioteca personal de sudokus archivados</small>
+              </div>
+            </button>
+
+            <button id="more-opt-history" class="more-opt-btn more-opt-history">
+              <span class="more-opt-icon">🥇</span>
+              <div class="more-opt-content">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <strong data-i18n="btn_history">Récords</strong>
+                  <span id="more-history-badge-count" class="vault-badge hidden">0</span>
+                </div>
+                <small data-i18n="more_opt_desc_history">Tus marcas personales, tiempos y partidas ganadas</small>
+              </div>
+            </button>
+
+            <button id="more-opt-hall-of-fame" class="more-opt-btn more-opt-hof">
+              <span class="more-opt-icon">🏛️</span>
+              <div class="more-opt-content">
+                <strong data-i18n="btn_hall_of_fame">Salón de la Fama</strong>
+                <small data-i18n="more_opt_desc_hof">Cuadro de Honor de Grandes Maestros por países, ciudades y edades</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-weekly" class="modal-overlay">
     <div class="modal-card" style="max-width: 620px;">
       <div class="modal-header">
         <h3 data-i18n="weekly_modal_title">🏆 Reto Semanal por Niveles</h3>

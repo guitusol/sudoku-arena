@@ -1617,6 +1617,7 @@ ${url}`;
   updateVaultBadge() {
     if (!this.vault) return;
     const badge = document.getElementById('vault-badge-count');
+    const moreVaultBadge = document.getElementById('more-vault-badge-count');
     if (!badge) return;
     const count = this.vault.getAll().length;
     if (count > 0) {
@@ -1625,11 +1626,20 @@ ${url}`;
     } else {
       badge.classList.add('hidden');
     }
+    if (moreVaultBadge) {
+      if (count > 0) {
+        moreVaultBadge.textContent = count;
+        moreVaultBadge.classList.remove('hidden');
+      } else {
+        moreVaultBadge.classList.add('hidden');
+      }
+    }
   }
 
   updateHistoryBadge() {
     if (!this.history) return;
     const badge = document.getElementById('history-badge-count');
+    const moreHistBadge = document.getElementById('more-history-badge-count');
     if (!badge) return;
     const count = this.history.getAll().length;
     if (count > 0) {
@@ -2083,6 +2093,36 @@ ${url}`;
     // Selector de Idioma (Modal 7)
     
     // Botón Reto Semanal en cabecera
+    // Botón 'Otras opciones' y sus modales
+    document.getElementById('btn-open-more-options')?.addEventListener('click', () => {
+      this.openModal('modal-more-options');
+    });
+
+    document.getElementById('more-opt-weekly')?.addEventListener('click', () => {
+      this.closeModal('modal-more-options');
+      this.openWeeklyModal();
+    });
+
+    document.getElementById('more-opt-scan')?.addEventListener('click', () => {
+      this.closeModal('modal-more-options');
+      this.openScanModal();
+    });
+
+    document.getElementById('more-opt-vault')?.addEventListener('click', () => {
+      this.closeModal('modal-more-options');
+      this.openVaultModal();
+    });
+
+    document.getElementById('more-opt-history')?.addEventListener('click', () => {
+      this.closeModal('modal-more-options');
+      this.openHistoryModal();
+    });
+
+    document.getElementById('more-opt-hall-of-fame')?.addEventListener('click', () => {
+      this.closeModal('modal-more-options');
+      this.openHallOfFameModal();
+    });
+
     document.getElementById('btn-open-weekly-modal')?.addEventListener('click', () => {
       this.openWeeklyModal();
     });
