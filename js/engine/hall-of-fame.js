@@ -182,32 +182,33 @@ class HallOfFameEngine {
   }
 
   /**
-   * Obtiene la lista de victorias certificadas como Gran Maestro del jugador local
-   * (Cualquier sudoku resuelto legítimamente como Maestro con autonomía >= 90%, 0 ayudas y sin trampas)
+   * Obtiene la lista de partidas solucionadas como Maestro del jugador local
+   * Cuenta todas las partidas resueltas con rango Maestro/Gran Maestro o autonomía >= 90%
    */
   getCertifiedVictories(historyList = []) {
     if (!Array.isArray(historyList)) return [];
     return historyList.filter(r => {
       if (!r) return false;
-      if (r.fairPlayFlag) return false;
 
-      // Calcular ayudas totales de forma segura
-      const peeks = (r.peeksCount !== undefined && r.peeksCount !== null && !isNaN(Number(r.peeksCount)))
-        ? Number(r.peeksCount)
-        : ((Number(r.peeksCellCount) || 0) + (Number(r.peeksAllCount) || 0));
+      // 1. Detección por clave de rango oficial
+      if (r.rankKey === 'rank_grandmaster') return true;
 
-      if (peeks > 0) return false;
+      // 2. Detección por texto de rango guardado (español o cualquier idioma)
+      if (typeof r.rank === 'string') {
+        const lowerRank = r.rank.toLowerCase();
+        if (lowerRank.includes('maestro') || lowerRank.includes('master') || lowerRank.includes('grandmaster')) {
+          return true;
+        }
+      }
 
+      // 3. Detección por autonomía >= 90% y sin ayudas
+      const peeks = Number(r.peeksCount ?? ((r.peeksCellCount || 0) + (r.peeksAllCount || 0))) || 0;
       const autonomy = Number(r.autonomyIndex) || 0;
-      const rankKey = r.rankKey || '';
-      const rankStr = typeof r.rank === 'string' ? r.rank.toLowerCase() : '';
+      if (autonomy >= 90 && peeks === 0) {
+        return true;
+      }
 
-      const isGM = (rankKey === 'rank_grandmaster') ||
-                   rankStr.includes('maestro') ||
-                   rankStr.includes('master') ||
-                   (autonomy >= 90);
-
-      return isGM;
+      return false;
     });
   }
 
