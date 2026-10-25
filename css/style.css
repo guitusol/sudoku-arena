@@ -3109,3 +3109,134 @@ body {
   border-radius: 999px;
   font-weight: 600;
 }
+
+/* Tarjeta de Formulario de Registro de Maestro */
+.hof-registration-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(30, 41, 59, 0.95));
+  border: 2px solid #f59e0b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
+  animation: hofPulseGlow 2.5s infinite alternate;
+}
+
+@keyframes hofPulseGlow {
+  0% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+  100% { box-shadow: 0 0 22px rgba(245, 158, 11, 0.45); }
+}
+
+.hof-reg-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.hof-reg-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.hof-reg-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.hof-reg-sub {
+  font-size: 0.78rem;
+  color: #fde68a;
+  margin-top: 0.15rem;
+}
+
+.hof-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (max-width: 520px) {
+  .hof-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hof-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hof-form-group label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.hof-form-input, .hof-form-select {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-grid);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hof-form-input:focus, .hof-form-select:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.hof-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.hof-btn-save-profile {
+  background: linear-gradient(135deg, #d97706, #b45309) !important;
+  border-color: #f59e0b !important;
+  color: #fff !important;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+}
+
+/* Banner cuando ya está inscrito */
+.hof-enrolled-banner {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(30, 41, 59, 0.8));
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.hof-enrolled-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.hof-enrolled-badge-icon {
+  font-size: 1.5rem;
+}
+
+.hof-enrolled-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.hof-enrolled-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}

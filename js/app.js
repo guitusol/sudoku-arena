@@ -1682,6 +1682,43 @@ ${url}`;
       }
     }
 
+    // Gestionar tarjeta de inscripción y ficha de maestro
+    const profile = window.hallOfFameEngine.getPlayerProfile();
+    const regCard = document.getElementById('hof-registration-card');
+    const enrolledCard = document.getElementById('hof-enrolled-card');
+
+    if (count >= 3) {
+      if (!profile || !profile.name) {
+        // Mostrar tarjeta de solicitud de inscripción
+        if (regCard) {
+          regCard.classList.remove('hidden');
+          const subEl = document.getElementById('hof-reg-subtitle');
+          if (subEl) {
+            subEl.textContent = window.i18n ? 
+              window.i18n.t('hof_reg_desc', { count }) : 
+              ('Cumples con mérito propio los requisitos oficiales (' + count + ' victorias de Gran Maestro Puro). ¿Deseas inscribirte en el Salón de la Fama?');
+          }
+        }
+        if (enrolledCard) enrolledCard.classList.add('hidden');
+      } else {
+        // Ya está inscrito
+        if (regCard) regCard.classList.add('hidden');
+        if (enrolledCard) {
+          enrolledCard.classList.remove('hidden');
+          const detailsEl = document.getElementById('hof-enrolled-details');
+          if (detailsEl) {
+            const ageGroupLabel = profile.ageGroup === 'junior' ? 'Júnior (<18)' :
+                                  (profile.ageGroup === 'adult' ? 'Adultos (18-49)' :
+                                  (profile.ageGroup === 'senior' ? 'Senior (50-64)' : 'Leyendas (65+)'));
+            detailsEl.textContent = profile.name + ' • ' + profile.city + ', ' + (profile.countryName || profile.country) + ' ' + (profile.flag || '') + ' • ' + profile.age + ' años (' + ageGroupLabel + ')';
+          }
+        }
+      }
+    } else {
+      if (regCard) regCard.classList.add('hidden');
+      if (enrolledCard) enrolledCard.classList.add('hidden');
+    }
+
     // Obtener maestros agrupados por categoría (Generaciones, Países, Ciudades o General)
     const groups = window.hallOfFameEngine.getGroupedMasters({
       tab: this.hofActiveTab || 'all',
@@ -2349,6 +2386,76 @@ ${url}`;
         this.hofActiveDiff = btn.dataset.diff;
         this.renderHallOfFame();
       });
+    });
+
+    // Formulario de inscripción y perfil en el Salón de la Fama
+    document.getElementById('btn-hof-submit-profile')?.addEventListener('click', () => {
+      const nameInput = document.getElementById('hof-input-name');
+      const cityInput = document.getElementById('hof-input-city');
+      const ageInput = document.getElementById('hof-input-age');
+      const countrySelect = document.getElementById('hof-select-country');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const city = cityInput ? cityInput.value.trim() : '';
+      const age = ageInput ? parseInt(ageInput.value, 10) : 0;
+      const countryOpt = countrySelect ? countrySelect.options[countrySelect.selectedIndex] : null;
+      const country = countryOpt ? countryOpt.value : 'ES';
+      const countryName = countryOpt ? countryOpt.getAttribute('data-name') : 'España';
+      const flag = countryOpt ? countryOpt.getAttribute('data-flag') : '🇪🇸';
+
+      if (!name) {
+        alert('Por favor introduce tu nombre o alias para el Salón de la Fama.');
+        nameInput?.focus();
+        return;
+      }
+      if (!city) {
+        alert('Por favor introduce tu ciudad o localidad.');
+        cityInput?.focus();
+        return;
+      }
+      if (!age || age < 5 || age > 110) {
+        alert('Por favor introduce una edad válida.');
+        ageInput?.focus();
+        return;
+      }
+
+      const profileData = {
+        name,
+        city,
+        age,
+        ageGroup: window.hallOfFameEngine ? window.hallOfFameEngine.getAgeGroup(age) : 'adult',
+        country,
+        countryName,
+        flag,
+        registeredAt: Date.now()
+      };
+
+      window.hallOfFameEngine.savePlayerProfile(profileData);
+      if (window.soundFx) window.soundFx.playVictory();
+
+      this.showToast(window.i18n ? window.i18n.t('hof_reg_success_toast') : '🎉 ¡Inscripción completada! Ya formas parte oficial del Salón de la Fama.', 'success');
+      this.renderHallOfFame();
+    });
+
+    document.getElementById('btn-hof-dismiss-profile')?.addEventListener('click', () => {
+      document.getElementById('hof-registration-card')?.classList.add('hidden');
+    });
+
+    document.getElementById('btn-hof-edit-profile')?.addEventListener('click', () => {
+      const p = window.hallOfFameEngine.getPlayerProfile();
+      if (p) {
+        const nameInput = document.getElementById('hof-input-name');
+        const cityInput = document.getElementById('hof-input-city');
+        const ageInput = document.getElementById('hof-input-age');
+        const countrySelect = document.getElementById('hof-select-country');
+
+        if (nameInput) nameInput.value = p.name || '';
+        if (cityInput) cityInput.value = p.city || '';
+        if (ageInput) ageInput.value = p.age || '';
+        if (countrySelect && p.country) countrySelect.value = p.country;
+      }
+      document.getElementById('hof-registration-card')?.classList.remove('hidden');
+      document.getElementById('hof-enrolled-card')?.classList.add('hidden');
     });
 
     // Botones de Historial y Récords

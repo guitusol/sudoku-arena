@@ -1208,6 +1208,80 @@
           </div>
         </div>
 
+        <!-- Tarjeta de Solicitud de Inscripción al Salón de la Fama (Se activa con >= 3 victorias GM) -->
+        <div id="hof-registration-card" class="hof-registration-card hidden">
+          <div class="hof-reg-header">
+            <span class="hof-reg-icon">🎉🎖️</span>
+            <div>
+              <strong class="hof-reg-title" data-i18n="hof_reg_title">¡Enhorabuena, Maestro! Has alcanzado la maestría consistente</strong>
+              <div id="hof-reg-subtitle" class="hof-reg-sub" data-i18n="hof_reg_desc">
+                Cumples con mérito propio los requisitos oficiales (3 victorias de Gran Maestro Puro). ¿Deseas inscribirte en el Salón de la Fama?
+              </div>
+            </div>
+          </div>
+          
+          <form id="hof-registration-form" class="hof-reg-form" onsubmit="return false;">
+            <div class="hof-form-grid">
+              <div class="hof-form-group">
+                <label for="hof-input-name" data-i18n="hof_reg_name_label">Nombre o Alias público:</label>
+                <input type="text" id="hof-input-name" class="hof-form-input" placeholder="Ej: Guillermo T." maxlength="25" required>
+              </div>
+              <div class="hof-form-group">
+                <label for="hof-select-country" data-i18n="hof_reg_country_label">País:</label>
+                <select id="hof-select-country" class="hof-form-select">
+                  <option value="ES" data-flag="🇪🇸" data-name="España" selected>🇪🇸 España</option>
+                  <option value="MX" data-flag="🇲🇽" data-name="México">🇲🇽 México</option>
+                  <option value="AR" data-flag="🇦🇷" data-name="Argentina">🇦🇷 Argentina</option>
+                  <option value="CO" data-flag="🇨🇴" data-name="Colombia">🇨🇴 Colombia</option>
+                  <option value="CL" data-flag="🇨🇱" data-name="Chile">🇨🇱 Chile</option>
+                  <option value="PE" data-flag="🇵🇪" data-name="Perú">🇵🇪 Perú</option>
+                  <option value="US" data-flag="🇺🇸" data-name="Estados Unidos">🇺🇸 Estados Unidos</option>
+                  <option value="FR" data-flag="🇫🇷" data-name="Francia">🇫🇷 Francia</option>
+                  <option value="DE" data-flag="🇩🇪" data-name="Alemania">🇩🇪 Alemania</option>
+                  <option value="IT" data-flag="🇮🇹" data-name="Italia">🇮🇹 Italia</option>
+                  <option value="GB" data-flag="🇬🇧" data-name="Reino Unido">🇬🇧 Reino Unido</option>
+                  <option value="JP" data-flag="🇯🇵" data-name="Japón">🇯🇵 Japón</option>
+                  <option value="BR" data-flag="🇧🇷" data-name="Brasil">🇧🇷 Brasil</option>
+                  <option value="OT" data-flag="🌍" data-name="Internacional">🌍 Otro país</option>
+                </select>
+              </div>
+              <div class="hof-form-group">
+                <label for="hof-input-city" data-i18n="hof_reg_city_label">Ciudad / Localidad:</label>
+                <input type="text" id="hof-input-city" class="hof-form-input" placeholder="Ej: Madrid" maxlength="30" required>
+              </div>
+              <div class="hof-form-group">
+                <label for="hof-input-age" data-i18n="hof_reg_age_label">Edad (años):</label>
+                <input type="number" id="hof-input-age" class="hof-form-input" placeholder="Ej: 52" min="8" max="110" required>
+              </div>
+            </div>
+
+            <div class="hof-form-actions">
+              <button type="button" id="btn-hof-submit-profile" class="modal-btn primary hof-btn-save-profile" data-i18n="hof_reg_btn_submit">
+                🎖️ Inscribirme en el Salón de la Fama
+              </button>
+              <button type="button" id="btn-hof-dismiss-profile" class="modal-btn secondary" data-i18n="hof_reg_btn_later">
+                Ahora no
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Ficha de Maestro Inscrito (Visible cuando ya está registrado) -->
+        <div id="hof-enrolled-card" class="hof-enrolled-banner hidden">
+          <div class="hof-enrolled-left">
+            <span class="hof-enrolled-badge-icon">🌟</span>
+            <div>
+              <div class="hof-enrolled-title" data-i18n="hof_reg_enrolled_banner">¡Inscrito oficialmente en el Salón de la Fama!</div>
+              <div id="hof-enrolled-details" class="hof-enrolled-sub">
+                <!-- Se llena dinámicamente -->
+              </div>
+            </div>
+          </div>
+          <button type="button" id="btn-hof-edit-profile" class="modal-btn secondary" style="font-size: 0.76rem; padding: 0.3rem 0.6rem;" data-i18n="hof_reg_edit_btn">
+            ✏️ Editar ficha
+          </button>
+        </div>
+
         <!-- Barra de Pestañas / Filtros de Segmentación -->
         <div class="hof-tabs-bar" id="hof-tabs-bar">
           <button class="hof-tab-btn active" data-tab="all" data-i18n="hof_tab_all">🏆 Todos los Maestros</button>
