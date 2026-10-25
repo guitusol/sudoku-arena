@@ -47,11 +47,14 @@
       </div>
 
       <nav class="header-nav-bar">
-        <!-- Fila 1: Idioma, Sonido y Manual (en móvil comparte la fila superior con el logotipo) -->
+        <!-- Fila 1: Idioma, Sonido, Reiniciar, Manual y Salón de la Fama -->
         <div class="header-nav-row header-row-1">
           <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
           <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
             <span id="sound-icon">🔊</span>
+          </button>
+          <button id="btn-restart-game" class="header-btn icon-only-btn" title="Reiniciar tablero actual" data-i18n-title="title_restart">
+            <span>🔄</span>
           </button>
           <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>
           <button id="btn-open-hall-of-fame" class="header-btn hall-of-fame-highlight-btn" title="Salón de la Fama Global y Cuadro de Honor de Maestros" data-i18n-title="title_hall_of_fame">
@@ -65,21 +68,6 @@
           <button id="btn-open-scan-modal" class="header-btn scan-highlight-btn" title="Escanear desde foto o plantear sudoku" data-i18n-title="title_scan_btn"><span>📷</span> <span data-i18n="btn_scan">Escanear / Crear</span></button>
           <button id="btn-open-vault-modal" class="header-btn vault-highlight-btn" title="Bóveda de retos guardados" data-i18n-title="title_vault_btn"><span>📁</span> <span data-i18n="btn_vault">Mis Retos</span> <span id="vault-badge-count" class="vault-badge hidden">0</span></button>
           <button id="btn-open-history-modal" class="header-btn history-highlight-btn" title="Tus Récords y Sudokus Completados" data-i18n-title="title_history_btn"><span>🏆</span> <span data-i18n="btn_history">Récords</span> <span id="history-badge-count" class="vault-badge hidden">0</span></button>
-        </div>
-
-        <!-- Fila 3: Acciones de Partida y Sala de Duelo -->
-        <div class="header-nav-row header-row-3">
-          <button id="btn-restart-game" class="header-btn icon-only-btn" title="Reiniciar tablero actual">
-            <span>🔄</span>
-          </button>
-          <button id="btn-new-game" class="header-btn primary new-game-btn" title="Nuevo tablero aleatorio">
-            <span data-i18n="btn_new_game">➕ Nuevo</span>
-          </button>
-          <button id="btn-open-new-duel-modal" class="header-btn duel-highlight-btn" title="Hacer un nuevo planteamiento para un duelo indicándole la dificultad" data-i18n-title="title_duel_modal"><span>⚔️</span> <span data-i18n="btn_new_duel">Nuevo Duelo</span></button>
-          <button id="btn-tool-competition" class="header-btn duel-btn" title="Sala de Duelo / Código de Partida" data-i18n-title="title_duel_btn">
-            <span>⚔️</span>
-            <span class="duel-btn-label"><span class="duel-text-prefix"><span data-i18n="btn_duel">Duelo</span>: </span><strong id="challenge-code-display" class="font-mono text-accent">...</strong></span>
-          </button>
         </div>
       </nav>
     </div>
@@ -99,7 +87,7 @@
           <button class="diff-btn" data-diff="medio" data-i18n="diff_medio">Medio</button>
           <button class="diff-btn" data-diff="dificil" data-i18n="diff_dificil">Difícil</button>
           <button class="diff-btn" data-diff="endemoniado" data-i18n="diff_endemoniado">Endemoniado</button>
-          <button id="btn-reroll-seed" class="btn-reroll-seed" title="Cambiar semilla aleatoria dentro de este nivel (Tecla S o N)" data-i18n-title="title_reroll_seed">
+          <button id="btn-reroll-seed" class="btn-reroll-seed" title="Nuevo tablero aleatorio / Cambiar semilla (Tecla S o N)" data-i18n-title="title_reroll_seed">
             <span>🎲</span>
             <span class="seed-btn-text" data-i18n="btn_reroll_seed">Semilla</span>
           </button>

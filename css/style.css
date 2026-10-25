@@ -1150,9 +1150,6 @@ body {
   .header-row-2 #btn-open-history-modal { flex: 0.9 1 0; }
 
   /* Distribución Fila 3: Reiniciar, + Nuevo, Nuevo Duelo y Código */
-  .header-row-3 #btn-new-game { flex: 1 1 0; }
-  .header-row-3 #btn-open-new-duel-modal { flex: 1.2 1 0; }
-  .header-row-3 #btn-tool-competition { flex: 1.5 1 0; }
 
   .header-nav-break {
     display: none;
@@ -3276,5 +3273,11 @@ body {
     justify-content: center !important;
     font-size: 0.75rem !important;
     padding: 0.35rem 0.5rem !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .hof-btn-label {
+    display: none;
   }
 }
