@@ -54,9 +54,6 @@
           <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
             <span id="sound-icon">🔊</span>
           </button>
-          <button id="btn-restart-game" class="header-btn icon-only-btn" title="Reiniciar tablero actual" data-i18n-title="title_restart">
-            <span>🔄</span>
-          </button>
           <a href="manual.html" class="header-btn icon-only-btn" title="Manual del Jugador y Reglas de Puntuación" style="text-decoration:none;"><span>📖</span></a>
           <button id="btn-open-more-options" class="header-btn more-options-btn" title="Otras opciones: Reto semanal, Escanear, Mis Retos, Récords y Salón de la Fama" data-i18n-title="title_more_options">
             <span>⚙️</span> <span data-i18n="btn_more_options">Otras opciones</span>
@@ -95,9 +92,14 @@
           <strong id="challenge-code-display" class="font-mono text-accent">...</strong>
         </div>
 
-        <div class="timer-box timer-inline" id="game-timer" title="Tiempo de partida">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
+        <div class="seed-timer-actions">
+          <button id="btn-restart-game" class="seed-restart-btn" title="Reiniciar tablero actual desde cero" data-i18n-title="title_restart">
+            <span>🔄</span>
+          </button>
+          <div class="timer-box timer-inline" id="game-timer" title="Tiempo de partida">
+            <span>⏱️</span>
+            <span id="timer-display">00:00</span>
+          </div>
         </div>
       </div>
 
