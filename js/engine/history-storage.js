@@ -16,7 +16,19 @@ class HistoryStorage {
     try {
       const data = localStorage.getItem(this.STORAGE_KEY);
       const list = data ? JSON.parse(data) : [];
-      return Array.isArray(list) ? list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)) : [];
+      if (!Array.isArray(list)) return [];
+
+      let needsSave = false;
+      list.forEach(r => {
+        if (r && (r.peeksCount === undefined || r.peeksCount === null || isNaN(Number(r.peeksCount)))) {
+          r.peeksCount = (Number(r.peeksCellCount) || 0) + (Number(r.peeksAllCount) || 0);
+          needsSave = true;
+        }
+      });
+      if (needsSave) {
+        this.saveAll(list);
+      }
+      return list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
     } catch (e) {
       console.error('Error al leer el historial de partidas:', e);
       return [];

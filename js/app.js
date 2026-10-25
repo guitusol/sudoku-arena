@@ -1988,6 +1988,37 @@ ${url}`;
     const container = document.getElementById('history-items-list');
     if (!container || !this.history) return;
 
+    // 0. Actualizar banner hacia el Salón de la Fama según estatus
+    const hofBanner = document.getElementById('btn-history-open-hof');
+    if (hofBanner && window.hallOfFameEngine) {
+      const historyList = this.history ? this.history.getAll() : [];
+      const certified = window.hallOfFameEngine.getCertifiedVictories(historyList);
+      const profile = window.hallOfFameEngine.getPlayerProfile();
+
+      const titleEl = hofBanner.querySelector('.hof-entry-banner-title');
+      const subEl = hofBanner.querySelector('.hof-entry-banner-sub');
+      const btnEl = hofBanner.querySelector('.hof-entry-banner-btn');
+
+      if (certified.length >= 3 && (!profile || !profile.name)) {
+        hofBanner.style.background = 'linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(30, 41, 59, 0.95))';
+        hofBanner.style.borderColor = '#f59e0b';
+        hofBanner.style.boxShadow = '0 0 18px rgba(245, 158, 11, 0.35)';
+        hofBanner.style.cursor = 'pointer';
+        if (titleEl) titleEl.innerHTML = `👑 <strong style="color: #fbbf24;">¡Has alcanzado la Maestría! (${certified.length}/3 victorias)</strong>`;
+        if (subEl) subEl.textContent = 'Cumples los requisitos oficiales. ¡Inscríbete ahora en el Salón de la Fama!';
+        if (btnEl) {
+          btnEl.innerHTML = '🎖️ Inscribirme en el Salón de la Fama';
+          btnEl.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+          btnEl.style.color = '#000';
+          btnEl.style.fontWeight = '800';
+        }
+      } else if (certified.length >= 3 && profile && profile.name) {
+        if (titleEl) titleEl.innerHTML = `🌟 <strong>Salón de la Fama Global</strong> (Inscrito: ${profile.name})`;
+        if (subEl) subEl.textContent = `Consulta tu posición oficial y reta a los Maestros mundiales.`;
+        if (btnEl) btnEl.innerHTML = '🏛️ Ver Salón de la Fama';
+      }
+    }
+
     const stats = this.history.getStats();
 
     // 1. Estadísticas Globales
