@@ -252,7 +252,7 @@ Sudoku Arena premia el mérito intelectual con un Cuadro de Honor mundial públi
 - **Requisito de Entrada al Cuadro de Honor: Consistencia Anti-Suerte**:
   Para garantizar que la distinción de Maestro refleje auténtica destreza y no una partida afortunada por azar:
   - **Mínimo de Partidas Certificadas**: Es obligatorio acumular al menos **3 victorias de Gran Maestro Puro**.
-  - **Baremos Oficiales**: Obtenidas en dificultad **Medio, Difícil o Endemoniado** con **≥ 90% de autonomía mental** y **0 ayudas del sistema (0 ay.)**.
+  - **Baremos Oficiales**: Obtenidas en dificultad **Difícil o Endemoniado** con **≥ 90% de autonomía mental** y **0 ayudas del sistema (0 ay.)**.
 
 ---
 

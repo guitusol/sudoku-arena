@@ -103,10 +103,10 @@ class HallOfFameEngine {
         city: 'Lyon',
         age: 68,
         ageGroup: 'legend',
-        difficulty: 'medio',
-        diffLabel: 'Medio',
-        score: 960,
-        timeSeconds: 198,
+        difficulty: 'dificil',
+        diffLabel: 'Difícil',
+        score: 1445,
+        timeSeconds: 308,
         autonomyIndex: 98,
         peeksCount: 0,
         errorsCount: 1,
@@ -124,10 +124,10 @@ class HallOfFameEngine {
         city: 'Buenos Aires',
         age: 26,
         ageGroup: 'adult',
-        difficulty: 'medio',
-        diffLabel: 'Medio',
-        score: 945,
-        timeSeconds: 215,
+        difficulty: 'endemoniado',
+        diffLabel: 'Endemoniado',
+        score: 1890,
+        timeSeconds: 435,
         autonomyIndex: 92,
         peeksCount: 0,
         errorsCount: 2,
@@ -145,10 +145,10 @@ class HallOfFameEngine {
         city: 'Múnich',
         age: 17,
         ageGroup: 'junior',
-        difficulty: 'medio',
-        diffLabel: 'Medio',
-        score: 930,
-        timeSeconds: 230,
+        difficulty: 'dificil',
+        diffLabel: 'Difícil',
+        score: 1465,
+        timeSeconds: 295,
         autonomyIndex: 91,
         peeksCount: 0,
         errorsCount: 3,
@@ -188,7 +188,7 @@ class HallOfFameEngine {
   getCertifiedVictories(historyList = []) {
     if (!Array.isArray(historyList)) return [];
     return historyList.filter(r => 
-      ['medio', 'dificil', 'endemoniado'].includes(r.difficulty) &&
+      ['dificil', 'endemoniado'].includes(r.difficulty) &&
       (Number(r.autonomyIndex) >= 90) &&
       (Number(r.peeksCount) === 0) &&
       !r.fairPlayFlag

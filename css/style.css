@@ -3240,3 +3240,41 @@ body {
   color: var(--text-muted);
   margin-top: 0.1rem;
 }
+
+/* Responsive HOF tabs grid for mobile */
+@media (max-width: 600px) {
+  .hof-tabs-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+    overflow-x: visible !important;
+    padding-bottom: 0.6rem !important;
+  }
+
+  .hof-tab-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.5rem 0.35rem !important;
+    font-size: 0.76rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+    min-height: 38px !important;
+    line-height: 1.2 !important;
+  }
+
+  #hof-diff-pills {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+  }
+
+  #hof-diff-pills .vault-pill {
+    flex: 1 1 auto !important;
+    text-align: center !important;
+    justify-content: center !important;
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.5rem !important;
+  }
+}

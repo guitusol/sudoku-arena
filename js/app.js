@@ -1677,7 +1677,7 @@ ${url}`;
         const remaining = 3 - count;
         progressText.textContent = window.i18n ? 
           (window.i18n.t('hof_status_desc') + ' (Te faltan ' + remaining + ' partida' + (remaining > 1 ? 's' : '') + ').') : 
-          ('Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas) en Medio, Difícil o Endemoniado. (Te faltan ' + remaining + ' partida' + (remaining > 1 ? 's' : '') + ').');
+          ('Se requieren al menos 3 victorias como Gran Maestro Puro (≥ 90% autonomía y 0 ayudas) en Difícil o Endemoniado. (Te faltan ' + remaining + ' partida' + (remaining > 1 ? 's' : '') + ').');
         progressText.style.color = 'var(--text-muted)';
       }
     }
