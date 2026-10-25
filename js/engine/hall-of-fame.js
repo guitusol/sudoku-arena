@@ -12,7 +12,7 @@ class HallOfFameEngine {
     this.DEFAULT_MASTERS = [
       {
         id: 'master_1',
-        name: 'Guillermo Tudela',
+        name: 'Javier Navarro',
         flag: '🇪🇸',
         country: 'ES',
         countryName: 'España',
