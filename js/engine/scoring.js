@@ -86,7 +86,8 @@ class ScoringEngine {
 
     const tx = this._logTransaction('HIT', row, col, pointsAwarded, this.currentScore, desc);
 
-    // Centinela de Juego Limpio: Detección de barrido lineal mecánico (ChatGPT / Solver externo)
+    // Centinela de Juego Limpio Calibrado:
+    // Detección inteligente adaptada a la dificultad y a la fase de partida (inmunidad en cascada final)
     const now = Date.now();
     const cellIndex = row * 9 + col;
     let fairPlayJustTriggered = false;
@@ -101,38 +102,68 @@ class ScoringEngine {
       this.reverseScanStreak = 0;
     }
 
-    if (this.moveHistory.length > 0) {
+    // Contar cuántas casillas vacías quedan por resolver
+    let remainingEmpty = 0;
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (!this.cellCompleted[r][c]) remainingEmpty++;
+      }
+    }
+
+    const diff = (this.difficulty || 'medio').toLowerCase();
+
+    // 1. Inmunidad Total en Nivel Fácil: los maestros y jugadores experimentados resuelven rapidísimo
+    // 2. Inmunidad Total en Fase Final (Desencadenamiento / Cascada): con 28 casillas o menos restantes,
+    //    las deducciones caen como fichas de dominó de forma legítima y fluida.
+    const isImmune = (diff === 'facil') || (remainingEmpty <= 28);
+
+    if (isImmune) {
+      this.scanStreak = 0;
+      this.reverseScanStreak = 0;
+    } else if (this.moveHistory.length > 0) {
       const lastMove = this.moveHistory[this.moveHistory.length - 1];
       const timeDiff = (now - lastMove.time) / 1000;
 
-      // Barrido ascendente (de arriba a abajo, izquierda a derecha)
-      if (cellIndex > lastMove.cellIndex && timeDiff < 7.0) {
-        this.scanStreak++;
-      } else if (cellIndex > lastMove.cellIndex) {
-        this.scanStreak = Math.min(this.scanStreak + 1, 8);
-      } else {
+      // Umbrales calibrados por dificultad para la fase de apertura/media:
+      const configByDiff = {
+        'medio': { minStreak: 12, maxSecondsPerCell: 1.8, pauseResetSeconds: 3.0 },
+        'dificil': { minStreak: 8, maxSecondsPerCell: 2.2, pauseResetSeconds: 3.5 },
+        'endemoniado': { minStreak: 7, maxSecondsPerCell: 2.5, pauseResetSeconds: 4.0 }
+      };
+      const cfg = configByDiff[diff] || configByDiff['medio'];
+
+      // Si el jugador se detiene a pensar (pausa superior al umbral), se rompe la racha
+      if (timeDiff >= cfg.pauseResetSeconds) {
         this.scanStreak = 1;
-      }
-
-      // Barrido descendente (de abajo a arriba)
-      if (cellIndex < lastMove.cellIndex && timeDiff < 7.0) {
-        this.reverseScanStreak++;
-      } else {
         this.reverseScanStreak = 1;
+      } else {
+        // Barrido ascendente rápido en orden de lectura
+        if (cellIndex > lastMove.cellIndex && timeDiff <= cfg.maxSecondsPerCell) {
+          this.scanStreak++;
+          this.reverseScanStreak = 1;
+        } else if (cellIndex < lastMove.cellIndex && timeDiff <= cfg.maxSecondsPerCell) {
+          // Barrido descendente rápido
+          this.reverseScanStreak++;
+          this.scanStreak = 1;
+        } else {
+          this.scanStreak = 1;
+          this.reverseScanStreak = 1;
+        }
       }
 
-      // Si se acumulan 6 o más casillas consecutivas en barrido mecánico
-      if ((this.scanStreak >= 6 || this.reverseScanStreak >= 6) && !this.fairPlayFlag) {
+      // Evaluar activación solo si se alcanza la racha mecánica extrema
+      if ((this.scanStreak >= cfg.minStreak || this.reverseScanStreak >= cfg.minStreak) && !this.fairPlayFlag) {
         this.fairPlayFlag = true;
         this.fairPlayReason = 'LINEAR_SCAN_PATTERN';
         fairPlayJustTriggered = true;
+        const streakCount = Math.max(this.scanStreak, this.reverseScanStreak);
         this._logTransaction(
           'FAIR_PLAY_ALERT',
           row,
           col,
           0,
           this.currentScore,
-          `⚠️ Alerta de Integridad: Detectada secuencia de ${Math.max(this.scanStreak, this.reverseScanStreak)} casillas consecutivas en barrido lineal característico de transcripción externa.`
+          `⚠️ Alerta de Integridad: Detectada secuencia de ${streakCount} casillas consecutivas a ritmo mecánico (< ${cfg.maxSecondsPerCell}s) en apertura/media de nivel ${diff.toUpperCase()}.`
         );
       }
     } else {
