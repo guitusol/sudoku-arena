@@ -61,6 +61,7 @@ class SudokuApp {
     window.i18n.applyTranslations();
 
     this.bindEvents();
+    this.checkMigrationPayload();
     this.updateTopSudokuLinks();
     this.buildReviewGrid();
     this.updateVaultBadge();
@@ -1678,9 +1679,16 @@ ${url}`;
     this.openModal('modal-hall-of-fame');
     this.renderHallOfFame();
 
-    // Si el jugador cumple los requisitos (>= 3 victorias de Maestro) y aún no está registrado,
-    // proponer activamente la inscripción destacando la tarjeta y mostrando aviso
     const historyList = this.history ? this.history.getAll() : [];
+
+    // Sincronizar en segundo plano con la base de datos central de Club del Ingenio
+    if (window.hallOfFameEngine && window.hallOfFameEngine.syncWithServer) {
+      window.hallOfFameEngine.syncWithServer(historyList).then(updated => {
+        if (updated) {
+          this.renderHallOfFame();
+        }
+      });
+    }
     const certified = window.hallOfFameEngine ? window.hallOfFameEngine.getCertifiedVictories(historyList) : [];
     const profile = window.hallOfFameEngine ? window.hallOfFameEngine.getPlayerProfile() : null;
 
@@ -2643,6 +2651,16 @@ ${url}`;
       };
 
       window.hallOfFameEngine.savePlayerProfile(profileData);
+      
+      // Enviar a la base de datos central de Club del Ingenio en segundo plano
+      if (window.hallOfFameEngine.submitMasterToServer) {
+        window.hallOfFameEngine.submitMasterToServer(profileData, this.history ? this.history.getAll() : []).then(sent => {
+          if (sent) {
+            this.renderHallOfFame();
+          }
+        });
+      }
+
       if (window.soundFx) window.soundFx.playVictory();
 
       this.showToast(window.i18n ? window.i18n.t('hof_reg_success_toast') : '🎉 ¡Inscripción completada! Ya formas parte oficial del Salón de la Fama.', 'success');
@@ -3082,14 +3100,92 @@ ${url}`;
   }
 
   /**
+   * Procesa el traspaso de partidas, récords y perfil si se accede desde una redirección de migración (?traspaso=...)
+   */
+  checkMigrationPayload() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const traspaso = params.get('traspaso');
+      if (!traspaso) return;
+
+      const decoded = decodeURIComponent(atob(traspaso));
+      const backupData = JSON.parse(decoded);
+
+      if (backupData && typeof backupData === 'object') {
+        let importedCount = 0;
+
+        if (backupData.history && Array.isArray(backupData.history)) {
+          backupData.history.forEach(item => {
+            if (this.history && item && item.id) {
+              this.history.records.set(item.id, item);
+              importedCount++;
+            }
+          });
+          this.history?.save();
+        }
+
+        if (backupData.vault && Array.isArray(backupData.vault)) {
+          backupData.vault.forEach(item => {
+            if (this.vault && item && item.id) {
+              this.vault.challenges.set(item.id, item);
+            }
+          });
+          this.vault?.save();
+        }
+
+        if (backupData.profile && window.hallOfFameEngine) {
+          window.hallOfFameEngine.savePlayerProfile(backupData.profile);
+        }
+
+        if (backupData.weekly) {
+          localStorage.setItem('sudoku_arena_weekly_history_v1', JSON.stringify(backupData.weekly));
+        }
+
+        // Limpiar parámetro de la URL sin recargar
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+
+        setTimeout(() => {
+          this.showToast('🎉 ¡Bienvenido a Club del Ingenio! Tus partidas y récords se han transferido con éxito.', 'success');
+          this.updateHistoryBadge();
+          this.updateVaultBadge();
+        }, 800);
+      }
+    } catch (e) {
+      console.warn('No se pudo procesar el traspaso de migración:', e);
+    }
+  }
+
+  /**
    * Actualiza los enlaces hacia Top-Sudoku para reflejar el idioma en curso
-   * y resolver dinámicamente entre entorno local (/top-sudoku/) o producción en GitHub Pages.
+   * y resolver dinámicamente entre Club del Ingenio, localhost o producción en GitHub Pages.
    */
   updateTopSudokuLinks() {
     try {
       const lang = (window.i18n?.currentLang || localStorage.getItem('sudoku_arena_lang') || 'es').toLowerCase();
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const baseUrl = isLocal ? '/top-sudoku/' : 'https://guitusol.github.io/top-sudoku/';
+      const host = window.location.hostname;
+      const isClub = host.includes('clubdelingenio') || window.location.pathname.includes('/clubdelingenio/');
+      const isLocal = host === 'localhost' || host === '127.0.0.1';
+
+      let baseUrl = '../top-sudoku/';
+      let clubUrl = '../clubdelingenio/';
+
+      if (isClub) {
+        baseUrl = '../top-sudoku/';
+        clubUrl = '/';
+      } else if (isLocal) {
+        baseUrl = '/top-sudoku/';
+        clubUrl = '/clubdelingenio/';
+      } else if (host.endsWith('.test')) {
+        baseUrl = 'http://top-sudoku.test/';
+        clubUrl = 'http://clubdelingenio.test/';
+      } else {
+        baseUrl = 'https://guitusol.github.io/top-sudoku/';
+        clubUrl = 'https://clubdelingenio.com';
+      }
+
+      const clubBtn = document.getElementById('btn-header-club');
+      if (clubBtn) clubBtn.href = clubUrl;
 
       const seed = this.currentSeed || '';
       const diff = this.selectedDifficulty || 'medio';

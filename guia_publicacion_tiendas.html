@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Publicación en Tiendas (Google Play & App Store) — Sudoku Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(15, 23, 42, 0.8);
+      --border: rgba(56, 189, 248, 0.25);
+      --primary: #38bdf8;
+      --gold: #f59e0b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --code-bg: #030712;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header-box {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    p, li {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+    }
+
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--code-bg);
+      color: #38bdf8;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.88rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 1rem;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      color: #a5f3fc;
+      font-size: 0.88rem;
+    }
+
+    .copy-block {
+      background: rgba(3, 7, 18, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #334155;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+    }
+
+    .highlight-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--gold);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="nav-actions">
+      <a href="index.html" class="btn-nav">🎮 Volver a Sudoku Arena</a>
+      <a href="../" class="btn-nav">🏛️ Club del Ingenio</a>
+      <button onclick="window.print()" class="btn-nav" style="cursor:pointer;">🖨️ Imprimir / Guardar PDF</button>
+    </div>
+
+    <div class="header-box">
+      <span class="badge">Capacitor 6 / 7 • Android & iOS</span>
+      <h1>🚀 Guía de Publicación en Tiendas</h1>
+      <p class="subtitle">Instrucciones técnicas y metadatos para compilar y subir <strong>Sudoku Arena</strong> a Google Play Store y Apple App Store.</p>
+    </div>
+
+    <!-- SECCIÓN 1 -->
+    <div class="section-card">
+      <h2>📦 1. Estructura de Ficheros Preparada en el Proyecto</h2>
+      <p>El proyecto en <code>c:\laragon\www\sudoku-arena</code> ya contiene todos los archivos y configuraciones necesarios:</p>
+      <ul>
+        <li><code>manifest.json</code>: Web App Manifest con orientación vertical, colores oscuros y metadatos PWA.</li>
+        <li><code>capacitor.config.json</code>: Configuración del Bundle ID (<code>com.sudokuarena.mobile</code>), nombre oficial y Splash Screen nativo.</li>
+        <li><code>package.json</code>: Dependencias de Capacitor oficiales listas para instalar.</li>
+        <li><code>icons/</code>: Iconos vectoriales y rasterizados de alta resolución (192px y 512px).</li>
+        <li><code>privacidad.html</code>: Política de privacidad obligatoria requerida por Google Play y Apple.</li>
+      </ul>
+    </div>
+
+    <!-- SECCIÓN 2 -->
+    <div class="section-card">
+      <h2>🛠️ 2. Pasos para Compilar en Android (Google Play)</h2>
+      <div class="highlight-box">
+        <strong>Requisitos:</strong> Ordenador con Node.js y <a href="https://developer.android.com/studio" target="_blank" style="color:var(--primary);">Android Studio</a> instalado.
+      </div>
+
+      <ol>
+        <li>Abrir la terminal en la carpeta del proyecto:
+          <pre><code>cd C:\laragon\www\sudoku-arena</code></pre>
+        </li>
+        <li>Instalar dependencias de Capacitor:
+          <pre><code>npm install</code></pre>
+        </li>
+        <li>Empaquetar y sincronizar con Android nativo:
+          <pre><code>npm run build
+npx cap add android
+npx cap sync</code></pre>
+        </li>
+        <li>Abrir el proyecto directamente en Android Studio:
+          <pre><code>npx cap open android</code></pre>
+        </li>
+        <li>En <strong>Android Studio</strong>:
+          <ul>
+            <li>Ir al menú: <strong>Build > Generate Signed Bundle / APK</strong>.</li>
+            <li>Elegir <strong>Android App Bundle (.aab)</strong> (el formato estándar de Google Play).</li>
+            <li>Seleccionar o generar la clave de firma digital (<em>keystore</em>).</li>
+            <li>Obtendrás el archivo <code>.aab</code> listo para subir a <strong>Google Play Console</strong>.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <!-- SECCIÓN 3 -->
+    <div class="section-card">
+      <h2>🍏 3. Pasos para Compilar en iOS (Apple App Store)</h2>
+      <div class="highlight-box">
+        <strong>Requisitos:</strong> Un Mac con <a href="https://developer.apple.com/xcode/" target="_blank" style="color:var(--primary);">Xcode</a> instalado y cuenta Apple Developer.
+      </div>
+
+      <ol>
+        <li>En el Mac, abrir la terminal en la carpeta del proyecto:
+          <pre><code>npm install
+npm run build
+npx cap add ios
+npx cap sync</code></pre>
+        </li>
+        <li>Abrir el proyecto nativo en Xcode:
+          <pre><code>npx cap open ios</code></pre>
+        </li>
+        <li>En <strong>Xcode</strong>:
+          <ul>
+            <li>En la pestaña <strong>Signing & Capabilities</strong>, seleccionar tu cuenta de desarrollador (*Team*).</li>
+            <li>Conectar un iPhone o usar el simulador de iOS para probarlo.</li>
+            <li>Para enviar a la tienda: Seleccionar dispositivo <strong>Any iOS Device (arm64)</strong> y pulsar <strong>Product > Archive</strong>.</li>
+            <li>Pulsar <strong>Distribute App</strong> para subir la compilación a <strong>App Store Connect / TestFlight</strong>.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <!-- SECCIÓN 4 -->
+    <div class="section-card">
+      <h2>📋 4. Ficha y Textos Oficiales para las Tiendas</h2>
+
+      <h3>Datos de Ficha</h3>
+      <ul>
+        <li><strong>Nombre de la App:</strong> Sudoku Arena — Reto Lógico</li>
+        <li><strong>Nombre Corto:</strong> Sudoku Arena</li>
+        <li><strong>Bundle ID:</strong> <code>com.sudokuarena.mobile</code></li>
+        <li><strong>Categoría:</strong> Juegos / Puzles / Lógica / Juegos de Mesa</li>
+        <li><strong>Precio:</strong> Gratis (Sin anuncios ni micropagos)</li>
+        <li><strong>Clasificación PEGI:</strong> PEGI 3 / 4+ (Para todos los públicos)</li>
+      </ul>
+
+      <h3>Descripción Breve (Google Play - 80 caracteres)</h3>
+      <div class="copy-block">
+        <p style="margin:0; font-weight:600; color:#fff;">Sudoku táctico con clasificación lógica de dificultad y duelos multijugador.</p>
+      </div>
+
+      <h3>Descripción Completa (Google Play y App Store)</h3>
+      <div class="copy-block">
+        <button class="copy-btn" onclick="copyFullDesc(this)">📋 Copiar Texto</button>
+        <pre id="full-desc" style="white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5; color: #cbd5e1; margin-top: 1rem;">¿Cansado de los sudokus que se resuelven adivinando? Bienvenido a Sudoku Arena.
+
+Sudoku Arena es un juego de sudoku táctico diseñado para desafiar tu agilidad deductiva real sin tanteo a ciegas. Cada casilla tiene un valor en puntos según la técnica lógica humana necesaria para resolverla (candidatos únicos, números ocultos, pares y cadenas).
+
+CARACTERÍSTICAS PRINCIPALES:
+⚡ 4 Niveles de Dificultad Real: Fácil, Medio, Difícil y Endemoniado, con soluciones únicas garantizadas por algoritmo.
+🎯 Motor de Puntuación Cognitiva: Cada acierto suma según su complejidad lógica.
+🔍 Inspección Quirúrgica (Lupa): Consulta las posibilidades de una casilla activa con coste de oportunidad en tu techo de puntos.
+⚡ Rayos X Globales: Escanea todos los candidatos del tablero con penalización matemática escalonada.
+🧠 Índice de Autonomía Mental: Descubre tu rango real (Gran Maestro Puro, Lógico Quirúrgico, Resolutor Pragmático o Nivel Muy Bajo).
+📋 Libro Mayor de Auditoría: Revisa la trazabilidad de cada acierto, fallo y deducción.
+⚔️ Modo Duelo / Códigos Compartibles: Reta a tus amigos a resolver exactamente el mismo tablero con un código de partida único.
+
+100% PRIVADO Y SIN PUBLICIDAD:
+• Sin anuncios molestos ni interrupciones.
+• No requiere conexión a internet para jugar (offline-first).
+• 0 datos personales recopilados.</pre>
+      </div>
+
+      <h3>Palabras Clave (Keywords iOS)</h3>
+      <p><code>sudoku, puzzle, logica, duelos, entrenamiento cerebral, solver, rompecabezas, matematicas, mente</code></p>
+
+      <h3>URL de Política de Privacidad (Requerida por Google y Apple)</h3>
+      <p><code>https://clubdelingenio.es/sudoku-arena/privacidad.html</code></p>
+    </div>
+
+  </div>
+
+  <script>
+    function copyFullDesc(btn) {
+      const text = document.getElementById('full-desc').innerText;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = '✅ ¡Copiado!';
+          setTimeout(() => btn.textContent = '📋 Copiar Texto', 2500);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -47,9 +47,10 @@
         </div>
       </div>
 
-      <!-- LÍNEA 2: Los cuatro primeros botones y botón 'Otras opciones' -->
+      <!-- LÍNEA 2: Botón Club del Ingenio, controles y botón 'Otras opciones' -->
       <nav class="header-nav-bar">
         <div class="header-nav-row header-row-controls">
+          <a href="../" id="btn-header-club" class="header-btn" title="Volver a la Sede Oficial: Club del Ingenio" style="text-decoration:none; background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(30, 41, 59, 0.85)); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24;"><span>🏛️</span> <span style="font-weight:700;">Club</span></a>
           <button id="btn-open-lang-modal" class="header-btn" title="Seleccionar idioma" data-i18n-title="title_lang"><span>🌐</span> <span id="current-lang-code" class="font-mono font-bold">ES</span></button>
           <button id="btn-toggle-sound" class="header-btn icon-only-btn" title="Activar/Silenciar sonido">
             <span id="sound-icon">🔊</span>
@@ -715,6 +716,17 @@
                 <small data-i18n="more_opt_desc_backup">Exportar e importar toda la base de datos entre móvil, tablet y PC</small>
               </div>
             </button>
+
+            <a href="../" class="more-opt-btn more-opt-club" style="text-decoration: none; border-color: rgba(245, 158, 11, 0.45); background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(19, 27, 46, 0.95));">
+              <span class="more-opt-icon">👑</span>
+              <div class="more-opt-content">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <strong style="color: #fbbf24;">Club del Ingenio</strong>
+                  <span style="font-size: 0.65rem; background: #f59e0b; color: #070a13; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 4px;">SEDE OFICIAL</span>
+                </div>
+                <small style="color: #cbd5e1;">Portal central del Club: Escuela, Arena y nuevos proyectos</small>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -1566,6 +1578,7 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
   </footer>
 
   <!-- Scripts -->
+  <script src="js/legacy-migration-notice.js?v=1.0"></script>
   <script src="js/i18n.js?v=4.9.5"></script>
   <script src="js/engine/sudoku.js?v=4.9.5"></script>
   <script src="js/engine/scoring.js?v=4.9.5"></script>

@@ -14,6 +14,7 @@ Si eres el hijo de Guillermo y vas a empaquetar y subir la app a **Google Play S
 1. **[GUIA_PUBLICACION_TIENDAS.md](./GUIA_PUBLICACION_TIENDAS.md)**: Manual técnico paso a paso con los comandos de terminal exactos, configuración de Android Studio, Xcode y los textos listos para copiar y pegar en la ficha de ambas tiendas.
 2. **[MANUAL_DE_USUARIO.md](./MANUAL_DE_USUARIO.md)**: Manual oficial del juego con todas las reglas, puntuaciones, penalizaciones y el nuevo sistema de duelos.
 3. **[privacidad.html](./privacidad.html)**: Política de privacidad obligatoria requerida por Google y Apple (100% conforme: 0 datos personales, sin anuncios, sin trackers).
+4. **[ROADMAP_MONETIZACION_ETICA.md](./ROADMAP_MONETIZACION_ETICA.md)**: Especificación de la futura monetización ética no invasiva (Stripe Payment Links y micro-aportaciones voluntarias).
 
 ---
 
