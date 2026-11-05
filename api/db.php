@@ -2,6 +2,7 @@
 /**
  * Conexión a la Base de Datos MariaDB / MySQL
  * Compatible con entorno local de Laragon y servidor VPS Plesk
+ * Diseño tolerante a fallos: no aborta la ejecución si la BD no está disponible
  */
 
 // Configuración por defecto (Laragon)
@@ -16,20 +17,20 @@ if (file_exists(__DIR__ . '/config.local.php')) {
     include __DIR__ . '/config.local.php';
 }
 
+$pdo = null;
+$dbConnectionError = null;
+
 try {
     $dsn = "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
     ];
     $pdo = new PDO($dsn, $dbUser, $dbPass, $options);
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error'   => 'Error de conexión con la base de datos',
-        'details' => $e->getMessage()
-    ]);
-    exit;
+} catch (Throwable $e) {
+    // Si la conexión falla, no interrumpimos con error 500 para permitir el almacenamiento de respaldo en disco
+    $pdo = null;
+    $dbConnectionError = $e->getMessage();
 }
