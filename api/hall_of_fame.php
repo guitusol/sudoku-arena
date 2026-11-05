@@ -339,6 +339,11 @@ if ($method === 'GET') {
     // Fallback: Si no hay base de datos o dio error, leer del almacenamiento JSON en servidor
     if ($masters === null) {
         $all = loadMastersFromJson($jsonFile);
+        // Excluir registros temporales de prueba o depuración
+        $all = array_values(array_filter($all, function($m) {
+            $uuid = strtolower($m['deviceUuid'] ?? '');
+            return strpos($uuid, 'test') === false;
+        }));
         if ($diff !== 'all') {
             $all = array_values(array_filter($all, function($m) use ($diff) {
                 return ($m['difficulty'] ?? '') === $diff;
