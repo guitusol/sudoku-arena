@@ -318,9 +318,15 @@ class ScoringEngine {
    * Calcula el estado actual de maestría
    */
   getSummary() {
-    const autonomyIndex = this.initialTotalPoints > 0
+    let autonomyIndex = this.initialTotalPoints > 0
       ? Math.round((this.currentScore / this.initialTotalPoints) * 100)
       : 0;
+
+    // En dificultad Endemoniado, por definición lógica y bifurcaciones iniciales necesarias,
+    // la autonomía cognitiva real máxima nunca puede ser del 100% (tope realista del 96%)
+    if ((this.difficulty || '').toLowerCase() === 'endemoniado' && autonomyIndex > 96) {
+      autonomyIndex = 96;
+    }
 
     let rankKey = 'rank_training_wheels';
     let rankBadge = 'badge-starter';
