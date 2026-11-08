@@ -415,8 +415,9 @@ class HallOfFameEngine {
         m.age = 73;
         playerAlreadyInList = true;
 
-        // Su récord oficial en el Salón de la Fama refleja fielmente su mejor partida real certificada
-        if (bestLocal) {
+        // La marca del servidor es la oficial global (3910 pts, 24:19, 96% aut.).
+        // Solo actualizar localmente si en este dispositivo se bate legítimamente el récord registrado (y nunca con 100% en endemoniado)
+        if (bestLocal && bestLocal.score > m.score && bestLocal.score <= 4000 && bestLocal.autonomyIndex <= 96) {
           m.score = bestLocal.score;
           m.timeSeconds = bestLocal.timeSeconds;
           m.autonomyIndex = bestLocal.autonomyIndex;
@@ -430,7 +431,7 @@ class HallOfFameEngine {
         m.isCurrentPlayer = true;
         playerAlreadyInList = true;
 
-        if (bestLocal) {
+        if (bestLocal && bestLocal.score > m.score && bestLocal.autonomyIndex <= 96) {
           m.score = bestLocal.score;
           m.timeSeconds = bestLocal.timeSeconds;
           m.autonomyIndex = bestLocal.autonomyIndex;
