@@ -905,6 +905,7 @@ class SudokuApp {
           mode: this.isWeeklyMode ? 'weekly' : (this.gameData?.isCustom ? 'custom' : 'standard'),
           seed: this.currentSeed,
           score: summary.currentScore,
+          pureScore: summary.pureScore || Math.round(summary.currentScore * (summary.autonomyIndex / 100)),
           maxTheoreticalScore: summary.initialTotalPoints,
           autonomyIndex: summary.autonomyIndex,
           rank: summary.rank,
@@ -992,7 +993,8 @@ class SudokuApp {
       if (compBanner) compBanner.classList.add('hidden');
     }
 
-    document.getElementById('verdict-score').textContent = `${summary.currentScore} pts`;
+    const pureScore = summary.pureScore || Math.round(summary.currentScore * (summary.autonomyIndex / 100));
+    document.getElementById('verdict-score').textContent = `${summary.currentScore} pts (${pureScore} puros)`;
     document.getElementById('verdict-max-theoretical').textContent = `${summary.initialTotalPoints} pts`;
     document.getElementById('verdict-autonomy').textContent = `${summary.autonomyIndex}%`;
     document.getElementById('verdict-autonomy').style.color = isSystemSolved ? '#94a3b8' : summary.rankColor;
@@ -1039,12 +1041,13 @@ class SudokuApp {
         shareBtn.innerHTML = `<span>${window.i18n ? window.i18n.t('verdict_share') : '📋 Copiar Resultado y Código de Desafío para Retar'}</span>`;
         shareBtn.onclick = () => {
           let text = '';
+          const pureScoreVal = summary.pureScore || Math.round((summary.currentScore || 0) * ((summary.autonomyIndex || 0) / 100));
           if (this.gameData && this.gameData.isCustom) {
             const url = CompetitionEngine.generateCustomChallengeUrl(this.gameData.boardString, this.gameData.customName || 'Reto Personalizado');
-            text = `🏆 ¡He resuelto este Sudoku personalizado en Sudoku Arena!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme en este reto? Juega aquí:\n${url}`;
+            text = `🏆 ¡He resuelto este Sudoku personalizado en Sudoku Arena!\n💎 Puntuación Pura: ${pureScoreVal} pts (${summary.currentScore} pts brutos)\n🧠 Pureza Mental: ${summary.autonomyIndex}% (${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superar mi pureza deductiva? Juega aquí:\n${url}`;
           } else {
             const code = CompetitionEngine.generateChallengeCode(this.selectedDifficulty, this.currentSeed);
-            text = `🏆 ¡He resuelto Sudoku Arena en nivel ${this.selectedDifficulty.toUpperCase()}!\n🎯 Puntuación: ${summary.currentScore} pts (Autonomía: ${summary.autonomyIndex}% - ${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero con este enlace:\n${CompetitionEngine.getChallengeUrl(code)}`;
+            text = `🏆 ¡He resuelto Sudoku Arena en nivel ${this.selectedDifficulty.toUpperCase()}!\n💎 Puntuación Pura: ${pureScoreVal} pts (${summary.currentScore} pts brutos)\n🧠 Pureza Mental: ${summary.autonomyIndex}% (${summary.rank})\n⏱️ Tiempo: ${this.formatTime(this.timerSeconds)}\n⚔️ ¿Te atreves a superar mi pureza deductiva? Juega el mismo tablero con este enlace:\n${CompetitionEngine.getChallengeUrl(code)}`;
           }
 
           if (navigator.clipboard) {
@@ -1855,8 +1858,8 @@ ${url}`;
           '</div>' +
           '<div class="hof-master-right">' +
             '<div class="hof-master-stats">' +
-              '<div class="hof-master-score">' + m.score + ' pts</div>' +
-              '<div class="hof-master-time">⏱️ ' + this.formatTime(m.timeSeconds) + ' • ' + m.autonomyIndex + '% aut.</div>' +
+              '<div class="hof-master-score">' + (m.pureScore || Math.round(m.score * (m.autonomyIndex / 100))) + ' <span style="font-size:0.75rem;font-weight:normal;opacity:0.85;">pts puros</span></div>' +
+              '<div class="hof-master-time">⏱️ ' + this.formatTime(m.timeSeconds) + ' • ' + m.autonomyIndex + '% aut. (' + m.score + ' pts)</div>' +
             '</div>' +
             '<button type="button" class="hof-btn-duel" data-master-id="' + m.id + '" title="Cargar mismo tablero y semilla del maestro">' +
               challengeBtnLabel +
@@ -2034,7 +2037,14 @@ ${url}`;
     if (totalElem) totalElem.textContent = stats.totalGames;
 
     const bestScoreElem = document.getElementById('hist-stat-best-score');
-    if (bestScoreElem) bestScoreElem.textContent = stats.globalBestScore > 0 ? `${stats.globalBestScore} pts` : '0 pts';
+    if (bestScoreElem) {
+      if (stats.globalBestPureScore > 0) {
+        bestScoreElem.textContent = `${stats.globalBestPureScore} pts puros`;
+        bestScoreElem.title = `Puntuación bruta: ${stats.globalBestScore} pts`;
+      } else {
+        bestScoreElem.textContent = stats.globalBestScore > 0 ? `${stats.globalBestScore} pts` : '0 pts';
+      }
+    }
 
     const bestTimeElem = document.getElementById('hist-stat-best-time');
     if (bestTimeElem) bestTimeElem.textContent = stats.globalBestTime > 0 ? this.formatTime(stats.globalBestTime) : '--:--';
@@ -2051,7 +2061,14 @@ ${url}`;
       const timeEl = document.getElementById(`hist-diff-time-${d}`);
 
       if (countEl) countEl.textContent = `${dStats.count}`;
-      if (scoreEl) scoreEl.textContent = dStats.bestScore > 0 ? `${dStats.bestScore} pts` : '-- pts';
+      if (scoreEl) {
+        if (dStats.bestPureScore > 0) {
+          scoreEl.textContent = `${dStats.bestPureScore} puros`;
+          scoreEl.title = `Puntuación bruta: ${dStats.bestScore} pts`;
+        } else {
+          scoreEl.textContent = dStats.bestScore > 0 ? `${dStats.bestScore} pts` : '-- pts';
+        }
+      }
       if (timeEl) timeEl.textContent = dStats.bestTime > 0 ? `⏱️ ${this.formatTime(dStats.bestTime)}` : '--:--';
     });
 
@@ -2119,7 +2136,9 @@ ${url}`;
               <span class="history-card-date">${dateStr}</span>
             </div>
             <div class="history-card-meta">
-              <span class="font-bold text-gold font-mono">${item.score} pts</span>
+              <span class="font-bold text-cyan font-mono" style="color:#38bdf8;">${item.pureScore || Math.round((item.score || 0) * ((item.autonomyIndex || 0) / 100))} pts puros</span>
+              <span>&bull;</span>
+              <span class="font-mono text-gold font-bold">${item.score} pts</span>
               ${item.maxTheoreticalScore ? `<span class="text-muted font-mono" style="font-size:0.75rem;">/ ${item.maxTheoreticalScore}</span>` : ''}
               <span>&bull;</span>
               <span class="font-mono text-emerald font-bold">${item.autonomyIndex}% aut.</span>
@@ -2159,7 +2178,8 @@ ${url}`;
         }
         const code = CompetitionEngine.generateChallengeCode(item.difficulty, item.seed);
         const url = CompetitionEngine.getChallengeUrl(code);
-        const text = `🏆 ¡He logrado ${item.score} pts (Autonomía: ${item.autonomyIndex}%) en Sudoku Arena nivel ${diffLabel}!\n⏱️ Tiempo: ${this.formatTime(item.timeSeconds)}\n⚔️ ¿Te atreves a superarme? Juega el mismo tablero aquí:\n${url}`;
+        const pureScoreVal = item.pureScore || Math.round((item.score || 0) * ((item.autonomyIndex || 0) / 100));
+        const text = `🏆 ¡He logrado ${pureScoreVal} pts puros (${item.score} pts • ${item.autonomyIndex}% Pureza) en Sudoku Arena nivel ${diffLabel}!\n⏱️ Tiempo: ${this.formatTime(item.timeSeconds)}\n⚔️ ¿Te atreves a superar mi nivel de deducción? Juega el mismo tablero aquí:\n${url}`;
         if (navigator.clipboard) {
           navigator.clipboard.writeText(text).then(() => {
             this.showToast(window.i18n ? window.i18n.t('toast_duel_link_copied') : '¡Enlace de Duelo copiado al portapapeles!', 'success');

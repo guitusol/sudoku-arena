@@ -178,10 +178,17 @@ class ScoringEngine {
 
   /**
    * El jugador comete un error al teclear un número incorrecto
+   * Penalización proporcional a la dificultad (Fácil: -10, Medio: -15, Difícil: -25, Endemoniado: -50)
    */
   registerError(row, col, value) {
     this.errorsCount++;
-    const penalty = 15;
+    const diff = (this.difficulty || '').toLowerCase();
+    let penalty = 15;
+    if (diff === 'endemoniado') penalty = 50;
+    else if (diff === 'dificil') penalty = 25;
+    else if (diff === 'medio') penalty = 15;
+    else if (diff === 'facil') penalty = 10;
+
     this.currentScore = Math.max(0, this.currentScore - penalty);
     this.totalPenalties += penalty;
     this.currentMaxPossible = Math.max(this.currentScore, this.currentMaxPossible - penalty);
@@ -354,8 +361,11 @@ class ScoringEngine {
       ? window.i18n.t(rankKey)
       : 'Nivel Muy Bajo';
 
+    const pureScore = Math.round(this.currentScore * (autonomyIndex / 100));
+
     return {
       currentScore: this.currentScore,
+      pureScore,
       initialTotalPoints: this.initialTotalPoints,
       currentMaxPossible: this.currentMaxPossible,
       totalPenalties: this.totalPenalties,

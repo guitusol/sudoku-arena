@@ -40,6 +40,7 @@ function getDefaultMasters() {
             'difficulty'    => 'endemoniado',
             'diffLabel'     => 'Endemoniado',
             'score'         => 3910,
+            'pureScore'     => 3754,
             'timeSeconds'   => 1459,
             'autonomyIndex' => 96,
             'peeksCount'    => 0,
@@ -247,10 +248,26 @@ function loadMastersFromJson($file) {
 
 // Guardar lista en JSON de forma atómica y segura
 function saveMastersToJson($file, array $masters) {
-    // Ordenar siempre por puntuación descendente y tiempo ascendente
+    foreach ($masters as &$m) {
+        if (!isset($m['pureScore'])) {
+            $m['pureScore'] = (int)round(($m['score'] ?? 0) * (($m['autonomyIndex'] ?? 0) / 100));
+        }
+    }
+    unset($m);
+
+    // Criterio Oficial de Ordenación: Puntuación Pura DESC, Autonomía DESC, Puntos DESC, Tiempo ASC
     usort($masters, function($a, $b) {
+        $pureA = $a['pureScore'] ?? round(($a['score'] ?? 0) * (($a['autonomyIndex'] ?? 0) / 100));
+        $pureB = $b['pureScore'] ?? round(($b['score'] ?? 0) * (($b['autonomyIndex'] ?? 0) / 100));
+        $diffPure = $pureB - $pureA;
+        if ($diffPure !== 0) return $diffPure;
+
+        $diffAut = ($b['autonomyIndex'] ?? 0) - ($a['autonomyIndex'] ?? 0);
+        if ($diffAut !== 0) return $diffAut;
+
         $diffScore = ($b['score'] ?? 0) - ($a['score'] ?? 0);
         if ($diffScore !== 0) return $diffScore;
+
         return ($a['timeSeconds'] ?? 0) - ($b['timeSeconds'] ?? 0);
     });
 

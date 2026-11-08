@@ -401,7 +401,7 @@
     <p data-m-i18n="sec3_desc">Cada partida comienza con un <strong>Techo Inicial de Puntos</strong> (la suma de todos los puntos de las casillas vacías). Tus decisiones modifican este techo:</p>
     <ul>
       <li data-m-i18n="sec3_rule1"><strong>Acierto correcto</strong>: Suma los puntos asignados a la casilla a tu saldo neto.</li>
-      <li data-m-i18n="sec3_rule2"><strong>Fallo / Error</strong>: Resta <strong>-15 puntos netos</strong> directos de tu marcador y queda anotado en tu historial.</li>
+      <li data-m-i18n="sec3_rule2"><strong>Fallo / Error</strong>: Penalización proporcional según la dificultad (Fácil: <strong>-10 pts</strong>, Medio: <strong>-15 pts</strong>, Difícil: <strong>-25 pts</strong>, Endemoniado: <strong>-50 pts</strong>). En Endemoniado se penaliza con severidad el 50% de la celda para erradicar el tanteo por suerte.</li>
       <li data-m-i18n="sec3_rule3"><strong>Uso de Ayudas</strong>: Deducen puntos de tu techo máximo según la información que te regalan.</li>
     </ul>
 
@@ -435,6 +435,11 @@
     <!-- SECCIÓN 5: AUTONOMÍA Y RANGOS -->
     <h2 id="sec-5" data-m-i18n="sec5_title">5. Índice de Autonomía Mental y Rangos</h2>
     <p data-m-i18n="sec5_desc">Tu maestría se mide calculando el porcentaje de puntos obtenidos frente al techo inicial posible:</p>
+    <div class="card-box" style="border-left: 4px solid var(--gold); margin-bottom: 1.25rem;">
+      <h3 style="color: var(--gold); margin-top: 0;">✨ Puntuación Pura de Maestría (Puntos Puros)</h3>
+      <p style="margin-bottom: 0.5rem;">Para ponderar justamente la dificultad y la limpieza deductiva, el sistema calcula: <code>Puntos Puros = Puntos Netos × (Autonomía % / 100)</code>.</p>
+      <p style="margin-bottom: 0; font-size: 0.88rem; color: #cbd5e1;">Esto garantiza que un Sudoku Endemoniado resuelto con alta autonomía (ej. 3910 pts y 96% aut = 3754 pts puros) supere siempre a niveles inferiores (ej. Difícil 1800 pts puros), castigando a su vez el tanteo por suerte dentro de la misma dificultad.</p>
+    </div>
     <div class="table-responsive">
       <table>
         <thead>
@@ -507,9 +512,9 @@
       <h3 data-m-i18n="sec6_sub3">🏆 Criterio Oficial de Victoria</h3>
       <p data-m-i18n="sec6_win_p">Al completarse el sudoku, la auditoría dictamina el ganador comparando:</p>
       <ol>
-        <li data-m-i18n="sec6_win_li1"><strong>Puntos Netos Obtenidos</strong> (quien haya sumado más aciertos y menos penalizaciones).</li>
-        <li data-m-i18n="sec6_win_li2"><strong>Índice de Autonomía Mental (%)</strong> (quien haya necesitado menos ayudas).</li>
-        <li data-m-i18n="sec6_win_li3"><strong>Tiempo Cronometrado</strong> (criterio de desempate en caso de puntuaciones idénticas).</li>
+        <li data-m-i18n="sec6_win_li1"><strong>Puntuación Pura de Maestría</strong> (Puntos Netos &times; Autonomía % / 100; pondera dificultad y ausencia de fallos).</li>
+        <li data-m-i18n="sec6_win_li2"><strong>Índice de Autonomía Mental (%)</strong> (desempate a favor de quien haya resuelto con mayor rigor deductivo).</li>
+        <li data-m-i18n="sec6_win_li3"><strong>Puntos Netos y Menor Tiempo</strong> (criterios de desempate sucesivos).</li>
       </ol>
     </div>
 
@@ -517,7 +522,7 @@
     <h2 id="sec-7" data-m-i18n="sec7_title">7. Consejos para Lograr el Rango de Gran Maestro</h2>
     <ul>
       <li data-m-i18n="sec7_tip1"><strong>Fíjate en las restricciones cruzadas</strong>: Antes de colocar un número, revisa mentalmente la fila, la columna y la caja 3x3 para estar seguro al 100%.</li>
-      <li data-m-i18n="sec7_tip2"><strong>No te arriesgues al azar</strong>: Un fallo penaliza -15 puntos y destruye tu 100% de autonomía.</li>
+      <li data-m-i18n="sec7_tip2"><strong>No te arriesgues al azar</strong>: En Endemoniado un fallo resta -50 puntos y merma tu autonomía y tus puntos puros.</li>
       <li data-m-i18n="sec7_tip3"><strong>Prefiere la Lupa a los Rayos X</strong>: Si estás atascado en un punto muerto, usar la Lupa en una sola casilla solo te penalizará esa celda, mientras que Rayos X castiga todo el tablero.</li>
     </ul>
 
@@ -585,6 +590,7 @@
       <ul>
         <li data-m-i18n="sec9_cons_li1"><strong>Mínimo de Partidas Certificadas</strong>: Se requiere acumular al menos <strong>3 victorias de Gran Maestro Puro</strong>.</li>
         <li data-m-i18n="sec9_cons_li2"><strong>Baremos Oficiales de Maestría</strong>: Logradas en nivel Difícil o Endemoniado con <strong>≥ 90% de autonomía mental</strong> y <strong>0 ayudas del sistema (0 ay.)</strong>.</li>
+        <li data-m-i18n="sec9_cons_li3"><strong>Jerarquía Oficial de Clasificación</strong>: 1º Puntuación Pura (Puntos Puros = Netos &times; Autonomía %) &bull; 2º Mayor Autonomía Mental % &bull; 3º Mayor Puntuación Neta &bull; 4º Menor Tiempo.</li>
       </ul>
     </div>
 

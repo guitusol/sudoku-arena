@@ -77,11 +77,14 @@ La interfaz móvil está optimizada para jugar con una o dos manos:
 
 ## 4. El Motor de Puntuación (Opportunity Cost Engine)
 
-Al comenzar una partida, el sistema evalúa cada casilla vacía y calcula el **Techo Inicial de Puntos**:
-La suma del valor lógico de todas las casillas vacías al inicio.
+Al comenzar una partida, el sistema evalúa cada casilla vacía y calcula el **Techo Inicial de Puntos** (la suma del valor lógico de todas las casillas vacías al inicio).
 
-- **Acierto**: Sumas los puntos asignados a esa casilla a tu marcador neto.
-- **Fallo / Error**: Introducir un número incorrecto penaliza **-15 puntos** directos de tu marcador neto y cuenta como falta.
+- **Acierto**: Sumas los puntos asignados a esa casilla a tu marcador neto (Fácil: 10 pts, Medio: 15 pts, Difícil: 30 pts, Endemoniado: 100 pts).
+- **Fallo / Error (Penalización Proporcional)**: Introducir un número incorrecto penaliza de inmediato tu marcador neto y queda registrado en el historial de auditoría:
+  - 🟢 **Fácil**: **-10 pts** por fallo.
+  - 🟡 **Medio**: **-15 pts** por fallo.
+  - 🔴 **Difícil**: **-25 pts** por fallo.
+  - 🟣 **Endemoniado**: **-50 pts** por fallo *(penalización disuasoria del 50% del valor de la casilla para erradicar el tanteo o la adivinación a ciegas por fuerza bruta)*.
 - **Techo Máximo Alcanzable**: Disminuye cada vez que cometes errores o utilizas ayudas del sistema.
 
 ---
@@ -111,17 +114,31 @@ Sudoku Arena permite solicitar ayuda pedagógica, pero penaliza el techo de punt
 
 ---
 
-## 6. Índice de Autonomía Mental y Rangos Cognitivos
+## 6. Índice de Autonomía Mental, Puntuación Pura y Rangos Cognitivos
 
-Al finalizar la partida (o en tiempo real durante la misma), el sistema evalúa tu grado de independencia cognitiva con la siguiente fórmula:
+Al finalizar la partida (o en tiempo real durante la misma), el sistema evalúa tu grado de independencia deductiva:
 
-Autonomía Mental (%) = (Puntos Netos Obtenidos / Techo Teórico Inicial) * 100
+### A. Fórmula del Índice de Autonomía Mental (%)
+$$\text{Autonomía Mental (\%)} = \left(\frac{\text{Puntos Netos Obtenidos}}{\text{Techo Teórico Inicial}}\right) \times 100$$
+
+### B. Métrica Oficial de Competición: «Puntuación Pura de Maestría»
+Para resolver con absoluta equidad las clasificaciones entre distintos niveles de dificultad y evitar que el tanteo por suerte beneficie a un jugador sobre otro, Sudoku Arena introduce la **Puntuación Pura**:
+
+$$\text{Puntos Puros} = \text{Puntos Netos Finales} \times \left(\frac{\text{Autonomía Mental (\%)}}{100}\right)$$
+
+*(El resultado se redondea al entero más próximo)*.
+
+#### ¿Por qué es fundamental la Puntuación Pura?
+1. **Pondera la Dificultad Real**: Un sudoku Endemoniado (donde cada casilla vale 100 pts y el techo ronda los 4000 pts) tiene mayor mérito que un Difícil (casillas a 30 pts y techos de ~1800 pts). Un maestro que complete un Endemoniado con 3910 pts y 96% de autonomía obtiene **3754 pts puros**, superando limpiamente a quien resuelva un Difícil con 1800 pts y 100% de autonomía (1800 pts puros).
+2. **Erradica el Tanteo por Suerte**: En partidas del mismo nivel, si un jugador recurre a adivinar casillas arriesgando fallos, su puntuación neta y su porcentaje de autonomía descenderán. Quien deduzca limpiamente con 96% de autonomía superará a quien termine con 88%, aunque este último hubiera empezado con suerte.
+
+### C. Rangos de Honor
 
 Según tu porcentaje de autonomía, obtendrás uno de los 4 rangos de honor:
 
 | Rango | Medalla | Autonomía | Descripción |
 | :--- | :---: | :---: | :--- |
-| **Gran Maestro Puro** | 🥇 | **≥ 90%** | Resolución impecable con cero ayudas externas (0 ay.), deducción 100% propia y ≥ 90% de puntuación neta. Los fallos mecánicos leves no quitan la maestría. |
+| **Gran Maestro Puro** | 🥇 | **≥ 90%** | Resolución impecable con cero ayudas externas (0 ay.), deducción propia y ≥ 90% de puntuación neta. Los fallos mecánicos leves no quitan la maestría. |
 | **Lógico Quirúrgico** | 🥈 | **80% – 89%** | Deducción brillante con consultas mínimas o fallos moderados. |
 | **Resolutor Pragmático**| 🥉 | **50% – 79%** | Juego con uso moderado de asistencias o activación de rayos X para desatascar fases complejas. |
 | **Nivel Muy Bajo** | 🚸 | **< 50%** | Partida con alta dependencia de la máquina o resolución automática asistida. ¡Toca seguir entrenando! |
@@ -187,10 +204,11 @@ Tu contrincante tiene dos formas sencillas de conectarse al mismo duelo:
 
 ### 🏆 Criterio de Victoria del Duelo
 
-Al finalizar el tablero, el sistema muestra la tarjeta oficial de auditoría:
-1. **1º Criterio (Puntuación Neta)**: Gana quien consiga el mayor número de puntos netos.
-2. **2º Criterio (Índice de Autonomía Mental %)**: Quien haya resuelto con mayor autonomía (menos ayudas o consultas de lupa/rayos X).
-3. **3º Criterio (Tiempo de Cronómetro)**: En caso de empate a puntos y autonomía, el tiempo más rápido desempata la partida.
+Al finalizar el tablero, el sistema muestra la tarjeta oficial de auditoría con la siguiente jerarquía:
+1. **1º Criterio (Puntuación Pura)**: Gana quien consiga mayor puntuación pura ($\text{Puntos Netos} \times \text{Autonomía} / 100$), ponderando equilibradamente la dificultad elegida y la ausencia de fallos por tanteo.
+2. **2º Criterio (Índice de Autonomía Mental %)**: En caso de empate a puntos puros, se premia a quien haya resuelto con mayor rigor y menos penalizaciones.
+3. **3º Criterio (Puntuación Neta)**: Puntuación total conseguida tras el cómputo de aciertos y errores.
+4. **4º Criterio (Tiempo de Cronómetro)**: El tiempo más rápido desempata la contienda en última instancia.
 
 ---
 
@@ -256,14 +274,20 @@ Sudoku Arena premia el mérito intelectual con un Cuadro de Honor mundial públi
   Para garantizar que la distinción de Maestro refleje auténtica destreza y no una partida afortunada por azar:
   - **Mínimo de Partidas Certificadas**: Es obligatorio acumular al menos **3 victorias de Gran Maestro Puro**.
   - **Baremos Oficiales**: Obtenidas en dificultad **Difícil o Endemoniado** con **≥ 90% de autonomía mental** y **0 ayudas del sistema (0 ay.)**.
+- **Jerarquía Oficial de Clasificación**:
+  Para que el ranking mundial sea indiscutible y premie tanto la dificultad del tablero como el rigor deductivo:
+  1. **1º Puntuación Pura (Puntos Puros)**: Pondera directamente el nivel del sudoku y la pureza lógica ($\text{Puntos Netos} \times \text{Autonomía} / 100$). Un jugador que resuelva un Endemoniado con alta autonomía liderará con justicia el Cuadro de Honor por encima de dificultades inferiores.
+  2. **2º Índice de Autonomía Mental (%)**: Desempata a favor del resolutor que cometió menos fallos o demostró mayor independencia mental.
+  3. **3º Puntuación Neta Final**: Desempata por volumen acumulado de puntos.
+  4. **4º Menor Tiempo de Cronómetro**: Desempata en última instancia premiando la rapidez resolutiva.
 
 ---
 
 ## 12. Consejos Tácticos para Convertirte en Gran Maestro
 
 1. **Aprovecha el Descarte Sistemático**: Busca primero filas, columnas o cajas 3x3 que tengan ya 6 o 7 números colocados; en ellas es mucho más fácil deducir los números restantes.
-2. **No Adivines**: Cada fallo cuesta **-15 puntos** y reduce tu índice de autonomía. Si dudas entre dos casillas, busca otra zona del tablero antes de arriesgarte.
-3. **Usa la Lupa con Cabeza**: Si estás totalmente bloqueado, usar la **Lupa en una sola casilla estratégica** solo te resta los puntos de esa celda (ej. 15 o 25 pts), mientras que activar **Rayos X** deducirá puntos de decenas de casillas a la vez.
+2. **No Adivines**: En nivel Endemoniado cada fallo resta **-50 puntos** (la mitad del valor de la celda) y merma tu Puntuación Pura drásticamente. Si dudas entre dos casillas, busca otra zona del tablero antes de arriesgarte.
+3. **Usa la Lupa con Cabeza**: Si estás totalmente bloqueado, usar la **Lupa en una sola casilla estratégica** solo te resta los puntos de esa celda (ej. 15 o 30 pts), mientras que activar **Rayos X** deducirá puntos de decenas de casillas a la vez.
 4. **Vigila el Techo de Puntos**: Tu objetivo no es solo resolver el sudoku, sino mantener la barra de Autonomía lo más cerca posible del **100%**.
 
 ---

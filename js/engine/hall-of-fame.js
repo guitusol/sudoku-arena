@@ -31,6 +31,7 @@ class HallOfFameEngine {
         difficulty: 'endemoniado',
         diffLabel: 'Endemoniado',
         score: 3910,
+        pureScore: 3754,
         timeSeconds: 1459,
         autonomyIndex: 96,
         peeksCount: 0,
@@ -486,7 +487,29 @@ class HallOfFameEngine {
       }
     });
 
-    return deduplicated.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+    deduplicated.forEach(m => {
+      m.pureScore = typeof m.pureScore === 'number' && m.pureScore > 0
+        ? m.pureScore
+        : Math.round((Number(m.score) || 0) * ((Number(m.autonomyIndex) || 0) / 100));
+    });
+
+    // Criterio de Ordenación Oficial:
+    // 1º Puntuación Pura (Pureza × Dificultad) DESC
+    // 2º Autonomía % DESC
+    // 3º Puntos Brutos DESC
+    // 4º Menor Tiempo ASC
+    return deduplicated.sort((a, b) => {
+      const diffPure = (b.pureScore || 0) - (a.pureScore || 0);
+      if (diffPure !== 0) return diffPure;
+
+      const diffAut = (Number(b.autonomyIndex) || 0) - (Number(a.autonomyIndex) || 0);
+      if (diffAut !== 0) return diffAut;
+
+      const diffScore = (Number(b.score) || 0) - (Number(a.score) || 0);
+      if (diffScore !== 0) return diffScore;
+
+      return (Number(a.timeSeconds) || 0) - (Number(b.timeSeconds) || 0);
+    });
   }
 
   /**

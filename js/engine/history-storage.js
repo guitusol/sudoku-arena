@@ -137,6 +137,9 @@ class HistoryStorage {
     const isNewBestScore = score > 0 && (previousInDiff.length === 0 || score > previousBestScore);
     const isNewBestTime = timeSeconds > 0 && (previousInDiff.length === 0 || timeSeconds < previousBestTime);
 
+    const autonomyIndex = Number(gameData.autonomyIndex) || 0;
+    const pureScore = Number(gameData.pureScore) || Math.round(score * (autonomyIndex / 100));
+
     const record = {
       id: `game_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
       timestamp: Date.now(),
@@ -144,8 +147,9 @@ class HistoryStorage {
       mode: gameData.mode || 'standard', // 'standard', 'weekly', 'custom', 'duel'
       seed: gameData.seed ?? null,
       score: score,
+      pureScore: pureScore,
       maxTheoreticalScore: Number(gameData.maxTheoreticalScore) || 0,
-      autonomyIndex: Number(gameData.autonomyIndex) || 0,
+      autonomyIndex: autonomyIndex,
       rank: gameData.rank || 'Gran Maestro',
       rankKey: gameData.rankKey || 'rank_grandmaster',
       rankColor: gameData.rankColor || '#10b981',
@@ -215,6 +219,7 @@ class HistoryStorage {
     }
 
     const globalBestScore = list.reduce((max, r) => Math.max(max, r.score || 0), 0);
+    const globalBestPureScore = list.reduce((max, r) => Math.max(max, r.pureScore || Math.round((r.score || 0) * ((r.autonomyIndex || 0) / 100))), 0);
     const validTimes = list.filter(r => (r.timeSeconds || 0) > 0);
     const globalBestTime = validTimes.length > 0 ? validTimes.reduce((min, r) => Math.min(min, r.timeSeconds), Infinity) : 0;
     const avgAutonomy = Math.round(list.reduce((acc, r) => acc + (r.autonomyIndex || 0), 0) / totalGames);
@@ -225,14 +230,16 @@ class HistoryStorage {
     diffs.forEach(d => {
       const inDiff = list.filter(r => r.difficulty === d);
       const bScore = inDiff.reduce((max, r) => Math.max(max, r.score || 0), 0);
+      const bPure = inDiff.reduce((max, r) => Math.max(max, r.pureScore || Math.round((r.score || 0) * ((r.autonomyIndex || 0) / 100))), 0);
       const times = inDiff.filter(r => (r.timeSeconds || 0) > 0);
       const bTime = times.length > 0 ? times.reduce((min, r) => Math.min(min, r.timeSeconds), Infinity) : 0;
       
-      const topRecord = inDiff.find(r => r.score === bScore);
+      const topRecord = inDiff.find(r => (r.pureScore || Math.round((r.score || 0) * ((r.autonomyIndex || 0) / 100))) === bPure) || inDiff.find(r => r.score === bScore);
 
       diffStats[d] = {
         count: inDiff.length,
         bestScore: bScore,
+        bestPureScore: bPure,
         bestTime: bTime === Infinity ? 0 : bTime,
         bestRank: topRecord ? topRecord.rank : null,
         bestRankKey: topRecord ? topRecord.rankKey : null,
@@ -243,6 +250,7 @@ class HistoryStorage {
     return {
       totalGames,
       globalBestScore,
+      globalBestPureScore,
       globalBestTime: globalBestTime === Infinity ? 0 : globalBestTime,
       avgAutonomy,
       diffStats
