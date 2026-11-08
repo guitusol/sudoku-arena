@@ -231,19 +231,44 @@ function getDefaultMasters() {
 
 // Cargar lista desde JSON en disco
 function loadMastersFromJson($file) {
+    $masters = [];
     if (file_exists($file)) {
         $content = @file_get_contents($file);
         if ($content) {
             $data = json_decode($content, true);
             if (is_array($data) && count($data) > 0) {
-                return $data;
+                $masters = $data;
             }
         }
     }
     // Si no existe el archivo, inicializamos con los maestros por defecto
-    $default = getDefaultMasters();
-    saveMastersToJson($file, $default);
-    return $default;
+    if (empty($masters)) {
+        $masters = getDefaultMasters();
+        saveMastersToJson($file, $masters);
+    }
+
+    foreach ($masters as &$m) {
+        if (!isset($m['pureScore']) || !is_numeric($m['pureScore']) || $m['pureScore'] <= 0) {
+            $m['pureScore'] = (int)round(($m['score'] ?? 0) * (($m['autonomyIndex'] ?? 0) / 100));
+        }
+    }
+    unset($m);
+
+    // Criterio Oficial de Ordenación: Puntuación Pura DESC, Autonomía DESC, Puntos DESC, Tiempo ASC
+    usort($masters, function($a, $b) {
+        $diffPure = ($b['pureScore'] ?? 0) - ($a['pureScore'] ?? 0);
+        if ($diffPure !== 0) return $diffPure;
+
+        $diffAut = ($b['autonomyIndex'] ?? 0) - ($a['autonomyIndex'] ?? 0);
+        if ($diffAut !== 0) return $diffAut;
+
+        $diffScore = ($b['score'] ?? 0) - ($a['score'] ?? 0);
+        if ($diffScore !== 0) return $diffScore;
+
+        return ($a['timeSeconds'] ?? 0) - ($b['timeSeconds'] ?? 0);
+    });
+
+    return $masters;
 }
 
 // Guardar lista en JSON de forma atómica y segura
