@@ -436,9 +436,10 @@
     <h2 id="sec-5" data-m-i18n="sec5_title">5. Índice de Autonomía Mental y Rangos</h2>
     <p data-m-i18n="sec5_desc">Tu maestría se mide calculando el porcentaje de puntos obtenidos frente al techo inicial posible:</p>
     <div class="card-box" style="border-left: 4px solid var(--gold); margin-bottom: 1.25rem;">
-      <h3 style="color: var(--gold); margin-top: 0;">✨ Puntuación Pura de Maestría (Puntos Puros)</h3>
-      <p style="margin-bottom: 0.5rem;">Para ponderar justamente la dificultad y la limpieza deductiva, el sistema calcula: <code>Puntos Puros = Puntos Netos × (Autonomía % / 100)</code>.</p>
-      <p style="margin-bottom: 0; font-size: 0.88rem; color: #cbd5e1;">Esto garantiza que un Sudoku Endemoniado resuelto con alta autonomía (ej. 3910 pts y 96% aut = 3754 pts puros) supere siempre a niveles inferiores (ej. Difícil 1800 pts puros), castigando a su vez el tanteo por suerte dentro de la misma dificultad.</p>
+      <h3 style="color: var(--gold); margin-top: 0;">✨ Autonomía por Decisiones y Puntuación Pura</h3>
+      <p style="margin-bottom: 0.5rem;"><strong>Fórmula de Autonomía Mental (%):</strong> <code>Autonomía = [Casillas Vacías / (Casillas Vacías + Fallos + Ayudas)] &times; 100</code>. Mide con exactitud objetiva la eficacia de tus decisiones sin distorsiones de puntos (ej. 51 casillas y 10 fallos = 51 / 61 = 84% de autonomía).</p>
+      <p style="margin-bottom: 0.5rem;"><strong>Puntuación Pura:</strong> <code>Puntos Puros = Puntos Netos &times; (Autonomía % / 100)</code>. Pondera el mérito de la dificultad elegida con la limpieza deductiva demostrada (ej. 3560 pts con 84% aut = 2990 pts puros en Endemoniado).</p>
+      <p style="margin-bottom: 0; font-size: 0.88rem; color: #cbd5e1;"><strong>Baremos Oficiales de Gran Maestro (🥇):</strong> Exige 0 ayudas de la máquina y &ge; 90% de autonomía en Fácil/Medio/Difícil, o &ge; 80% en Endemoniado (reconociendo las bifurcaciones iniciales inevitables).</p>
     </div>
     <div class="table-responsive">
       <table>
@@ -589,7 +590,7 @@
       <p data-m-i18n="sec9_cons_p1">Un solo sudoku afortunado puede deberse a la casualidad. Para que el título de Maestro tenga verdadero prestigio, la inscripción oficial exige trayectoria demostrada:</p>
       <ul>
         <li data-m-i18n="sec9_cons_li1"><strong>Mínimo de Partidas Certificadas</strong>: Se requiere acumular al menos <strong>3 victorias de Gran Maestro Puro</strong>.</li>
-        <li data-m-i18n="sec9_cons_li2"><strong>Baremos Oficiales de Maestría</strong>: Logradas en nivel Difícil o Endemoniado con <strong>≥ 90% de autonomía mental</strong> y <strong>0 ayudas del sistema (0 ay.)</strong>.</li>
+        <li data-m-i18n="sec9_cons_li2"><strong>Baremos Oficiales de Maestría</strong>: Logradas en nivel Difícil (<strong>&ge; 90%</strong>) o Endemoniado (<strong>&ge; 80%</strong>) con <strong>0 ayudas del sistema (0 ay.)</strong>.</li>
         <li data-m-i18n="sec9_cons_li3"><strong>Jerarquía Oficial de Clasificación</strong>: 1º Puntuación Pura (Puntos Puros = Netos &times; Autonomía %) &bull; 2º Mayor Autonomía Mental % &bull; 3º Mayor Puntuación Neta &bull; 4º Menor Tiempo.</li>
       </ul>
     </div>

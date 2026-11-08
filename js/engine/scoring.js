@@ -31,12 +31,15 @@ class ScoringEngine {
     this.fairPlayReason = null;
     this.fairPlayWarningTriggered = false;
 
-    // Marcar las celdas iniciales fijas
+    // Marcar las celdas iniciales fijas y contabilizar casillas vacías a rellenar
+    this.initialEmptyCells = 0;
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
         if (gameData.board[r][c] !== 0) {
           this.cellCompleted[r][c] = true;
           this.cellScores[r][c] = 0; // Las pistas iniciales no dan puntos
+        } else {
+          this.initialEmptyCells++;
         }
       }
     }
@@ -323,15 +326,20 @@ class ScoringEngine {
 
   /**
    * Calcula el estado actual de maestría
+   * Autonomía basada en decisiones (Casillas a rellenar vs Intentos totales: Aciertos + Fallos + Ayudas)
    */
   getSummary() {
-    let autonomyIndex = this.initialTotalPoints > 0
-      ? Math.round((this.currentScore / this.initialTotalPoints) * 100)
-      : 0;
+    const emptyCells = this.initialEmptyCells > 0 ? this.initialEmptyCells : 51;
+    const totalAttempts = emptyCells + this.errorsCount + this.peeksCellCount + this.peeksAllCount;
+    let autonomyIndex = totalAttempts > 0
+      ? Math.round((emptyCells / totalAttempts) * 100)
+      : 100;
+
+    const diff = (this.difficulty || '').toLowerCase();
 
     // En dificultad Endemoniado, por definición lógica y bifurcaciones iniciales necesarias,
     // la autonomía cognitiva real máxima nunca puede ser del 100% (tope realista del 96%)
-    if ((this.difficulty || '').toLowerCase() === 'endemoniado' && autonomyIndex > 96) {
+    if (diff === 'endemoniado' && autonomyIndex > 96) {
       autonomyIndex = 96;
     }
 
@@ -339,15 +347,22 @@ class ScoringEngine {
     let rankBadge = 'badge-starter';
     let rankColor = '#ef4444';
 
+    // Baremos de Gran Maestro adaptados a la exigencia real:
+    // En Endemoniado, debido al tanteo inicial inevitable, Gran Maestro requiere >= 80% sin ayudas.
+    // En Difícil o inferiores, requiere >= 90% sin ayudas.
+    const gmThreshold = diff === 'endemoniado' ? 80 : 90;
+    const slThreshold = diff === 'endemoniado' ? 70 : 80;
+
     if (this.isAutoSolved) {
+      autonomyIndex = 0;
       rankKey = 'rank_system_solved';
       rankBadge = 'badge-starter';
       rankColor = '#64748b';
-    } else if (autonomyIndex >= 90 && this.peeksCellCount === 0 && this.peeksAllCount === 0) {
+    } else if (autonomyIndex >= gmThreshold && this.peeksCellCount === 0 && this.peeksAllCount === 0) {
       rankKey = 'rank_grandmaster';
       rankBadge = 'badge-master';
       rankColor = '#10b981';
-    } else if (autonomyIndex >= 80) {
+    } else if (autonomyIndex >= slThreshold) {
       rankKey = 'rank_surgical_logician';
       rankBadge = 'badge-expert';
       rankColor = '#06b6d4';

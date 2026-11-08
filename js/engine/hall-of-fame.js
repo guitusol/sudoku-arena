@@ -31,14 +31,14 @@ class HallOfFameEngine {
         difficulty: 'endemoniado',
         diffLabel: 'Endemoniado',
         score: 3560,
-        pureScore: 3133,
+        pureScore: 2990,
         timeSeconds: 1459,
-        autonomyIndex: 88,
+        autonomyIndex: 84,
         peeksCount: 0,
         errorsCount: 10,
         seed: 47316,
         verified: true,
-        rank: 'Lógico Quirúrgico',
+        rank: 'Gran Maestro Puro',
         date: '2026-11-07'
       },
       {
@@ -232,10 +232,12 @@ class HallOfFameEngine {
         }
       }
 
-      // 3. Detección por autonomía >= 90% y sin ayudas
+      // 3. Detección por autonomía adaptada a la dificultad y sin ayudas (Endemoniado >= 80%, Difícil >= 90%)
       const peeks = Number(r.peeksCount ?? ((r.peeksCellCount || 0) + (r.peeksAllCount || 0))) || 0;
       const autonomy = Number(r.autonomyIndex) || 0;
-      if (autonomy >= 90 && peeks === 0) {
+      const diff = (r.difficulty || '').toLowerCase();
+      const minAutonomy = diff === 'endemoniado' ? 80 : 90;
+      if (autonomy >= minAutonomy && peeks === 0) {
         return true;
       }
 
@@ -416,7 +418,7 @@ class HallOfFameEngine {
         m.age = 73;
         playerAlreadyInList = true;
 
-        // La marca del servidor es la oficial global (3560 pts, 24:19, 88% aut., 3133 pts puros).
+        // La marca del servidor es la oficial global (3560 pts, 24:19, 84% aut., 2990 pts puros).
         // Solo actualizar localmente si en este dispositivo se bate legítimamente el récord registrado (y nunca con 100% en endemoniado ni con la marca anterior descalibrada de 3910)
         if (bestLocal && bestLocal.score > m.score && bestLocal.score <= 4000 && bestLocal.autonomyIndex <= 96 && bestLocal.score !== 3910) {
           m.score = bestLocal.score;

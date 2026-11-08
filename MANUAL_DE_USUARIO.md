@@ -116,32 +116,40 @@ Sudoku Arena permite solicitar ayuda pedagógica, pero penaliza el techo de punt
 
 ## 6. Índice de Autonomía Mental, Puntuación Pura y Rangos Cognitivos
 
-Al finalizar la partida (o en tiempo real durante la misma), el sistema evalúa tu grado de independencia deductiva:
+Al finalizar la partida (o en tiempo real durante la misma), el sistema evalúa tu grado de independencia deductiva con base en tus **decisiones reales**:
 
 ### A. Fórmula del Índice de Autonomía Mental (%)
-$$\text{Autonomía Mental (\%)} = \left(\frac{\text{Puntos Netos Obtenidos}}{\text{Techo Teórico Inicial}}\right) \times 100$$
+Para que la autonomía sea un reflejo objetivo y no dependa de artificios de puntos ni sufra dobles penalizaciones, se calcula comparando las **casillas a rellenar** frente al **total de acciones realizadas** (aciertos, fallos y ayudas):
+
+$$\text{Autonomía Mental (\%)} = \left(\frac{\text{Casillas Vacías a Rellenar}}{\text{Casillas Vacías} + \text{Fallos} + \text{Ayudas Solicitadas}}\right) \times 100$$
+
+> **Ejemplo Práctico**: En un sudoku con 51 casillas vacías, si un jugador coloca los 51 números correctos cometiendo 10 fallos y sin pedir ayudas (0 ay.), ha realizado $51 + 10 = 61$ intentos:
+> $$\text{Autonomía} = \frac{51}{61} \times 100 = 83{,}60\% \approx 84\%$$
 
 ### B. Métrica Oficial de Competición: «Puntuación Pura de Maestría»
-Para resolver con absoluta equidad las clasificaciones entre distintos niveles de dificultad y evitar que el tanteo por suerte beneficie a un jugador sobre otro, Sudoku Arena introduce la **Puntuación Pura**:
+La **Puntuación Pura** es el estándar supremo de clasificación. Combina los puntos netos conseguidos tras las penalizaciones proporcionales con el porcentaje de autonomía mental:
 
 $$\text{Puntos Puros} = \text{Puntos Netos Finales} \times \left(\frac{\text{Autonomía Mental (\%)}}{100}\right)$$
 
 *(El resultado se redondea al entero más próximo)*.
 
 #### ¿Por qué es fundamental la Puntuación Pura?
-1. **Pondera la Dificultad Real**: Un sudoku Endemoniado (donde cada casilla vale 100 pts y el techo ronda los 4000 pts) tiene mayor mérito que un Difícil (casillas a 30 pts y techos de ~1800 pts). Un maestro que complete un Endemoniado con 3910 pts y 96% de autonomía obtiene **3754 pts puros**, superando limpiamente a quien resuelva un Difícil con 1800 pts y 100% de autonomía (1800 pts puros).
-2. **Erradica el Tanteo por Suerte**: En partidas del mismo nivel, si un jugador recurre a adivinar casillas arriesgando fallos, su puntuación neta y su porcentaje de autonomía descenderán. Quien deduzca limpiamente con 96% de autonomía superará a quien termine con 88%, aunque este último hubiera empezado con suerte.
+1. **Pondera la Dificultad Real**: Un sudoku Endemoniado (donde cada casilla vale 100 pts y el techo inicial ronda los 4000 pts) otorga mayor mérito cognitivo que un Difícil (casillas a 30 pts y techos de ~1800 pts). Por ejemplo:
+   - Partida en **Endemoniado**: 3560 pts con 84% de autonomía = **2990 pts puros**.
+   - Partida en **Difícil**: 1800 pts con 100% de autonomía = **1800 pts puros**.
+   La Puntuación Pura sitúa justamente a la maestría en Endemoniado en lo más alto del Salón de la Fama mundial.
+2. **Erradica el Tanteo por Suerte**: Dentro de la misma dificultad, un jugador que intente adivinar números a ciegas sufrirá la penalización severa de -50 pts por error en su marcador neto, y cada fallo reducirá a la vez su porcentaje de autonomía en el denominador, mermando drásticamente su Puntuación Pura final.
 
-### C. Rangos de Honor
+### C. Rangos de Honor Adaptados a la Dificultad Real
 
-Según tu porcentaje de autonomía, obtendrás uno de los 4 rangos de honor:
+Dado que en nivel **Endemoniado** es matemáticamente inevitable realizar ciertas bifurcaciones y tanteos iniciales antes de reducir el puzle a una fase resoluble por lógica pura, los baremos de maestría se adaptan con realismo:
 
-| Rango | Medalla | Autonomía | Descripción |
-| :--- | :---: | :---: | :--- |
-| **Gran Maestro Puro** | 🥇 | **≥ 90%** | Resolución impecable con cero ayudas externas (0 ay.), deducción propia y ≥ 90% de puntuación neta. Los fallos mecánicos leves no quitan la maestría. |
-| **Lógico Quirúrgico** | 🥈 | **80% – 89%** | Deducción brillante con consultas mínimas o fallos moderados. |
-| **Resolutor Pragmático**| 🥉 | **50% – 79%** | Juego con uso moderado de asistencias o activación de rayos X para desatascar fases complejas. |
-| **Nivel Muy Bajo** | 🚸 | **< 50%** | Partida con alta dependencia de la máquina o resolución automática asistida. ¡Toca seguir entrenando! |
+| Rango | Medalla | Autonomía (Fácil / Medio / Difícil) | Autonomía (Endemoniado) | Requisitos |
+| :--- | :---: | :---: | :---: | :--- |
+| **Gran Maestro Puro** | 🥇 | **≥ 90%** | **≥ 80%** | Cero ayudas de la máquina (0 ay.). Máxima pureza deductiva. En Endemoniado permite hasta 12 fallos de tanteo inicial. |
+| **Lógico Quirúrgico** | 🥈 | **80% – 89%** | **70% – 79%** | Deducción brillante con consultas mínimas o fallos moderados. |
+| **Resolutor Pragmático**| 🥉 | **50% – 79%** | **50% – 69%** | Partida resuelta apoyándose en ayudas o escáner de rayos X. |
+| **Nivel Muy Bajo** | 🚸 | **< 50%** | **< 50%** | Uso intensivo de asistencias o autocompletado por el sistema. |
 
 ---
 
@@ -273,7 +281,7 @@ Sudoku Arena premia el mérito intelectual con un Cuadro de Honor mundial públi
 - **Requisito de Entrada al Cuadro de Honor: Consistencia Anti-Suerte**:
   Para garantizar que la distinción de Maestro refleje auténtica destreza y no una partida afortunada por azar:
   - **Mínimo de Partidas Certificadas**: Es obligatorio acumular al menos **3 victorias de Gran Maestro Puro**.
-  - **Baremos Oficiales**: Obtenidas en dificultad **Difícil o Endemoniado** con **≥ 90% de autonomía mental** y **0 ayudas del sistema (0 ay.)**.
+  - **Baremos Oficiales de Maestría**: Obtenidas en dificultad **Difícil (≥ 90% de autonomía)** o **Endemoniado (≥ 80% de autonomía)**, siempre con **0 ayudas del sistema (0 ay.)**.
 - **Jerarquía Oficial de Clasificación**:
   Para que el ranking mundial sea indiscutible y premie tanto la dificultad del tablero como el rigor deductivo:
   1. **1º Puntuación Pura (Puntos Puros)**: Pondera directamente el nivel del sudoku y la pureza lógica ($\text{Puntos Netos} \times \text{Autonomía} / 100$). Un jugador que resuelva un Endemoniado con alta autonomía liderará con justicia el Cuadro de Honor por encima de dificultades inferiores.

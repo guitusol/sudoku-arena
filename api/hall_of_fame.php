@@ -40,14 +40,14 @@ function getDefaultMasters() {
             'difficulty'    => 'endemoniado',
             'diffLabel'     => 'Endemoniado',
             'score'         => 3560,
-            'pureScore'     => 3133,
+            'pureScore'     => 2990,
             'timeSeconds'   => 1459,
-            'autonomyIndex' => 88,
+            'autonomyIndex' => 84,
             'peeksCount'    => 0,
             'errorsCount'   => 10,
             'seed'          => 47316,
             'verified'      => true,
-            'rank'          => 'Lógico Quirúrgico',
+            'rank'          => 'Gran Maestro Puro',
             'date'          => '2026-11-07'
         ],
         [

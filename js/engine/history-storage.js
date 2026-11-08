@@ -45,14 +45,14 @@ class HistoryStorage {
           needsSave = true;
         }
 
-        // 3. Ajuste retroactivo de penalizaciones en Endemoniado según nuevo baremo (-50 pts por fallo)
+        // 3. Ajuste retroactivo de penalizaciones en Endemoniado según nuevo baremo (-50 pts por fallo y autonomía por casillas)
         if (r && (r.difficulty || '').toLowerCase() === 'endemoniado') {
-          if (r.score === 3910 && (r.errorsCount === 10 || r.seed === 47316)) {
+          if ((r.score === 3910 || r.score === 3560) && (r.errorsCount === 10 || r.seed === 47316)) {
             r.score = 3560;
-            r.autonomyIndex = 88;
-            r.pureScore = 3133;
-            r.rank = 'Lógico Quirúrgico (Mente Táctica)';
-            r.rankKey = 'rank_surgical_logician';
+            r.autonomyIndex = 84;
+            r.pureScore = 2990;
+            r.rank = 'Gran Maestro Puro (Mente de Acero)';
+            r.rankKey = 'rank_grandmaster';
             needsSave = true;
           }
         }
