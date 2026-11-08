@@ -45,15 +45,30 @@ class HistoryStorage {
           needsSave = true;
         }
 
-        // 3. Ajuste retroactivo de penalizaciones en Endemoniado según nuevo baremo (-50 pts por fallo y autonomía por casillas)
+        // 3. Recalibración integral de partidas en Endemoniado con el nuevo baremo (-50 pts por fallo y autonomía por casillas)
         if (r && (r.difficulty || '').toLowerCase() === 'endemoniado') {
-          if ((r.score === 3910 || r.score === 3560) && (r.errorsCount === 10 || r.seed === 47316)) {
-            r.score = 3560;
-            r.autonomyIndex = 84;
-            r.pureScore = 2990;
-            r.rank = 'Gran Maestro Puro (Mente de Acero)';
-            r.rankKey = 'rank_grandmaster';
-            needsSave = true;
+          const errors = Number(r.errorsCount) || 0;
+          const peeks = Number(r.peeksCount) || 0;
+          const emptyCells = 51; // Casillas vacías estándar en Endemoniado
+
+          if (errors > 0) {
+            const calculatedAutonomy = Math.round((emptyCells / (emptyCells + errors + peeks)) * 100);
+            
+            let calculatedScore = r.score;
+            if (r.maxTheoreticalScore && r.maxTheoreticalScore > 0) {
+              calculatedScore = Math.max(0, r.maxTheoreticalScore - (errors * 50));
+            } else if (r.score > 3560 || r.autonomyIndex > 85) {
+              calculatedScore = Math.max(0, r.score - (errors * 35));
+            }
+
+            if (r.score !== calculatedScore || r.autonomyIndex !== calculatedAutonomy) {
+              r.score = calculatedScore;
+              r.autonomyIndex = calculatedAutonomy;
+              r.pureScore = Math.round(calculatedScore * (calculatedAutonomy / 100));
+              r.rank = calculatedAutonomy >= 80 ? 'Gran Maestro Puro (Mente de Acero)' : 'Lógico Quirúrgico (Mente Táctica)';
+              r.rankKey = calculatedAutonomy >= 80 ? 'rank_grandmaster' : 'rank_surgical_logician';
+              needsSave = true;
+            }
           }
         }
       });

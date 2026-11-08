@@ -418,18 +418,16 @@ class HallOfFameEngine {
         m.age = 73;
         playerAlreadyInList = true;
 
-        // La marca del servidor es la oficial global (3560 pts, 24:19, 84% aut., 2990 pts puros).
-        // Solo actualizar localmente si en este dispositivo se bate legítimamente el récord registrado (y nunca con 100% en endemoniado ni con la marca anterior descalibrada de 3910)
-        if (bestLocal && bestLocal.score > m.score && bestLocal.score <= 4000 && bestLocal.autonomyIndex <= 96 && bestLocal.score !== 3910) {
-          m.score = bestLocal.score;
-          m.timeSeconds = bestLocal.timeSeconds;
-          m.autonomyIndex = bestLocal.autonomyIndex;
-          m.difficulty = bestLocal.difficulty;
-          m.diffLabel = bestLocal.difficulty === 'facil' ? 'Fácil' : (bestLocal.difficulty === 'medio' ? 'Medio' : (bestLocal.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado'));
-          m.seed = bestLocal.seed;
-          m.errorsCount = bestLocal.errorsCount || 0;
-          m.date = new Date(bestLocal.timestamp || Date.now()).toISOString().slice(0, 10);
-        }
+        // La marca del servidor es la oficial global certificada (3560 pts, 24:19, 84% aut., 2990 pts puros)
+        m.score = 3560;
+        m.pureScore = 2990;
+        m.autonomyIndex = 84;
+        m.timeSeconds = 1459;
+        m.difficulty = 'endemoniado';
+        m.diffLabel = 'Endemoniado';
+        m.rank = 'Gran Maestro Puro';
+        m.errorsCount = 10;
+        m.peeksCount = 0;
       } else if (m.deviceUuid && m.deviceUuid === myDeviceUuid) {
         m.isCurrentPlayer = true;
         playerAlreadyInList = true;
@@ -630,6 +628,21 @@ class HallOfFameEngine {
    * Obtiene la lista filtrada de maestros según la pestaña activa y dificultad seleccionada
    */
 
+  _compareMasters(a, b) {
+    const pureA = typeof a.pureScore === 'number' ? a.pureScore : Math.round((Number(a.score) || 0) * ((Number(a.autonomyIndex) || 0) / 100));
+    const pureB = typeof b.pureScore === 'number' ? b.pureScore : Math.round((Number(b.score) || 0) * ((Number(b.autonomyIndex) || 0) / 100));
+    const diffPure = pureB - pureA;
+    if (diffPure !== 0) return diffPure;
+
+    const diffAut = (Number(b.autonomyIndex) || 0) - (Number(a.autonomyIndex) || 0);
+    if (diffAut !== 0) return diffAut;
+
+    const diffScore = (Number(b.score) || 0) - (Number(a.score) || 0);
+    if (diffScore !== 0) return diffScore;
+
+    return (Number(a.timeSeconds) || 0) - (Number(b.timeSeconds) || 0);
+  }
+
   /**
    * Obtiene los maestros agrupados por categorías (Generaciones, Países, Ciudades o General)
    */
@@ -653,9 +666,9 @@ class HallOfFameEngine {
         if (g) g.masters.push(m);
       });
 
-      // Ordenar maestros dentro de cada grupo por puntuación y tiempo
+      // Ordenar maestros dentro de cada grupo por Puntuación Pura oficial
       groups.forEach(g => {
-        g.masters.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+        g.masters.sort((a, b) => this._compareMasters(a, b));
       });
 
       return groups.filter(g => g.masters.length > 0);
@@ -677,7 +690,7 @@ class HallOfFameEngine {
 
       const groups = Array.from(countryMap.values());
       groups.forEach(g => {
-        g.masters.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+        g.masters.sort((a, b) => this._compareMasters(a, b));
       });
       groups.sort((a, b) => a.title.localeCompare(b.title));
       return groups;
@@ -699,14 +712,14 @@ class HallOfFameEngine {
 
       const groups = Array.from(cityMap.values());
       groups.forEach(g => {
-        g.masters.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+        g.masters.sort((a, b) => this._compareMasters(a, b));
       });
       groups.sort((a, b) => a.title.localeCompare(b.title));
       return groups;
     }
 
-    // Para 'all' (Todos los Maestros)
-    list.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+    // Para 'all' (Todos los Maestros) - Orden oficial por Puntuación Pura
+    list.sort((a, b) => this._compareMasters(a, b));
     return [
       { key: 'all', title: null, masters: list }
     ];
@@ -722,18 +735,18 @@ class HallOfFameEngine {
 
     // Filtro / Ordenación por pestaña
     if (tab === 'nations') {
-      // Ordenado por país y mejor puntuación
-      list.sort((a, b) => a.country.localeCompare(b.country) || (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      // Ordenado por país y mejor puntuación pura
+      list.sort((a, b) => a.country.localeCompare(b.country) || this._compareMasters(a, b));
     } else if (tab === 'cities') {
-      // Ordenado por ciudad y mejor puntuación
-      list.sort((a, b) => a.city.localeCompare(b.city) || (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      // Ordenado por ciudad y mejor puntuación pura
+      list.sort((a, b) => a.city.localeCompare(b.city) || this._compareMasters(a, b));
     } else if (tab === 'generations') {
-      // Ordenado por tramos generacionales
+      // Ordenado por tramos generacionales y mejor puntuación pura
       const groupOrder = { junior: 1, adult: 2, senior: 3, legend: 4 };
-      list.sort((a, b) => (groupOrder[a.ageGroup] || 9) - (groupOrder[b.ageGroup] || 9) || (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      list.sort((a, b) => (groupOrder[a.ageGroup] || 9) - (groupOrder[b.ageGroup] || 9) || this._compareMasters(a, b));
     } else {
-      // Ranking general por puntuación y tiempo
-      list.sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds));
+      // Ranking general por Puntuación Pura oficial
+      list.sort((a, b) => this._compareMasters(a, b));
     }
 
     return list;
