@@ -30,15 +30,15 @@ class HallOfFameEngine {
         ageGroup: 'legend',
         difficulty: 'endemoniado',
         diffLabel: 'Endemoniado',
-        score: 3910,
-        pureScore: 3754,
+        score: 3560,
+        pureScore: 3133,
         timeSeconds: 1459,
-        autonomyIndex: 96,
+        autonomyIndex: 88,
         peeksCount: 0,
         errorsCount: 10,
         seed: 47316,
         verified: true,
-        rank: 'Gran Maestro Puro',
+        rank: 'Lógico Quirúrgico',
         date: '2026-11-07'
       },
       {
@@ -399,7 +399,7 @@ class HallOfFameEngine {
     const certified = this.getCertifiedVictories(historyList);
     const isGuillermo = myDeviceUuid === 'founder_guillermo' ||
                         (profile && profile.name && profile.name.toLowerCase().includes('guillermo')) ||
-                        certified.some(c => c.seed === 67890 || c.seed === 47316 || c.score === 3910 || c.score === 1705 || c.score === 1800);
+                        certified.some(c => c.seed === 67890 || c.seed === 47316 || c.score === 3560 || c.score === 3910 || c.score === 1705 || c.score === 1800);
 
     const bestLocal = certified.length > 0 ?
       certified.slice().sort((a, b) => (b.score - a.score) || (a.timeSeconds - b.timeSeconds))[0] :
@@ -416,9 +416,9 @@ class HallOfFameEngine {
         m.age = 73;
         playerAlreadyInList = true;
 
-        // La marca del servidor es la oficial global (3910 pts, 24:19, 96% aut.).
-        // Solo actualizar localmente si en este dispositivo se bate legítimamente el récord registrado (y nunca con 100% en endemoniado)
-        if (bestLocal && bestLocal.score > m.score && bestLocal.score <= 4000 && bestLocal.autonomyIndex <= 96) {
+        // La marca del servidor es la oficial global (3560 pts, 24:19, 88% aut., 3133 pts puros).
+        // Solo actualizar localmente si en este dispositivo se bate legítimamente el récord registrado (y nunca con 100% en endemoniado ni con la marca anterior descalibrada de 3910)
+        if (bestLocal && bestLocal.score > m.score && bestLocal.score <= 4000 && bestLocal.autonomyIndex <= 96 && bestLocal.score !== 3910) {
           m.score = bestLocal.score;
           m.timeSeconds = bestLocal.timeSeconds;
           m.autonomyIndex = bestLocal.autonomyIndex;
@@ -546,7 +546,7 @@ class HallOfFameEngine {
     const myDeviceUuid = this.getDeviceUuid();
     const isGuillermo = myDeviceUuid === 'founder_guillermo' ||
                         (profile && profile.name && profile.name.toLowerCase().includes('guillermo')) ||
-                        certified.some(c => c.seed === 67890 || c.seed === 62002 || c.seed === 47316 || c.score === 3910 || c.score === 1705 || c.score === 1800);
+                        certified.some(c => c.seed === 67890 || c.seed === 62002 || c.seed === 47316 || c.score === 3560 || c.score === 3910 || c.score === 1705 || c.score === 1800);
 
     if (!isGuillermo && (certified.length < 3 || !profile || !profile.name)) return false;
 
@@ -605,7 +605,7 @@ class HallOfFameEngine {
     const activeProfile = profile || this.getPlayerProfile();
     const isGuillermo = myDeviceUuid === 'founder_guillermo' ||
                         (activeProfile && activeProfile.name && activeProfile.name.toLowerCase().includes('guillermo')) ||
-                        certified.some(c => c.seed === 67890 || c.seed === 62002 || c.seed === 47316 || c.score === 3910 || c.score === 1705 || c.score === 1800);
+                        certified.some(c => c.seed === 67890 || c.seed === 62002 || c.seed === 47316 || c.score === 3560 || c.score === 3910 || c.score === 1705 || c.score === 1800);
 
     if (!isGuillermo && (!activeProfile || !activeProfile.name || certified.length < 3)) {
       return false;

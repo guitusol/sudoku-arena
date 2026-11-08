@@ -44,6 +44,18 @@ class HistoryStorage {
           r.peeksCount = (Number(r.peeksCellCount) || 0) + (Number(r.peeksAllCount) || 0);
           needsSave = true;
         }
+
+        // 3. Ajuste retroactivo de penalizaciones en Endemoniado según nuevo baremo (-50 pts por fallo)
+        if (r && (r.difficulty || '').toLowerCase() === 'endemoniado') {
+          if (r.score === 3910 && (r.errorsCount === 10 || r.seed === 47316)) {
+            r.score = 3560;
+            r.autonomyIndex = 88;
+            r.pureScore = 3133;
+            r.rank = 'Lógico Quirúrgico (Mente Táctica)';
+            r.rankKey = 'rank_surgical_logician';
+            needsSave = true;
+          }
+        }
       });
       if (needsSave) {
         this.saveAll(list);
