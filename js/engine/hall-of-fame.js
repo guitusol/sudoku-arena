@@ -14,7 +14,7 @@ class HallOfFameEngine {
     // Detección automática del endpoint: si se ejecuta en GitHub Pages apunta a la API central en producción; en caso contrario, usa la ruta local
     this.API_URL = (typeof window !== 'undefined' && window.location && window.location.origin.includes('github.io'))
       ? 'https://clubdelingenio.com/api/hall_of_fame.php'
-      : 'api/hall_of_fame.php';
+      : '/api/hall_of_fame.php';
     this.remoteMasters = null;
 
     this.DEFAULT_MASTERS = [
@@ -387,10 +387,9 @@ class HallOfFameEngine {
     const baseList = this.remoteMasters || this.getRemoteMastersCache() || this.DEFAULT_MASTERS;
     let list = baseList.map(m => ({ ...m }));
 
-    // Eliminar categóricamente cualquier entrada anómala o fantasma
+    // Eliminar categóricamente cualquier entrada anómala con parámetros no válidos
     list = list.filter(m => {
       if (m && m.name && m.name.toLowerCase().includes('guillermo')) {
-        if (m.city && m.city.toLowerCase() === 'madrid') return false;
         if (m.score === 3985 || m.timeSeconds === 4195 || m.autonomyIndex === 100) return false;
       }
       return true;
@@ -411,14 +410,18 @@ class HallOfFameEngine {
 
     // 2. Comprobar si el jugador actual ya está en el ranking
     list.forEach(m => {
-      // Si es Guillermo, vincular con su marca oficial legítima de Valencia
-      if (isGuillermo && (m.deviceUuid === 'founder_guillermo' || m.id === 'master_founder' || (m.name === 'Guillermo T.' && m.city === 'Valencia'))) {
-        m.isCurrentPlayer = true;
+      // Si es la entrada de Guillermo (fundador), blindar con su marca oficial legítima de Valencia
+      const isEntryGuillermo = (m.deviceUuid === 'founder_guillermo' || m.id === 'master_founder' || (m.name && m.name.toLowerCase().includes('guillermo')));
+      if (isEntryGuillermo) {
+        m.id = 'master_founder';
+        m.deviceUuid = 'founder_guillermo';
+        m.name = 'Guillermo T.';
         m.city = 'Valencia';
         m.age = 73;
-        playerAlreadyInList = true;
-
-        // La marca del servidor es la oficial global certificada (3560 pts, 24:19, 84% aut., 2990 pts puros)
+        m.country = 'ES';
+        m.countryName = 'España';
+        m.flag = '🇪🇸';
+        m.ageGroup = 'legend';
         m.score = 3560;
         m.pureScore = 2990;
         m.autonomyIndex = 84;
@@ -428,59 +431,107 @@ class HallOfFameEngine {
         m.rank = 'Gran Maestro Puro';
         m.errorsCount = 10;
         m.peeksCount = 0;
-      } else if (m.deviceUuid && m.deviceUuid === myDeviceUuid) {
-        m.isCurrentPlayer = true;
-        playerAlreadyInList = true;
+        m.seed = 47316;
 
-        if (bestLocal && bestLocal.score > m.score && bestLocal.autonomyIndex <= 96) {
-          m.score = bestLocal.score;
-          m.timeSeconds = bestLocal.timeSeconds;
-          m.autonomyIndex = bestLocal.autonomyIndex;
-          m.difficulty = bestLocal.difficulty;
-          m.diffLabel = bestLocal.difficulty === 'facil' ? 'Fácil' : (bestLocal.difficulty === 'medio' ? 'Medio' : (bestLocal.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado'));
-          m.seed = bestLocal.seed;
-          m.errorsCount = bestLocal.errorsCount || 0;
-          m.date = new Date(bestLocal.timestamp || Date.now()).toISOString().slice(0, 10);
+        if (isGuillermo) {
+          m.isCurrentPlayer = true;
+          playerAlreadyInList = true;
+        }
+      } else {
+        // Para cualquier otro jugador: reconocer si coincide por UUID o por Perfil (Nombre + Ciudad)
+        const isCurrentMatch = (m.deviceUuid && m.deviceUuid === myDeviceUuid) ||
+          (profile && profile.name && m.name && m.city &&
+           m.name.trim().toLowerCase() === profile.name.trim().toLowerCase() &&
+           m.city.trim().toLowerCase() === profile.city.trim().toLowerCase());
+
+        if (isCurrentMatch) {
+          m.isCurrentPlayer = true;
+          playerAlreadyInList = true;
+
+          // Si el récord local bate al del servidor con autonomía válida, actualizar
+          const localPure = bestLocal ? (typeof bestLocal.pureScore === 'number' ? bestLocal.pureScore : Math.round(bestLocal.score * (bestLocal.autonomyIndex / 100))) : 0;
+          const currentPure = typeof m.pureScore === 'number' ? m.pureScore : Math.round((m.score || 0) * ((m.autonomyIndex || 0) / 100));
+
+          if (bestLocal && localPure > currentPure && bestLocal.autonomyIndex <= 96) {
+            m.score = bestLocal.score;
+            m.pureScore = localPure;
+            m.timeSeconds = bestLocal.timeSeconds;
+            m.autonomyIndex = bestLocal.autonomyIndex;
+            m.difficulty = bestLocal.difficulty;
+            m.diffLabel = bestLocal.difficulty === 'facil' ? 'Fácil' : (bestLocal.difficulty === 'medio' ? 'Medio' : (bestLocal.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado'));
+            m.seed = bestLocal.seed;
+            m.errorsCount = bestLocal.errorsCount || 0;
+            m.date = new Date(bestLocal.timestamp || Date.now()).toISOString().slice(0, 10);
+          }
         }
       }
     });
 
     // 3. Si califica localmente y aún no figura en la lista remota, añadir su ficha
-    if (!playerAlreadyInList && certified.length >= 3 && ((profile && profile.name) || isGuillermo)) {
-      const best = bestLocal;
-      if (best) {
-        const playerMaster = {
-          id: isGuillermo ? 'master_founder' : 'player_local_master',
-          deviceUuid: isGuillermo ? 'founder_guillermo' : myDeviceUuid,
-          name: isGuillermo ? 'Guillermo T.' : profile.name,
-          flag: isGuillermo ? '🇪🇸' : (profile.flag || '🌟'),
+    if (!playerAlreadyInList && (certified.length >= 3 || isGuillermo) && ((profile && profile.name) || isGuillermo)) {
+      if (isGuillermo) {
+        list.push({
+          id: 'master_founder',
+          deviceUuid: 'founder_guillermo',
+          name: 'Guillermo T.',
+          flag: '🇪🇸',
           country: 'ES',
           countryName: 'España',
-          city: isGuillermo ? 'Valencia' : (profile.city || 'Tu Ciudad'),
-          age: isGuillermo ? 73 : (Number(profile.age) || 35),
-          ageGroup: isGuillermo ? 'legend' : this.getAgeGroup(Number(profile.age) || 35),
-          difficulty: best.difficulty,
-          diffLabel: best.difficulty === 'facil' ? 'Fácil' : (best.difficulty === 'medio' ? 'Medio' : (best.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado')),
-          score: best.score,
-          timeSeconds: best.timeSeconds,
-          autonomyIndex: best.autonomyIndex,
+          city: 'Valencia',
+          age: 73,
+          ageGroup: 'legend',
+          difficulty: 'endemoniado',
+          diffLabel: 'Endemoniado',
+          score: 3560,
+          pureScore: 2990,
+          timeSeconds: 1459,
+          autonomyIndex: 84,
           peeksCount: 0,
-          errorsCount: best.errorsCount || 0,
-          seed: best.seed || 47316,
+          errorsCount: 10,
+          seed: 47316,
           verified: true,
           rank: 'Gran Maestro Puro',
           isCurrentPlayer: true,
-          date: new Date(best.timestamp || Date.now()).toISOString().slice(0, 10)
+          date: '2026-11-07'
+        });
+      } else if (bestLocal) {
+        const localPure = typeof bestLocal.pureScore === 'number' ? bestLocal.pureScore : Math.round(bestLocal.score * (bestLocal.autonomyIndex / 100));
+        const playerMaster = {
+          id: 'player_local_master',
+          deviceUuid: myDeviceUuid,
+          name: profile.name,
+          flag: profile.flag || '🌟',
+          country: profile.country || 'ES',
+          countryName: profile.countryName || 'España',
+          city: profile.city || 'Tu Ciudad',
+          age: Number(profile.age) || 35,
+          ageGroup: this.getAgeGroup(Number(profile.age) || 35),
+          difficulty: bestLocal.difficulty,
+          diffLabel: bestLocal.difficulty === 'facil' ? 'Fácil' : (bestLocal.difficulty === 'medio' ? 'Medio' : (bestLocal.difficulty === 'dificil' ? 'Difícil' : 'Endemoniado')),
+          score: bestLocal.score,
+          pureScore: localPure,
+          timeSeconds: bestLocal.timeSeconds,
+          autonomyIndex: bestLocal.autonomyIndex,
+          peeksCount: 0,
+          errorsCount: bestLocal.errorsCount || 0,
+          seed: bestLocal.seed || 47316,
+          verified: true,
+          rank: 'Gran Maestro Puro',
+          isCurrentPlayer: true,
+          date: new Date(bestLocal.timestamp || Date.now()).toISOString().slice(0, 10)
         };
         list.push(playerMaster);
       }
     }
 
-    // Deduplicación estricta por id o por nombre si es Guillermo
+    // Deduplicación estricta por id, por fundador o por nombre+ciudad
     const seen = new Set();
     const deduplicated = [];
     list.forEach(m => {
-      const key = (m.name === 'Guillermo T.') ? 'guillermo_official_valencia' : (m.id || m.deviceUuid);
+      const isFounder = (m.id === 'master_founder' || m.deviceUuid === 'founder_guillermo' || (m.name && m.name.toLowerCase().includes('guillermo')));
+      const key = isFounder
+        ? 'founder_guillermo'
+        : (m.name && m.city ? (m.name.trim().toLowerCase() + '_' + m.city.trim().toLowerCase()) : (m.id || m.deviceUuid));
       if (!seen.has(key)) {
         seen.add(key);
         deduplicated.push(m);
@@ -516,26 +567,35 @@ class HallOfFameEngine {
    * Sincroniza en segundo plano con la base de datos central en el servidor
    */
   async syncWithServer(historyList = []) {
-    try {
-      const response = await fetch(this.API_URL, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' },
-        cache: 'no-cache'
-      });
+    const candidateUrls = [
+      this.API_URL,
+      '/api/hall_of_fame.php',
+      'api/hall_of_fame.php',
+      'https://clubdelingenio.com/api/hall_of_fame.php'
+    ];
+    const uniqueUrls = Array.from(new Set(candidateUrls.filter(Boolean)));
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data && data.success && Array.isArray(data.masters)) {
-          this.remoteMasters = data.masters;
-          localStorage.setItem(this.CACHE_KEY, JSON.stringify(data.masters));
-          return true;
+    for (const url of uniqueUrls) {
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-cache'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.success && Array.isArray(data.masters) && data.masters.length > 0) {
+            this.remoteMasters = data.masters;
+            localStorage.setItem(this.CACHE_KEY, JSON.stringify(data.masters));
+            return true;
+          }
         }
+      } catch (e) {
+        // Intentar siguiente endpoint candidato
       }
-      return false;
-    } catch (e) {
-      // Entorno offline o sin servidor activo: continúa en local sin interrumpir
-      return false;
     }
+    return false;
   }
 
   /**

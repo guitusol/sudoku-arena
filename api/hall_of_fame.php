@@ -540,10 +540,49 @@ if ($method === 'POST') {
     $found = false;
 
     foreach ($masters as &$m) {
-        if (($m['deviceUuid'] ?? '') === $deviceUuid) {
+        $matchUuid = (!empty($deviceUuid) && ($m['deviceUuid'] ?? '') === $deviceUuid);
+        $matchNameCity = (
+            !empty($name) && !empty($city) &&
+            mb_strtolower(trim($m['name'] ?? '')) === mb_strtolower(trim($name)) &&
+            mb_strtolower(trim($m['city'] ?? '')) === mb_strtolower(trim($city))
+        );
+        $isFounder = ($deviceUuid === 'founder_guillermo' || ($m['deviceUuid'] ?? '') === 'founder_guillermo' || ($m['id'] ?? '') === 'master_founder' || stripos($name, 'guillermo') !== false || stripos($m['name'] ?? '', 'guillermo') !== false);
+
+        if ($matchUuid || $matchNameCity || $isFounder) {
             $found = true;
-            // Actualizar si bate su récord
-            if ($score > ($m['score'] ?? 0) || ($score === ($m['score'] ?? 0) && $timeSeconds < ($m['timeSeconds'] ?? 9999))) {
+
+            // Si es el fundador, su récord oficial de Valencia (3560 / 2990) está blindado
+            if ($isFounder) {
+                $m['id']            = 'master_founder';
+                $m['deviceUuid']    = 'founder_guillermo';
+                $m['name']          = 'Guillermo T.';
+                $m['city']          = 'Valencia';
+                $m['country']       = 'ES';
+                $m['countryName']   = 'España';
+                $m['flag']          = '🇪🇸';
+                $m['age']           = 73;
+                $m['ageGroup']      = 'legend';
+                $m['difficulty']    = 'endemoniado';
+                $m['diffLabel']     = 'Endemoniado';
+                $m['score']         = 3560;
+                $m['pureScore']     = 2990;
+                $m['timeSeconds']   = 1459;
+                $m['autonomyIndex'] = 84;
+                $m['errorsCount']   = 10;
+                $m['peeksCount']    = 0;
+                $m['seed']          = 47316;
+                $m['verified']      = true;
+                $m['rank']          = 'Gran Maestro Puro';
+                $m['date']          = '2026-11-07';
+                break;
+            }
+
+            // Para cualquier otro jugador: actualizar solo si supera o iguala con mejor tiempo
+            $newPure = (int)round($score * ($autonomyIndex / 100));
+            $oldPure = (int)($m['pureScore'] ?? round(($m['score'] ?? 0) * (($m['autonomyIndex'] ?? 0) / 100)));
+
+            if ($newPure > $oldPure || ($newPure === $oldPure && $timeSeconds < ($m['timeSeconds'] ?? 9999))) {
+                $m['deviceUuid']    = $deviceUuid; // Asociar al nuevo dispositivo
                 $m['name']          = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
                 $m['city']          = htmlspecialchars($city, ENT_QUOTES, 'UTF-8');
                 $m['age']           = $age;
@@ -554,12 +593,18 @@ if ($method === 'POST') {
                 $m['difficulty']    = $difficulty;
                 $m['diffLabel']     = $diffLabels[$difficulty] ?? ucfirst($difficulty);
                 $m['score']         = $score;
+                $m['pureScore']     = $newPure;
                 $m['timeSeconds']   = $timeSeconds;
                 $m['autonomyIndex'] = $autonomyIndex;
                 $m['peeksCount']    = $peeksCount;
                 $m['errorsCount']   = $errorsCount;
                 $m['seed']          = $seed;
                 $m['date']          = date('Y-m-d');
+            } else {
+                // Si la puntuación actual es inferior, mantenemos su récord pero vinculamos el dispositivo si no tenía
+                if (empty($m['deviceUuid'])) {
+                    $m['deviceUuid'] = $deviceUuid;
+                }
             }
             break;
         }
