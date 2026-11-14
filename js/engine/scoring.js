@@ -337,8 +337,6 @@ class ScoringEngine {
       ? Math.round((emptyCells / totalAttempts) * 100)
       : 100;
 
-    const diff = (this.difficulty || '').toLowerCase();
-
     // En dificultad Endemoniado, por definición lógica y bifurcaciones iniciales necesarias,
     // la autonomía cognitiva real máxima nunca puede ser del 100% (tope realista del 96%)
     if (diff === 'endemoniado' && autonomyIndex > 96) {
