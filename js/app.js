@@ -129,6 +129,20 @@ class SudokuApp {
         return false;
       }
 
+      // Validar que el tablero guardado contenga números (evitar restaurar tableros vacíos)
+      let filledCount = 0;
+      if (Array.isArray(saved.currentBoard)) {
+        for (let r = 0; r < 9; r++) {
+          for (let c = 0; c < 9; c++) {
+            if (saved.currentBoard[r] && saved.currentBoard[r][c] > 0) filledCount++;
+          }
+        }
+      }
+      if (filledCount < 10) {
+        this.clearActiveGame();
+        return false;
+      }
+
       this.stopTimer();
       this.isGameOver = false;
       this.selectedDifficulty = saved.difficulty;
