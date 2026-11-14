@@ -55,25 +55,7 @@ class HistoryStorage {
         if (diff === 'endemoniado') {
           const errors = Number(r.errorsCount) || 0;
           const peeks = Number(r.peeksCount) || 0;
-
-          // Obtener las casillas vacías reales de la partida (nunca son 51 en Endemoniado: 21-24 pistas -> 57-60 vacías)
-          let realEmptyCells = Number(r.emptyCells) || 0;
-          if (!realEmptyCells && r.seed && typeof SudokuEngine !== 'undefined' && typeof SudokuEngine.generateGame === 'function') {
-            try {
-              let s = typeof r.seed === 'number' ? r.seed : parseInt(String(r.seed).replace(/\D/g, '').slice(-9), 10);
-              if (!isNaN(s) && s > 0) {
-                const g = SudokuEngine.generateGame('endemoniado', s);
-                if (g && g.initialClues) {
-                  realEmptyCells = 81 - g.initialClues;
-                  r.emptyCells = realEmptyCells;
-                }
-              }
-            } catch (e) {}
-          }
-          if (!realEmptyCells) {
-            // Valor representativo estándar de Endemoniado (24 pistas iniciales -> 57 casillas vacías a resolver)
-            realEmptyCells = 57;
-          }
+          const realEmptyCells = Number(r.emptyCells) || 57; // Endemoniado tiene 24 pistas fijas (57 casillas vacías a deducir)
 
           if (errors > 0 || peeks > 0) {
             const accurateAutonomy = Math.min(96, Math.round((realEmptyCells / (realEmptyCells + errors + peeks)) * 100));
@@ -81,6 +63,7 @@ class HistoryStorage {
             const legacyFlawedAutonomy = Math.round((51 / (51 + errors + peeks)) * 100);
             if (r.autonomyIndex === legacyFlawedAutonomy && accurateAutonomy !== legacyFlawedAutonomy) {
               r.autonomyIndex = accurateAutonomy;
+              r.emptyCells = realEmptyCells;
               r.pureScore = Math.round((r.score || 0) * (accurateAutonomy / 100));
               if (r.autonomyIndex >= 80) {
                 r.rank = 'Gran Maestro Puro (Mente de Acero)';
