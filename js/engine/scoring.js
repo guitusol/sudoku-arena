@@ -329,7 +329,9 @@ class ScoringEngine {
    * Autonomía basada en decisiones (Casillas a rellenar vs Intentos totales: Aciertos + Fallos + Ayudas)
    */
   getSummary() {
-    const emptyCells = this.initialEmptyCells > 0 ? this.initialEmptyCells : 51;
+    const diff = (this.difficulty || '').toLowerCase();
+    const defaultEmptyCells = diff === 'endemoniado' ? 57 : (diff === 'dificil' ? 55 : (diff === 'facil' ? 43 : 49));
+    const emptyCells = this.initialEmptyCells > 0 ? this.initialEmptyCells : defaultEmptyCells;
     const totalAttempts = emptyCells + this.errorsCount + this.peeksCellCount + this.peeksAllCount;
     let autonomyIndex = totalAttempts > 0
       ? Math.round((emptyCells / totalAttempts) * 100)
@@ -381,6 +383,7 @@ class ScoringEngine {
     return {
       currentScore: this.currentScore,
       pureScore,
+      initialEmptyCells: emptyCells,
       initialTotalPoints: this.initialTotalPoints,
       currentMaxPossible: this.currentMaxPossible,
       totalPenalties: this.totalPenalties,

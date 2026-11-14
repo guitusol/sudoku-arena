@@ -34,41 +34,67 @@ class HistoryStorage {
         return true;
       });
 
-      // 2. Normalizar datos y garantizar que ningún endemoniado supere el 96% de autonomía
+      // 2. Normalizar datos, blindar autonomía máxima y reparar registros descalibrados
       list.forEach(r => {
-        if (r && (r.difficulty || '').toLowerCase() === 'endemoniado' && r.autonomyIndex >= 100) {
+        if (!r) return;
+        const diff = (r.difficulty || '').toLowerCase();
+
+        // En dificultad Endemoniado, por definición lógica y bifurcaciones iniciales necesarias,
+        // la autonomía cognitiva real máxima nunca puede ser del 100% (tope realista del 96%)
+        if (diff === 'endemoniado' && r.autonomyIndex > 96) {
           r.autonomyIndex = 96;
           needsSave = true;
         }
-        if (r && (r.peeksCount === undefined || r.peeksCount === null || isNaN(Number(r.peeksCount)))) {
+
+        if (r.peeksCount === undefined || r.peeksCount === null || isNaN(Number(r.peeksCount))) {
           r.peeksCount = (Number(r.peeksCellCount) || 0) + (Number(r.peeksAllCount) || 0);
           needsSave = true;
         }
 
-        // 3. Recalibración integral de partidas en Endemoniado con el nuevo baremo (-50 pts por fallo y autonomía por casillas)
-        if (r && (r.difficulty || '').toLowerCase() === 'endemoniado') {
+        // 3. Reparación de partidas en Endemoniado afectadas por el antiguo cálculo erróneo con 51 casillas fijas
+        if (diff === 'endemoniado') {
           const errors = Number(r.errorsCount) || 0;
           const peeks = Number(r.peeksCount) || 0;
-          const emptyCells = 51; // Casillas vacías estándar en Endemoniado
 
-          if (errors > 0) {
-            const calculatedAutonomy = Math.round((emptyCells / (emptyCells + errors + peeks)) * 100);
-            
-            let calculatedScore = r.score;
-            if (r.maxTheoreticalScore && r.maxTheoreticalScore > 0) {
-              calculatedScore = Math.max(0, r.maxTheoreticalScore - (errors * 50));
-            } else if (r.score > 3560 || r.autonomyIndex > 85) {
-              calculatedScore = Math.max(0, r.score - (errors * 35));
-            }
+          // Obtener las casillas vacías reales de la partida (nunca son 51 en Endemoniado: 21-24 pistas -> 57-60 vacías)
+          let realEmptyCells = Number(r.emptyCells) || 0;
+          if (!realEmptyCells && r.seed && typeof SudokuEngine !== 'undefined' && typeof SudokuEngine.generateGame === 'function') {
+            try {
+              let s = typeof r.seed === 'number' ? r.seed : parseInt(String(r.seed).replace(/\D/g, '').slice(-9), 10);
+              if (!isNaN(s) && s > 0) {
+                const g = SudokuEngine.generateGame('endemoniado', s);
+                if (g && g.initialClues) {
+                  realEmptyCells = 81 - g.initialClues;
+                  r.emptyCells = realEmptyCells;
+                }
+              }
+            } catch (e) {}
+          }
+          if (!realEmptyCells) {
+            // Valor representativo estándar de Endemoniado (24 pistas iniciales -> 57 casillas vacías a resolver)
+            realEmptyCells = 57;
+          }
 
-            if (r.score !== calculatedScore || r.autonomyIndex !== calculatedAutonomy) {
-              r.score = calculatedScore;
-              r.autonomyIndex = calculatedAutonomy;
-              r.pureScore = Math.round(calculatedScore * (calculatedAutonomy / 100));
-              r.rank = calculatedAutonomy >= 80 ? 'Gran Maestro Puro (Mente de Acero)' : 'Lógico Quirúrgico (Mente Táctica)';
-              r.rankKey = calculatedAutonomy >= 80 ? 'rank_grandmaster' : 'rank_surgical_logician';
+          if (errors > 0 || peeks > 0) {
+            const accurateAutonomy = Math.min(96, Math.round((realEmptyCells / (realEmptyCells + errors + peeks)) * 100));
+            // Si el registro fue degradado por el antiguo supuesto de 51 casillas (ej: 82% con 11 fallos en vez de 84%), restaurar al valor real
+            const legacyFlawedAutonomy = Math.round((51 / (51 + errors + peeks)) * 100);
+            if (r.autonomyIndex === legacyFlawedAutonomy && accurateAutonomy !== legacyFlawedAutonomy) {
+              r.autonomyIndex = accurateAutonomy;
+              r.pureScore = Math.round((r.score || 0) * (accurateAutonomy / 100));
+              if (r.autonomyIndex >= 80) {
+                r.rank = 'Gran Maestro Puro (Mente de Acero)';
+                r.rankKey = 'rank_grandmaster';
+              }
               needsSave = true;
             }
+          }
+
+          // Garantizar coherencia en pureScore
+          const expectedPure = Math.round((r.score || 0) * ((r.autonomyIndex || 0) / 100));
+          if (!r.pureScore || (r.pureScore !== expectedPure && r.autonomyIndex)) {
+            r.pureScore = expectedPure;
+            needsSave = true;
           }
         }
       });
@@ -177,6 +203,7 @@ class HistoryStorage {
       pureScore: pureScore,
       maxTheoreticalScore: Number(gameData.maxTheoreticalScore) || 0,
       autonomyIndex: autonomyIndex,
+      emptyCells: Number(gameData.emptyCells) || null,
       rank: gameData.rank || 'Gran Maestro',
       rankKey: gameData.rankKey || 'rank_grandmaster',
       rankColor: gameData.rankColor || '#10b981',

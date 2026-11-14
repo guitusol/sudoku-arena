@@ -908,6 +908,7 @@ class SudokuApp {
           pureScore: summary.pureScore || Math.round(summary.currentScore * (summary.autonomyIndex / 100)),
           maxTheoreticalScore: summary.initialTotalPoints,
           autonomyIndex: summary.autonomyIndex,
+          emptyCells: summary.initialEmptyCells || (81 - (this.gameData?.initialClues || 24)),
           rank: summary.rank,
           rankKey: summary.rankKey,
           rankColor: summary.rankColor,
