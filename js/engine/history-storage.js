@@ -59,12 +59,10 @@ class HistoryStorage {
 
           if (errors > 0 || peeks > 0) {
             const accurateAutonomy = Math.min(96, Math.round((realEmptyCells / (realEmptyCells + errors + peeks)) * 100));
-            // Si el registro fue degradado por el antiguo supuesto de 51 casillas (ej: 82% con 11 fallos en vez de 84%), restaurar al valor real
-            const legacyFlawedAutonomy = Math.round((51 / (51 + errors + peeks)) * 100);
-            if (r.autonomyIndex === legacyFlawedAutonomy && accurateAutonomy !== legacyFlawedAutonomy) {
+            if (Number(r.autonomyIndex) !== accurateAutonomy) {
               r.autonomyIndex = accurateAutonomy;
               r.emptyCells = realEmptyCells;
-              r.pureScore = Math.round((r.score || 0) * (accurateAutonomy / 100));
+              r.pureScore = Math.round((Number(r.score) || 0) * (accurateAutonomy / 100));
               if (r.autonomyIndex >= 80) {
                 r.rank = 'Gran Maestro Puro (Mente de Acero)';
                 r.rankKey = 'rank_grandmaster';
@@ -74,7 +72,7 @@ class HistoryStorage {
           }
 
           // Garantizar coherencia en pureScore
-          const expectedPure = Math.round((r.score || 0) * ((r.autonomyIndex || 0) / 100));
+          const expectedPure = Math.round((Number(r.score) || 0) * ((Number(r.autonomyIndex) || 0) / 100));
           if (!r.pureScore || (r.pureScore !== expectedPure && r.autonomyIndex)) {
             r.pureScore = expectedPure;
             needsSave = true;

@@ -1600,12 +1600,45 @@ Pero si no es así... sea ético: resuelva este Sudoku dentro de la plataforma. 
   <script src="js/engine/weekly.js?v=4.9.14"></script>
   <script src="js/engine/sudoku-ocr.js?v=4.9.14"></script>
   <script src="js/engine/vault-storage.js?v=4.9.14"></script>
-  <script src="js/engine/history-storage.js?v=4.9.16"></script>
+  <script src="js/engine/history-storage.js?v=4.9.18"></script>
   <script src="js/engine/hall-of-fame.js?v=4.9.14"></script>
   <script src="js/engine/backup-engine.js?v=4.9.14"></script>
   <script src="js/ui/audio.js?v=4.9.14"></script>
   <script src="js/ui/board.js?v=4.9.14"></script>
-  <script src="js/app.js?v=4.9.17"></script>
-
+  <script src="js/app.js?v=4.9.18"></script>
+  <script>
+    (function() {
+      try {
+        var raw = localStorage.getItem('sudoku_arena_player_history_v1');
+        if (raw) {
+          var list = JSON.parse(raw);
+          var changed = false;
+          list.forEach(function(r) {
+            if (r && (r.difficulty || '').toLowerCase() === 'endemoniado') {
+              var err = Number(r.errorsCount) || 0;
+              var peeks = Number(r.peeksCount) || 0;
+              var empty = Number(r.emptyCells) || 57;
+              if (err > 0 || peeks > 0) {
+                var acc = Math.min(96, Math.round((empty / (empty + err + peeks)) * 100));
+                if (Number(r.autonomyIndex) !== acc) {
+                  r.autonomyIndex = acc;
+                  r.emptyCells = empty;
+                  r.pureScore = Math.round((Number(r.score) || 0) * (acc / 100));
+                  if (acc >= 80) {
+                    r.rank = 'Gran Maestro Puro (Mente de Acero)';
+                    r.rankKey = 'rank_grandmaster';
+                  }
+                  changed = true;
+                }
+              }
+            }
+          });
+          if (changed) {
+            localStorage.setItem('sudoku_arena_player_history_v1', JSON.stringify(list));
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
 </body>
 </html>
